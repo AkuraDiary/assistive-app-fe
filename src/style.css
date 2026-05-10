@@ -1,4 +1,4 @@
-@import './base.css';
+@import 'tailwindcss';
 
 #app {
   max-width: 1280px;
@@ -32,4 +32,17 @@ a,
     grid-template-columns: 1fr 1fr;
     padding: 0 2rem;
   }
+}
+
+/* OPTIONAL TOKENS */
+:root {
+  --radius-field: 10px;
+  --height-field: 35px;
+}
+
+/* RESET */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }

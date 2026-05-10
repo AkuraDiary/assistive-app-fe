@@ -1,85 +1,32 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import { ref } from 'vue'
+
+import BaseButton from '@/components/button/BaseButton.vue'
+import BaseTextField from '@/components/input/BaseTextField.vue'
+import BaseTextarea from './components/input/BaseTextarea.vue'
+import BaseCheckbox from '@/components/input/BaseCheckbox.vue'
+import BaseRadio from '@/components/input/BaseRadio.vue'
+
+const email = ref('')
+const description = ref('')
+const remember = ref(false)
+const gender = ref('male')
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+  <div class="max-w-md p-10 space-y-5">
+    <BaseTextField v-model="email" label="Email" placeholder="Enter email" clearable />
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+    <BaseTextarea v-model="description" label="Description" placeholder="Write something..." />
 
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+    <BaseCheckbox v-model="remember" label="Remember me" />
+
+    <div class="flex gap-4">
+      <BaseRadio v-model="gender" name="gender" value="male" label="Male" />
+
+      <BaseRadio v-model="gender" name="gender" value="female" label="Female" />
     </div>
-  </header>
 
-  <RouterView />
+    <BaseButton> Submit </BaseButton>
+  </div>
 </template>
-
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-}
-</style>
