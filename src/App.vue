@@ -3,7 +3,7 @@ import { ref } from 'vue'
 
 import BaseButton from '@/components/button/BaseButton.vue'
 import BaseTextField from '@/components/input/BaseTextField.vue'
-import BaseTextarea from './components/input/BaseTextarea.vue'
+import BaseTextarea from './components/shared/input/BaseTextarea.vue'
 import BaseCheckbox from '@/components/input/BaseCheckbox.vue'
 import BaseRadio from '@/components/input/BaseRadio.vue'
 
