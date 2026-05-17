@@ -16,6 +16,17 @@ const gender = ref('male')
 <template>
   <div class="max-w-md p-10 space-y-5">
     <BaseTextField v-model="email" label="Email" placeholder="Enter email" clearable />
+    <BaseTextField
+      v-model="email"
+      label="Email"
+      placeholder="Masukkan email anda"
+      color="primary"
+      clearable
+    >
+      <template #leading>
+        <Mail class="w-4 h-4" />
+      </template>
+    </BaseTextField>
 
     <BaseTextarea v-model="description" label="Description" placeholder="Write something..." />
 
@@ -28,5 +39,9 @@ const gender = ref('male')
     </div>
 
     <BaseButton> Submit </BaseButton>
+
+    <BaseButton color="primary"> Daftar </BaseButton>
+
+    <BaseButton color="secondary" variant="outline"> Masuk </BaseButton>
   </div>
 </template>
