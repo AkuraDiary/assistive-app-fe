@@ -137,7 +137,7 @@ const handleRegister = async () => {
   <AuthLayout>
     <template #left>
       <div class="w-full max-w-[340px]">
-        <h1 class="mb-10 text-center text-5xl font-bold text-primary">Selamat Datang!</h1>
+        <h1 class="mb-10 text-center text-4xl font-bold text-primary">Selamat Datang!</h1>
 
         <AuthTabs active="register" />
 
