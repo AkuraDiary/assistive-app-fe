@@ -11,28 +11,19 @@
     <!-- Main Content -->
     <main class="w-full">
       <!-- Hero Section -->
-      <section id="beranda" class="w-full bg-white px-6 py-16 lg:py-24">
+      <section id="beranda" class="w-full bg-white px-6 py-8">
         <div class="mx-auto max-w-7xl">
           <LandingHero />
         </div>
       </section>
 
       <!-- Features Section -->
-      <section id="fitur" class="w-full bg-white px-6 py-20 lg:py-32">
-        <div class="mx-auto max-w-6xl">
-          <div class="mb-16 text-center">
-            <h2 class="text-4xl font-bold text-black lg:text-5xl">Fitur Unggulan</h2>
-            <p class="mx-auto mt-4 max-w-2xl text-lg text-neutral-700">
-              Aplikasi kami dilengkapi dengan fitur-fitur canggih untuk membantu Anda
-            </p>
-          </div>
-
-          <LandingCards />
-        </div>
+      <section id="fitur" class="w-full bg-white px-6 py-8">
+        <LandingCards />
       </section>
 
       <!-- About Section -->
-      <section id="tentang" class="w-full bg-white px-6 py-20 lg:py-32">
+      <section id="tentang" class="w-full bg-white px-6 py-8">
         <div class="mx-auto max-w-4xl">
           <div class="text-center">
             <h2 class="text-4xl font-bold text-black lg:text-5xl">Tentang Kami</h2>
