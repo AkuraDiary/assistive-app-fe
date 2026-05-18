@@ -87,18 +87,13 @@ const handleForgotPassword = () => {
 <template>
   <AuthLayout>
     <template #left>
-      <div class="w-full max-w-[340px]">
-        <h1 class="mb-10 text-center text-5xl font-bold text-[#008BD8]">
-          Selamat Datang!
-        </h1>
+      <div class="w-full max-w-[350px]">
+        <h1 class="mb-12 text-center text-4xl font-bold text-primary">Selamat Datang!</h1>
 
         <AuthTabs active="login" />
 
         <!-- API Error Alert -->
-        <div
-          v-if="authError"
-          class="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700"
-        >
+        <div v-if="authError" class="my-4 rounded-lg bg-red-50 p-3 text-sm text-red-700">
           {{ authError }}
         </div>
 
@@ -113,7 +108,7 @@ const handleForgotPassword = () => {
             @blur="validateForm"
           >
             <template #leading>
-              <AtSign class="h-4 w-4 text-[#FF3C8A]" />
+              <AtSign class="h-4 w-4 text-secondary" />
             </template>
           </BaseTextField>
 
@@ -128,7 +123,7 @@ const handleForgotPassword = () => {
             @blur="validateForm"
           >
             <template #leading>
-              <LockKeyhole class="h-4 w-4 text-[#FF3C8A]" />
+              <LockKeyhole class="h-4 w-4 text-secondary" />
             </template>
           </BaseTextField>
 
@@ -136,7 +131,7 @@ const handleForgotPassword = () => {
           <div class="text-right">
             <button
               type="button"
-              class="text-sm text-[#FF70A9] transition-colors hover:text-[#FF3C8A]"
+              class="text-sm text-[#FF70A9] transition-colors hover:text-secondary"
               @click="handleForgotPassword"
             >
               Lupa sandi?

@@ -137,7 +137,7 @@ const handleRegister = async () => {
   <AuthLayout>
     <template #left>
       <div class="w-full max-w-[340px]">
-        <h1 class="mb-10 text-center text-5xl font-bold text-[#008BD8]">Selamat Datang!</h1>
+        <h1 class="mb-10 text-center text-5xl font-bold text-primary">Selamat Datang!</h1>
 
         <AuthTabs active="register" />
 
@@ -177,7 +177,7 @@ const handleRegister = async () => {
             @blur="validateForm"
           >
             <template #leading>
-              <AtSign class="h-4 w-4 text-[#FF3C8A]" />
+              <AtSign class="h-4 w-4 text-secondary" />
             </template>
           </BaseTextField>
 
@@ -191,7 +191,7 @@ const handleRegister = async () => {
             @blur="validateForm"
           >
             <template #leading>
-              <Phone class="h-4 w-4 text-[#FF3C8A]" />
+              <Phone class="h-4 w-4 text-secondary" />
             </template>
           </BaseTextField>
 
@@ -206,7 +206,7 @@ const handleRegister = async () => {
             @blur="validateForm"
           >
             <template #leading>
-              <LockKeyhole class="h-4 w-4 text-[#FF3C8A]" />
+              <LockKeyhole class="h-4 w-4 text-secondary" />
             </template>
           </BaseTextField>
 

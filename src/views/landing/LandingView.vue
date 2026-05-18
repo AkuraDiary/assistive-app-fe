@@ -111,9 +111,9 @@
             <div>
               <h4 class="mb-4 font-semibold text-black">Produk</h4>
               <ul class="space-y-2 text-sm text-neutral-700">
-                <li><a href="#" class="hover:text-[#008BD8]">Fitur</a></li>
-                <li><a href="#" class="hover:text-[#008BD8]">Harga</a></li>
-                <li><a href="#" class="hover:text-[#008BD8]">Keamanan</a></li>
+                <li><a href="#" class="hover:text-primary">Fitur</a></li>
+                <li><a href="#" class="hover:text-primary">Harga</a></li>
+                <li><a href="#" class="hover:text-primary">Keamanan</a></li>
               </ul>
             </div>
 
@@ -121,9 +121,9 @@
             <div>
               <h4 class="mb-4 font-semibold text-black">Perusahaan</h4>
               <ul class="space-y-2 text-sm text-neutral-700">
-                <li><a href="#" class="hover:text-[#008BD8]">Tentang</a></li>
-                <li><a href="#" class="hover:text-[#008BD8]">Blog</a></li>
-                <li><a href="#" class="hover:text-[#008BD8]">Karir</a></li>
+                <li><a href="#" class="hover:text-primary">Tentang</a></li>
+                <li><a href="#" class="hover:text-primary">Blog</a></li>
+                <li><a href="#" class="hover:text-primary">Karir</a></li>
               </ul>
             </div>
 
@@ -131,9 +131,9 @@
             <div>
               <h4 class="mb-4 font-semibold text-black">Legal</h4>
               <ul class="space-y-2 text-sm text-neutral-700">
-                <li><a href="#" class="hover:text-[#008BD8]">Privasi</a></li>
-                <li><a href="#" class="hover:text-[#008BD8]">Terms</a></li>
-                <li><a href="#" class="hover:text-[#008BD8]">Kontak</a></li>
+                <li><a href="#" class="hover:text-primary">Privasi</a></li>
+                <li><a href="#" class="hover:text-primary">Terms</a></li>
+                <li><a href="#" class="hover:text-primary">Kontak</a></li>
               </ul>
             </div>
           </div>
