@@ -8,6 +8,7 @@ interface Props {
   size?: 'sm' | 'md' | 'lg'
   disabled?: boolean
   fullWidth?: boolean
+  type?: 'button' | 'submit' | 'reset'
 }
 
 const props = withDefaults(
@@ -16,6 +17,7 @@ const props = withDefaults(
     variant: 'solid',
     color: 'primary',
     size: 'md',
+    type: 'button',
   }
 )
 
@@ -45,6 +47,7 @@ const classes = computed(() => [
 
 <template>
   <button
+    :type="type"
     :disabled="disabled"
     :class="classes"
   >
