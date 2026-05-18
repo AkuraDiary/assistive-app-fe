@@ -41,16 +41,16 @@ export const ui = {
 
     secondary: {
       solid:
-        'bg-[#008BD8] text-white hover:brightness-95 focus:ring-[#8ED7FF]',
+        'bg-primary text-white hover:brightness-95 focus:ring-[#8ED7FF]',
 
       outline:
-        'border border-[#008BD8] text-[#008BD8] bg-white hover:bg-[#F0FAFF]',
+        'border border-primary text-primary bg-white hover:bg-[#F0FAFF]',
 
       ghost:
-        'text-[#008BD8] hover:bg-[#F0FAFF]',
+        'text-primary hover:bg-[#F0FAFF]',
 
       input:
-        'focus:border-[#008BD8] focus:ring-[#8ED7FF]/40',
+        'focus:border-primary focus:ring-[#8ED7FF]/40',
     },
 
     ternary: {
