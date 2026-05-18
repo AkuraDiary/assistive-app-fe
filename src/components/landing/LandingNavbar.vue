@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Menu, X } from 'lucide-vue-next'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 interface NavItem {
   label: string
@@ -25,13 +28,12 @@ const handleNavClick = (id: string) => {
 }
 
 const handleLogin = () => {
-  // TODO: Navigate to login page
-  console.log('Navigate to login')
+  router.push('/login')
 }
 
 const handleRegister = () => {
   // TODO: Navigate to register page
-  console.log('Navigate to register')
+  router.push('/register')
 }
 </script>
 

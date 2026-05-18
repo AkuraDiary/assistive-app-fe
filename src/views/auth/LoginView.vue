@@ -169,7 +169,7 @@ const handleForgotPassword = () => {
           <!-- Google Login Button -->
           <button
             type="button"
-            class="flex h-12 w-full items-center justify-center gap-3 rounded-[16px] border border-[#8ED7FF] bg-white font-semibold text-[#56BFF9] transition-colors hover:bg-[#F5F5F5]"
+            class="flex h-12 w-full items-center justify-center gap-3 rounded-[16px] border border-[#8ED7FF] bg-white font-semibold text-[#56BFF9] transition-colors hover:bg-white"
             @click="handleGoogleLogin"
           >
             <span class="text-2xl">G</span>
