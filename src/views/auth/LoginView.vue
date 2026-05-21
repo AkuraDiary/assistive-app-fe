@@ -81,7 +81,7 @@ const handleGoogleLogin = () => {
 
 const handleForgotPassword = () => {
   // TODO: Navigate to forgot password page
-  router.push('/forgot-password')
+  router.push('/reset-password')
 }
 </script>
 
