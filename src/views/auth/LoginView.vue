@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { AtSign, LockKeyhole, ArrowRight } from 'lucide-vue-next'
 import { useAuth } from '@/composable/useAuth'
 import { validators } from '@/utils/validators'
+import AppLogo from '@/components/shared/AppLogo.vue'
 
 const router = useRouter()
 const { login, error: authError } = useAuth()
@@ -85,6 +86,8 @@ const handleForgotPassword = () => {
 </script>
 
 <template>
+  <AppLogo />
+
   <AuthLayout>
     <template #left>
       <div class="w-full max-w-[350px]">
@@ -104,6 +107,7 @@ const handleForgotPassword = () => {
             label="Email"
             placeholder="Masukkan Email Anda"
             color="primary"
+            border="border border-primary"
             :error="errors.email"
             @blur="validateForm"
           >
@@ -119,6 +123,7 @@ const handleForgotPassword = () => {
             type="password"
             placeholder="Masukkan Sandi Anda"
             color="primary"
+            border="border border-primary"
             :error="errors.password"
             @blur="validateForm"
           >
@@ -164,7 +169,7 @@ const handleForgotPassword = () => {
           <!-- Google Login Button -->
           <button
             type="button"
-            class="flex h-12 w-full items-center justify-center gap-3 rounded-[16px] border border-[#8ED7FF] bg-white font-semibold text-[#56BFF9] transition-colors hover:bg-white"
+            class="flex h-12 w-full items-center justify-center gap-3 rounded-[16px] border border-primary bg-white font-semibold text-primary transition-colors hover:bg-white"
             @click="handleGoogleLogin"
           >
             <span class="text-2xl">G</span>
@@ -173,7 +178,6 @@ const handleForgotPassword = () => {
         </form>
       </div>
     </template>
-
     <template #right>
       <AuthHero />
     </template>

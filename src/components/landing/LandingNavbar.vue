@@ -39,17 +39,19 @@ const handleRegister = () => {
 <template>
   <header class="relative grid grid-cols-2 items-center px-6 py-8 lg:grid-cols-3 lg:px-10">
     <!-- Logo -->
-    <div class="h-12 w-12 shrink-0 rounded-full bg-neutral-300 justify-self-start" />
+    <img
+      src="@/assets/images/logo.png"
+      alt="Company Logo"
+      class="h-16 w-auto object-contain justify-self-start"
+    />
 
     <!-- Navigation - Desktop -->
-    <nav
-      class="hidden items-center gap-2 rounded-full border border-primary bg-[#8ED7FF] px-3 py-3 lg:flex justify-self-center"
-    >
+    <nav class="hidden items-center gap-2 rounded-full px-3 py-3 lg:flex justify-self-center">
       <button
         v-for="item in navItems"
         :key="item.id"
-        class="whitespace-nowrap rounded-full px-5 py-2 text-sm font-medium text-neutral-700 transition-all duration-200 hover:bg-white/60"
-        :class="activeNav === item.id ? 'bg-white shadow-sm' : ''"
+        class="whitespace-nowrap rounded-full px-5 py-2 text-sm font-medium text-neutral-700 text-black transition-all duration-200 hover:bg-white/60"
+        :class="activeNav === item.id ? ' text-primary' : ''"
         @click="handleNavClick(item.id)"
       >
         {{ item.label }}
@@ -75,7 +77,7 @@ const handleRegister = () => {
     <!-- Mobile Menu Dropdown -->
     <div
       v-if="isMobileMenuOpen"
-      class="absolute left-0 right-0 top-full z-40 border-b border-[#56BFF9] bg-[#8ED7FF] p-4 shadow-lg lg:hidden"
+      class="absolute left-0 right-0 top-full z-40 p-4 shadow-lg lg:hidden"
     >
       <nav class="mb-4 flex flex-col gap-2">
         <button

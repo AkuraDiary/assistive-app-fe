@@ -12,7 +12,7 @@ withDefaults(defineProps<Props>(), {
   <div class="flex justify-center gap-4 rounded-[24px] border border-[#8ED7FF] bg-white p-4">
     <RouterLink to="/login">
       <BaseButton :variant="active === 'login' ? 'solid' : 'outline'" color="primary" size="lg">
-        <template #leading> → </template>
+        <template #leading> →] </template>
 
         Masuk
       </BaseButton>
