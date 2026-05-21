@@ -152,7 +152,7 @@ const handleRegister = async () => {
             v-model="form.fullName"
             label="Nama Lengkap"
             placeholder="Contoh: Syahril"
-            color="secondary"
+            color="primary"
             :error="errors.fullName"
             @blur="validateForm"
           />
@@ -162,7 +162,7 @@ const handleRegister = async () => {
             v-model="form.username"
             label="Nama Pengguna"
             placeholder="Contoh: syahrilllll"
-            color="secondary"
+            color="primary"
             :error="errors.username"
             @blur="validateForm"
           />
@@ -172,12 +172,12 @@ const handleRegister = async () => {
             v-model="form.email"
             label="Email"
             placeholder="Masukkan Email Anda"
-            color="secondary"
+            color="primary"
             :error="errors.email"
             @blur="validateForm"
           >
             <template #leading>
-              <AtSign class="h-4 w-4 text-secondary" />
+              <AtSign class="h-4 w-4 text-primary" />
             </template>
           </BaseTextField>
 
@@ -186,12 +186,12 @@ const handleRegister = async () => {
             v-model="form.phone"
             label="No. Telepon"
             placeholder="Contoh: 0812345678"
-            color="secondary"
+            color="primary"
             :error="errors.phone"
             @blur="validateForm"
           >
             <template #leading>
-              <Phone class="h-4 w-4 text-secondary" />
+              <Phone class="h-4 w-4 text-primary" />
             </template>
           </BaseTextField>
 
@@ -201,12 +201,12 @@ const handleRegister = async () => {
             label="Kata Sandi"
             type="password"
             placeholder="Masukkan Sandi Anda"
-            color="secondary"
+            color="primary"
             :error="errors.password"
             @blur="validateForm"
           >
             <template #leading>
-              <LockKeyhole class="h-4 w-4 text-secondary" />
+              <LockKeyhole class="h-4 w-4 text-primary" />
             </template>
           </BaseTextField>
 

@@ -75,7 +75,7 @@
 
       <!-- CTA Section -->
       <section
-        class="w-full bg-gradient-to-r from-[#008BD8] to-[#56BFF9] px-6 py-20 text-center lg:py-32"
+        class="w-full bg-gradient-to-r from-[#8B73F6] to-[#56BFF9] px-6 py-20 text-center lg:py-32"
       >
         <div class="mx-auto max-w-3xl">
           <h2 class="text-4xl font-bold text-white lg:text-5xl">Siap Memulai?</h2>

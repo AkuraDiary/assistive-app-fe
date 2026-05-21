@@ -27,16 +27,16 @@ export const ui = {
   variants: {
     primary: {
       solid:
-        'bg-secondary text-white hover:brightness-95 focus:ring-[#FFB3D1]',
+        'bg-primary text-white hover:brightness-95 focus:ring-[#FFB3D1]',
 
       outline:
-        'border border-secondary text-secondary bg-white hover:bg-[#FFF0F6]',
+        'border border-primary text-primary bg-white hover:bg-[#FFF0F6]',
 
       ghost:
-        'text-secondary hover:bg-[#FFF0F6]',
+        'text-primary hover:bg-[#FFF0F6]',
 
       input:
-        'focus:border-secondary focus:ring-[#FFB3D1]/40',
+        'focus:border-primary focus:ring-[#FFB3D1]/40',
     },
 
     secondary: {

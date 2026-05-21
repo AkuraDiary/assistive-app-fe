@@ -21,7 +21,7 @@ import { ArrowUpRight } from 'lucide-vue-next'
         <BaseButton variant="outline" color="primary" size="lg">
           Hubungi kami
           <template #trailing>
-            <div class="flex h-6 w-6 items-center justify-center rounded-full bg-secondary-light">
+            <div class="flex h-6 w-6 items-center justify-center rounded-full bg-primary-light">
               <ArrowUpRight class="h-4 w-4" />
             </div>
           </template>

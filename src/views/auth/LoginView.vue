@@ -103,12 +103,12 @@ const handleForgotPassword = () => {
             v-model="form.email"
             label="Email"
             placeholder="Masukkan Email Anda"
-            color="secondary"
+            color="primary"
             :error="errors.email"
             @blur="validateForm"
           >
             <template #leading>
-              <AtSign class="h-4 w-4 text-secondary" />
+              <AtSign class="h-4 w-4 text-primary" />
             </template>
           </BaseTextField>
 
@@ -118,12 +118,12 @@ const handleForgotPassword = () => {
             label="Kata Sandi"
             type="password"
             placeholder="Masukkan Sandi Anda"
-            color="secondary"
+            color="primary"
             :error="errors.password"
             @blur="validateForm"
           >
             <template #leading>
-              <LockKeyhole class="h-4 w-4 text-secondary" />
+              <LockKeyhole class="h-4 w-4 text-primary" />
             </template>
           </BaseTextField>
 
@@ -131,7 +131,7 @@ const handleForgotPassword = () => {
           <div class="text-right">
             <button
               type="button"
-              class="text-sm text-[#FF70A9] transition-colors hover:text-secondary"
+              class="text-sm text-[#FF70A9] transition-colors hover:text-primary"
               @click="handleForgotPassword"
             >
               Lupa sandi?
