@@ -41,23 +41,31 @@ export function usePasswordReset() {
    */
   async function sendResetEmail(userEmail: string) {
     clearMessages()
-    isLoading.value = true
-    try {
-      email.value = userEmail
-      const response = await passwordResetAPI.forgotPassword({ email: userEmail })
+    isLoading.value = false
 
-      if (!response.success) throw new Error(response.message ?? 'Gagal mengirim email')
+    // for testing only
+    email.value = userEmail
+    maskedEmail.value = maskEmail(userEmail)
+    successMessage.value = 'Kode verifikasi telah dikirim'
+    return { success: true }
+    // return { success: true }
 
-      maskedEmail.value = response.data?.maskedEmail ?? maskEmail(userEmail)
-      successMessage.value = response.data?.message ?? 'Kode verifikasi telah dikirim'
-      return { success: true }
-    } catch (err: unknown) {
-      const msg = extractErrorMessage(err, 'Email tidak terdaftar, periksa kembali!')
-      error.value = msg
-      return { success: false, error: msg }
-    } finally {
-      isLoading.value = false
-    }
+    // try {
+    //   email.value = userEmail
+    //   const response = await passwordResetAPI.forgotPassword({ email: userEmail })
+
+    //   if (!response.success) throw new Error(response.message ?? 'Gagal mengirim email')
+
+    //   maskedEmail.value = response.data?.maskedEmail ?? maskEmail(userEmail)
+    //   successMessage.value = response.data?.message ?? 'Kode verifikasi telah dikirim'
+    //   return { success: true }
+    // } catch (err: unknown) {
+    //   const msg = extractErrorMessage(err, 'Email tidak terdaftar, periksa kembali!')
+    //   error.value = msg
+    //   return { success: false, error: msg }
+    // } finally {
+    //   isLoading.value = false
+    // }
   }
 
   /**
@@ -66,22 +74,28 @@ export function usePasswordReset() {
    */
   async function verifyOtp(otp: string) {
     clearMessages()
-    isLoading.value = true
-    try {
-      const response = await passwordResetAPI.verifyOtp({ email: email.value, otp })
 
-      if (!response.success || !response.data)
-        throw new Error(response.message ?? 'Kode verifikasi tidak valid')
+    // for testing only
+    isLoading.value = false
+    resetToken.value = 'bebek'
+    return { success: true }
 
-      resetToken.value = response.data.resetToken
-      return { success: true }
-    } catch (err: unknown) {
-      const msg = extractErrorMessage(err, 'Kode verifikasi tidak valid atau kadaluarsa')
-      error.value = msg
-      return { success: false, error: msg }
-    } finally {
-      isLoading.value = false
-    }
+    // isLoading.value = true
+    // try {
+    //   const response = await passwordResetAPI.verifyOtp({ email: email.value, otp })
+
+    //   if (!response.success || !response.data)
+    //     throw new Error(response.message ?? 'Kode verifikasi tidak valid')
+
+    //   resetToken.value = response.data.resetToken
+    //   return { success: true }
+    // } catch (err: unknown) {
+    //   const msg = extractErrorMessage(err, 'Kode verifikasi tidak valid atau kadaluarsa')
+    //   error.value = msg
+    //   return { success: false, error: msg }
+    // } finally {
+    //   isLoading.value = false
+    // }
   }
 
   /**
@@ -116,26 +130,30 @@ export function usePasswordReset() {
       return { success: false, error: error.value }
     }
 
-    clearMessages()
-    isLoading.value = true
-    try {
-      const response = await passwordResetAPI.resetPassword({
-        resetToken: resetToken.value,
-        newPassword,
-      })
+    // for testing only
+    reset() // clear sensitive state after success
+    return { success: true }
 
-      if (!response.success) throw new Error(response.message ?? 'Gagal mengubah kata sandi')
+    // clearMessages()
+    // isLoading.value = true
+    // try {
+    //   const response = await passwordResetAPI.resetPassword({
+    //     resetToken: resetToken.value,
+    //     newPassword,
+    //   })
 
-      successMessage.value = 'Kata sandi berhasil diubah!'
-      reset() // clear sensitive state after success
-      return { success: true }
-    } catch (err: unknown) {
-      const msg = extractErrorMessage(err, 'Gagal mengubah kata sandi, coba lagi')
-      error.value = msg
-      return { success: false, error: msg }
-    } finally {
-      isLoading.value = false
-    }
+    //   if (!response.success) throw new Error(response.message ?? 'Gagal mengubah kata sandi')
+
+    //   successMessage.value = 'Kata sandi berhasil diubah!'
+    //   reset() // clear sensitive state after success
+    //   return { success: true }
+    // } catch (err: unknown) {
+    //   const msg = extractErrorMessage(err, 'Gagal mengubah kata sandi, coba lagi')
+    //   error.value = msg
+    //   return { success: false, error: msg }
+    // } finally {
+    //   isLoading.value = false
+    // }
   }
 
   return {
@@ -164,7 +182,6 @@ function maskEmail(raw: string): string {
   return `${local.slice(0, 3)}${'*'.repeat(Math.max(local.length - 3, 4))}@${domain}`
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function extractErrorMessage(err: unknown, fallback: string): string {
   if (typeof err === 'object' && err !== null) {
     const e = err as { data?: { message?: string }; message?: string }

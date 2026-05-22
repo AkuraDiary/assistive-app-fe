@@ -7,8 +7,8 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { AtSign, ArrowLeft } from 'lucide-vue-next'
-import { validators } from '@/utils/validators'
 import { usePasswordReset } from '@/composable/usePasswordReset'
+import { validators } from '@/utils/validators'
 
 const router = useRouter()
 const { sendResetEmail, isLoading, error, clearMessages } = usePasswordReset()
@@ -21,15 +21,9 @@ const isFormValid = computed(() => email.value.trim().length > 0)
 function validateEmail(): boolean {
   localError.value = null
   const requiredCheck = validators.required('Email')(email.value)
-  if (requiredCheck !== true) {
-    localError.value = requiredCheck
-    return false
-  }
+  if (requiredCheck !== true) { localError.value = requiredCheck; return false }
   const emailCheck = validators.email(email.value)
-  if (emailCheck !== true) {
-    localError.value = emailCheck
-    return false
-  }
+  if (emailCheck !== true) { localError.value = emailCheck; return false }
   return true
 }
 
@@ -48,9 +42,8 @@ async function handleSubmit() {
 
 <template>
   <div class="flex min-h-screen items-center justify-center bg-[#F2F2F7] px-4">
-    <div
-      class="w-full max-w-[480px] rounded-3xl border-primary border-2 bg-white px-10 py-12 shadow-sm"
-    >
+    <div class="w-full max-w-[480px] rounded-3xl border border-primary/30 bg-white px-10 py-12 shadow-sm">
+
       <!-- Title -->
       <h1 class="text-center text-3xl font-bold text-neutral-800">Lupa Sandi?</h1>
       <p class="mt-3 text-center text-sm text-neutral-500">
