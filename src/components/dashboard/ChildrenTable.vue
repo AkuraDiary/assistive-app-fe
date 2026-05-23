@@ -70,6 +70,7 @@ const statusLabel: Record<string, string> = {
               </svg>
             </div>
             {{ record.name }}
+            
           </td>
           <td class="ct__td">{{ formatDate(record.tanggal ?? '') }}</td>
           <td class="ct__td">{{ record.lembaga }}</td>
@@ -133,36 +134,15 @@ const statusLabel: Record<string, string> = {
 </template>
 
 <style scoped>
-.children-table {
-  background: #fff;
-  border-radius: 16px;
-  padding: 0.5rem 1.5rem 1.5rem;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-}
 
-.children-table__table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-}
-
-thead tr {
-  background: #eee8fb;
-}
-
-th {
-  padding: 14px 16px;
-  text-align: left;
-  font-weight: 600;
-  color: #2d2d2d;
-  font-size: 14px;
-}
 
 .ct {
-  background: #fff;
-  border-radius: 16px;
+  background: var(--color-surface);
+border-radius: var(--radius-lg);
+box-shadow: var(--shadow-md);
+  
   overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  
 }
 
 .ct__table {
@@ -173,7 +153,7 @@ th {
 
 /* Head */
 .ct__head-row {
-  background: #eae6f8;
+  background: var(--color-primary-lighter);
 }
 
 .ct__th {
@@ -181,7 +161,7 @@ th {
   text-align: left;
   font-weight: 600;
   font-size: 14px;
-  color: #1a1a1a;
+  color: var(--color-text-dark);
 }
 
 .ct__th--name {
@@ -190,8 +170,8 @@ th {
 
 /* Rows */
 .ct__row {
-  border-bottom: 1px solid #f3f0fa;
-  transition: background 0.15s;
+  border-bottom: 1px solid var(--color-border);
+transition: background var(--transition-fast);
 }
 
 .ct__row:last-child {
@@ -199,12 +179,12 @@ th {
 }
 
 .ct__row:hover {
-  background: #faf8ff;
+  background: var(--color-primary-muted);
 }
 
 .ct__td {
   padding: 16px 20px;
-  color: #2d2d2d;
+  color: var(--color-text-dark);
   vertical-align: middle;
 }
 
@@ -229,9 +209,6 @@ th {
   object-fit: cover;
 }
 
-.ct__name {
-  font-weight: 500;
-}
 
 /* Status badges */
 .ct__status {
@@ -243,16 +220,16 @@ th {
 }
 
 .ct__status--menunggu {
-  background: #ddeeff;
-  color: #5b8dee;
+  background:var(--color-info-light);
+  color: var(--color-info);
 }
 .ct__status--diterima {
-  background: #d6f5e8;
-  color: #1e9e5e;
+  background: var(--color-success-light);
+  color: var(--color-success);
 }
 .ct__status--ditolak {
-  background: #fde8e8;
-  color: #e05c5c;
+  color: var(--color-error);
+background: var(--color-error-light);
 }
 
 /* Buttons */
@@ -263,28 +240,32 @@ th {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
-  border: 1.5px solid #d0cce0;
+  border-color: var(--color-border);
+  border: 1.5px solid;
+  color: var(--color-text-light);
+  border-color: var(--color-border);
   background: transparent;
 }
 
 .ct__btn--disable {
-  color: #aaa;
-  border-color: #ddd;
+  color: var(--color-text-light);
+border-color: var(--color-border);
   cursor: not-allowed;
 }
 
 .ct__btn--filled {
-  background: #7c5ccc;
+  background: var(--color-primary);
+border-color: var(--color-primary);
   color: #fff;
-  border-color: #7c5ccc;
+  
   display: inline-flex;
   align-items: center;
   gap: 6px;
 }
 
 .ct__btn--filled:hover {
-  background: #6a4db8;
-  border-color: #6a4db8;
+  background: var(--color-primary-light);
+border-color: var(--color-primary-light);
 }
 
 .ct__chevron {
@@ -301,8 +282,10 @@ th {
   position: absolute;
   top: calc(100% + 4px);
   left: 0;
-  background: #fff;
-  border: 1.5px solid #e0d9f5;
+  background: var(--color-surface);
+border-color: var(--color-primary);
+box-shadow: var(--shadow-md);
+  border: 1.5px solid;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   z-index: 10;
@@ -318,14 +301,14 @@ th {
   background: transparent;
   border: none;
   font-size: 13px;
-  color: #2d2d2d;
+  color: var(--color-text-dark);
   cursor: pointer;
   transition: background 0.15s;
 }
 
 .ct__dropdown-item:hover {
-  background: #f0ebff;
-  color: #7c5ccc;
+  color: var(--color-primary);
+background: #f0ebff;
 }
 
 /* Loading */
@@ -338,8 +321,10 @@ th {
 .ct__spinner {
   width: 24px;
   height: 24px;
-  border: 2px solid #ede8fa;
-  border-top-color: #7c5ccc;
+  border-top-color: var(--color-primary);
+border-color: #ede8fa; 
+  border: 2px solid;
+  
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }

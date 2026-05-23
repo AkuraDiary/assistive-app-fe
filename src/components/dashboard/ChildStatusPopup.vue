@@ -31,9 +31,9 @@ const emit = defineEmits<{
       </div>
 
       <BaseButton color="ternary" size="lg" full-width @click="emit('action')">
-  {{ status === 'diterima' ? 'Kerjakan' : 'Data Anak' }}
-</BaseButton>
-<button class="popup__back-btn" @click="emit('back')">← Kembali</button>
+        {{ status === 'diterima' ? 'Kerjakan' : 'Data Anak' }}
+      </BaseButton>
+      <button class="popup__back-btn" @click="emit('back')">← Kembali</button>
     </div>
   </div>
 </template>
@@ -50,9 +50,10 @@ const emit = defineEmits<{
 }
 
 .popup {
-  background: #fff;
-  border-radius: 24px;
-  border: 3px solid #8b73f6;
+  background: var(--color-surface);
+  border-color: var(--color-primary);
+  border-radius: var(--radius-2xl);
+  border: 3px solid var(--color-primary);
   width: 320px;
   padding: 2.5rem 2rem;
   display: flex;
@@ -65,7 +66,8 @@ const emit = defineEmits<{
 .popup__message {
   font-size: 22px;
   font-weight: 700;
-  color: #1a1a1a;
+  color: var(--color-text-dark);
+
   line-height: 1.4;
   margin: 0;
 }
@@ -73,56 +75,31 @@ const emit = defineEmits<{
 .popup__notice {
   width: 100%;
   padding: 10px 16px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   font-size: 13px;
   font-weight: 500;
   text-align: center;
 }
 
 .popup__notice--diterima {
-  background: #e6f9f0;
-  color: #1e9e5e;
+  background: var(--color-success-light);
+  color: var(--color-success);
 }
 
 .popup__notice--ditolak {
-  background: #fde8e8;
-  color: #e05c5c;
-}
-
-.popup__action-btn {
-  background: #7c5ccc;
-  color: #fff;
-  border: none;
-  border-radius: 999px;
-  padding: 12px 48px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.popup__action-btn:hover {
-  background: #6a4db8;
+  background: var(--color-error-light);
+  color: var(--color-error);
 }
 
 .popup__back-btn {
   background: transparent;
   border: none;
-  color: #7c5ccc;
+  color: var(--color-primary);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 6px;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
 }
 </style>
