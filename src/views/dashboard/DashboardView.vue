@@ -11,25 +11,24 @@ import type {
   ChildStatus,
   ScreeningUIState,
   ScreeningPayload,
-  ScreeningQuestion,
 } from '@/types/dashboard.types'
 import EmptyChildrenBanner from '@/components/dashboard/EmptyChildrenBanner.vue'
 import ParentScreeningForm from '@/components/forms/ParentScreeningForm.vue'
 import { dashboardService } from '@/services/dashboard.service'
 import { useDashboardOverlay } from '@/composable/useDashboardOverlay'
 
-const { state, hasChildren, initialize, selectChild, addChild, updateChild, updateScreeningUIState } =
-  useDashboard()
-  const overlay = useDashboardOverlay()
-
+const {
+  state,
+  hasChildren,
+  initialize,
+  selectChild,
+  addChild,
+  updateChild,
+  updateScreeningUIState,
+} = useDashboard()
+const overlay = useDashboardOverlay()
 
 const activeTab = ref<'dashboard' | 'course'>('dashboard')
-const showAddForm = ref(false)
-const formLoading = ref(false)
-const showScreening = ref(false)
-const screeningTarget = ref<{ childId: string; type: 'orang_tua' | 'anak' } | null>(null)
-const screeningQuestions = ref<ScreeningQuestion[]>([])
-const screeningLoading = ref(false)
 
 onMounted(initialize)
 async function handleSubmit(payload: AddChildPayload) {
@@ -45,28 +44,6 @@ async function handleSubmit(payload: AddChildPayload) {
     overlay.loading.value = false
   }
 }
-
-// async function handleScreeningUIState(id: string, action: ScreeningUIState) {
-//   if (action === 'lihat_hasil' || action === 'disable') return
-//   screeningTarget.value = { childId: id, type: action }
-//   screeningLoading.value = true
-//   screeningQuestions.value = await dashboardService.getScreeningQuestions(action)
-//   screeningLoading.value = false
-//   showScreening.value = true
-// }
-
-// async function handleScreeningSubmit(payload: ScreeningPayload) {
-//   screeningLoading.value = true
-//   try {
-//     await dashboardService.submitScreening(payload)
-//     updateScreeningUIState(payload.childId, 'lihat_hasil')
-//     showScreening.value = false
-//     screeningTarget.value = null
-//   } finally {
-//     screeningLoading.value = false
-//   }
-// }
-
 
 async function handleScreeningAction(id: string, action: ScreeningUIState) {
   if (action === 'disable' || action === 'lihat_hasil') return
@@ -103,37 +80,6 @@ function handleStatusAction(id: string, status: ChildStatus) {
     })
   }
 }
-
-function handleScreeningCancel() {
-  showScreening.value = false
-  screeningTarget.value = null
-}
-
-function handleChildFormCancel() {
-  showAddForm.value = false
-  editTarget.value = null
-}
-// handle status pop up action
-const editTarget = ref<{ id: string; data: AddChildPayload } | null>(null)
-
-// function handleStatusAction(id: string, status: ChildStatus) {
-//   if (status === 'diterima') {
-//     handleScreeningUIState(id, 'orang_tua')
-//     return
-//   }
-//   const record = state.value.childRecords.find((r) => r.id === id)
-//   if (!record) return
-//   editTarget.value = {
-//     id,
-//     data: {
-//       namaLengkap:  record.name,
-//       tanggalLahir: record.tanggal ?? '',
-//       jenisTerapi:  record.lembaga === 'Individu' ? 'individu' : 'lembaga_sekolah',
-//       lembagaId:    state.value.lembagaList.find((l) => l.name === record.lembaga)?.id,
-//     },
-//   }
-//   showAddForm.value = true
-// }
 </script>
 
 <template>
@@ -145,34 +91,31 @@ const editTarget = ref<{ id: string; data: AddChildPayload } | null>(null)
     />
 
     <main class="dashboard__main">
-      <!-- Child Form (fragment overlay) -->
       <Transition name="fade">
         <AddChildForm
-          v-if="showAddForm"
+          v-if="overlay.mode.value === 'add_child' || overlay.mode.value === 'edit_child'"
           :lembaga-list="state.lembagaList"
-          :loading="formLoading"
+          :loading="overlay.loading.value"
+          :initial-data="overlay.addChildData.value?.data"
           @submit="handleSubmit"
-          :initial-data="editTarget?.data ?? undefined"
-          @cancel="handleChildFormCancel"
-        />
-      </Transition>
-      <!-- Parent Screening Form (fragment overlay) -->
-      <Transition name="fade">
-        <ParentScreeningForm
-          v-if="showScreening && screeningTarget"
-          :child-id="screeningTarget.childId"
-          :screening-type="screeningTarget.type"
-          :questions="screeningQuestions"
-          :loading="screeningLoading"
-          @submit="handleScreeningSubmit"
-          @cancel="handleScreeningCancel"
+          @cancel="overlay.close()"
         />
       </Transition>
 
-      <!-- Dashboard content -->
       <Transition name="fade">
-        <div v-if="!showAddForm && !showScreening" class="dashboard__content">
-          <!-- Header row -->
+        <ParentScreeningForm
+          v-if="overlay.mode.value === 'screening' && overlay.screeningData.value"
+          :child-id="overlay.screeningData.value.childId"
+          :screening-type="overlay.screeningData.value.type"
+          :questions="overlay.screeningData.value.questions"
+          :loading="overlay.loading.value"
+          @submit="handleScreeningSubmit"
+          @cancel="overlay.close()"
+        />
+      </Transition>
+
+      <Transition name="fade">
+        <div v-if="overlay.mode.value === 'none'" class="dashboard__content">
           <div class="dashboard__header">
             <div>
               <h1 class="dashboard__title">Selamat datang {{ state.user?.name ?? '...' }}</h1>
@@ -184,23 +127,20 @@ const editTarget = ref<{ id: string; data: AddChildPayload } | null>(null)
                 }}
               </p>
             </div>
-
             <button
               v-if="hasChildren && !state.loading"
-              class="dashboard__add-btn background-secondary"
-              @click="showAddForm = true"
+              class="dashboard__add-btn"
+              @click="overlay.openAddChild()"
             >
               + Tambah Anak
             </button>
           </div>
 
-          <!-- Children: empty banner or table -->
           <EmptyChildrenBanner
             v-if="!hasChildren && !state.loading"
-            @add-child="showAddForm = true"
+            @add-child="overlay.openAddChild()"
             @contact-support="() => {}"
           />
-
           <ChildrenTable
             v-else
             :records="state.childRecords"
@@ -209,7 +149,6 @@ const editTarget = ref<{ id: string; data: AddChildPayload } | null>(null)
             @status-action="handleStatusAction"
           />
 
-          <!-- Panels row -->
           <div class="dashboard__panels">
             <ActivityPanel :activities="state.activities" :loading="state.loading" />
             <CourseProgressPanel
@@ -229,7 +168,7 @@ const editTarget = ref<{ id: string; data: AddChildPayload } | null>(null)
 <style scoped>
 .dashboard {
   min-height: 100vh;
-  background: #f5f4f9;
+  background: var(--color-background);
   font-family: 'Inter', system-ui, sans-serif;
 }
 
@@ -254,30 +193,31 @@ const editTarget = ref<{ id: string; data: AddChildPayload } | null>(null)
 .dashboard__title {
   font-size: 20px;
   font-weight: 700;
-  color: #1a1a1a;
+  color: var(--color-text-dark);
   margin: 0 0 4px;
 }
 
 .dashboard__subtitle {
   font-size: 14px;
-  color: #888;
+  color: var(--color-text-light);
   margin: 0;
 }
 
 .dashboard__add-btn {
   padding: 10px 20px;
-  background: #625ccc;
+  background: var(--color-primary);
+  border-radius: var(--radius-md);
+  transition: background var(--transition-base);
   color: #fff;
   border: none;
-  border-radius: 10px;
+
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
 }
 
 .dashboard__add-btn:hover {
-  background: #6a4db8;
+  background: var(--color-primary-light);
 }
 
 .dashboard__panels {
