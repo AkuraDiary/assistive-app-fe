@@ -74,6 +74,15 @@ export interface ScreeningPayload {
   answers: ScreeningAnswer[]
 }
 
+export interface ScreeningResult {
+  id: string
+  childId: string
+  screeningType: ScreeningType
+  answers: ScreeningAnswer[]
+  score: number
+  completedAt: string // ISO string
+  recommendation?: string
+}
 
 // dashboards
 export interface DashboardUser {

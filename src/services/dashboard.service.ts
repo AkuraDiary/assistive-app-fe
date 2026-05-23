@@ -8,6 +8,7 @@ import type {
   Lembaga,
   ScreeningQuestion,
   ScreeningPayload,
+  ScreeningResult,
 } from '@/types/dashboard.types'
 
 // ─── Config ──────────────────────────────────────────────────────────────────
@@ -100,6 +101,8 @@ const MOCK_SCREENING_QUESTIONS_ANAK: ScreeningQuestion[] = [
   { id: 'q4', order: 4, text: 'Apakah kamu sering lupa urutan huruf?', required: true },
   { id: 'q5', order: 5, text: 'Apakah kamu kesulitan menulis dengan rapi?', required: true },
 ]
+
+const MOCK_SCREENING_RESULTS: ScreeningResult[] = []
 
 const USE_MOCK = !BASE_URL
 
@@ -201,15 +204,29 @@ export const dashboardService = {
     }
     return request<ScreeningQuestion[]>(`/api/v1/screening/questions?type=${type}`)
   },
-
   async submitScreening(payload: ScreeningPayload): Promise<void> {
     if (USE_MOCK) {
-      console.log('Mock screening submitted:', payload)
+      MOCK_SCREENING_RESULTS.push({
+        id: `sr${Date.now()}`,
+        childId: payload.childId,
+        screeningType: payload.screeningType,
+        answers: payload.answers,
+        score: Math.round(
+          (payload.answers.reduce((s, a) => s + a.value, 0) / payload.answers.length) * 20,
+        ),
+        completedAt: new Date().toISOString(),
+        recommendation: 'Perlu evaluasi lebih lanjut.',
+      })
       return
     }
     return request<void>('/api/v1/screening/submit', {
       method: 'POST',
       body: JSON.stringify(payload),
     })
+  },
+
+  async getScreeningResult(childId: string): Promise<ScreeningResult[]> {
+    if (USE_MOCK) return MOCK_SCREENING_RESULTS.filter((r) => r.childId === childId)
+    return request<ScreeningResult[]>(`/api/v1/screening/results?childId=${childId}`)
   },
 }
