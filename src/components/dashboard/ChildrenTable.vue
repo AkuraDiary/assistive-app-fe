@@ -72,7 +72,6 @@ const statusLabel: Record<string, string> = {
           <td class="ct__td">{{ record.lembaga }}</td>
           <td class="ct__td">
             <span class="ct__status" :class="`ct__status--${record.status}`">
-              >
               {{ statusLabel[record.status] }}
             </span>
           </td>

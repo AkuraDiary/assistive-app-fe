@@ -150,6 +150,7 @@ function onChildChange(e: Event) {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  margin-bottom: 12px;
 }
 
 .course-panel__tab {
