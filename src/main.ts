@@ -43,4 +43,5 @@ app.component('LandingCardItem', LandingCardItem)
 
 app.use(createPinia())
 app.use(router)
+await router.isReady()
 app.mount('#app')

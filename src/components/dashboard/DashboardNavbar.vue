@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { DashboardUser } from '@/types/dashboard.types'
+import AppLogo from '../shared/AppLogo.vue';
 
 const props = defineProps<{
   user: DashboardUser | null
@@ -15,7 +16,7 @@ const emit = defineEmits<{
   <nav class="navbar">
     <div class="navbar__brand">
       <div class="navbar__logo">
-        <img src="@/assets/images/logo.png" alt="Company Logo" class="h-18 w-auto object-contain" />
+        <AppLogo/>
       </div>
     </div>
 

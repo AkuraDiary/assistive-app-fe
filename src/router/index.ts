@@ -15,16 +15,19 @@ const router = createRouter({
       path: '/',
       name: 'landing',
       component: LandingView,
+      meta: { transition: 'fade' },
     },
     {
       path: '/login',
       name: 'login',
       component: LoginView,
+      meta: { transition: 'slide-left' },
     },
     {
       name: 'register',
       path: '/register',
       component: RegisterView,
+      meta: { transition: 'slide-right' },
     },
     {
       path: '/forgot-password',
