@@ -83,7 +83,7 @@ const statusLabel: Record<string, string> = {
               {{ statusLabel[record.status] }}
             </span>
           </td>
-          <td class="ct__td">
+          <td class="ct__td ct__td-screening">
             <!-- Disabled -->
             <button
               v-if="record.screeningAction === 'disable'"
@@ -162,6 +162,7 @@ box-shadow: var(--shadow-md);
   font-weight: 600;
   font-size: 14px;
   color: var(--color-text-dark);
+  overflow: hidden; 
 }
 
 .ct__th--name {
@@ -183,6 +184,7 @@ transition: background var(--transition-fast);
 }
 
 .ct__td {
+  
   padding: 16px 20px;
   color: var(--color-text-dark);
   vertical-align: middle;
@@ -209,6 +211,9 @@ transition: background var(--transition-fast);
   object-fit: cover;
 }
 
+.ct__td-screening{
+  width: 20%;  
+}
 
 /* Status badges */
 .ct__status {
