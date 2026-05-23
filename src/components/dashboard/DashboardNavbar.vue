@@ -39,12 +39,12 @@ const emit = defineEmits<{
     <div class="navbar__user">
       <div class="navbar__avatar">
         <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-          <circle cx="16" cy="16" r="15" stroke="#C4B5E0" stroke-width="1.5" />
-          <circle cx="16" cy="13" r="5" stroke="#C4B5E0" stroke-width="1.5" />
+          <circle cx="16" cy="16" r="15" stroke="#8B73F6D9" stroke-width="2" />
+          <circle cx="16" cy="13" r="5" stroke="#8B73F6D9" stroke-width="2" />
           <path
             d="M6 27c1.5-4 5-6 10-6s8.5 2 10 6"
-            stroke="#C4B5E0"
-            stroke-width="1.5"
+            stroke="#8B73F6D9"
+            stroke-width="2"
             stroke-linecap="round"
           />
         </svg>
@@ -59,8 +59,6 @@ const emit = defineEmits<{
   align-items: center;
   justify-content: space-between;
   padding: 0.75rem 2rem;
-  background: #fff;
-  border-bottom: 1px solid #f0edf8;
 }
 
 .navbar__logo {

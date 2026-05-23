@@ -15,15 +15,15 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 // ─── Mock data (remove when backend is ready) ─────────────────────────────────
 const MOCK_USER: DashboardUser = { id: 'u1', name: 'Budi Santoso' }
 const MOCK_CHILDREN: Child[] = [
-  { id: 'c1', name: 'Fatur Rahman' },
-  { id: 'c2', name: 'Siti Rahayu' },
+  //   { id: 'c1', name: 'Fatur Rahman' },
+  //   { id: 'c2', name: 'Siti Rahayu' },
 ]
 const MOCK_COURSES: Course[] = [
-  { id: 'cr1', name: 'Course 1', progress: 75, completedSessions: 6, totalSessions: 8 },
-  { id: 'cr2', name: 'Course 2', progress: 40, completedSessions: 4, totalSessions: 10 },
-  { id: 'cr3', name: 'Course 3', progress: 20, completedSessions: 2, totalSessions: 10 },
-  { id: 'cr4', name: 'Course 4', progress: 0,  completedSessions: 0, totalSessions: 8 },
-  { id: 'cr5', name: 'Course 5', progress: 90, completedSessions: 9, totalSessions: 10 },
+  //   { id: 'cr1', name: 'Course 1', progress: 75, completedSessions: 6, totalSessions: 8 },
+  //   { id: 'cr2', name: 'Course 2', progress: 40, completedSessions: 4, totalSessions: 10 },
+  //   { id: 'cr3', name: 'Course 3', progress: 20, completedSessions: 2, totalSessions: 10 },
+  //   { id: 'cr4', name: 'Course 4', progress: 0,  completedSessions: 0, totalSessions: 8 },
+  //   { id: 'cr5', name: 'Course 5', progress: 90, completedSessions: 9, totalSessions: 10 },
 ]
 const MOCK_ACTIVITIES: ActivityEntry[] = []
 

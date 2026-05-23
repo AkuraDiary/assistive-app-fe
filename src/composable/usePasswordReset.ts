@@ -7,7 +7,7 @@
  */
 
 import { ref, computed } from 'vue'
-import { passwordResetAPI } from '@/services/passwordResetAPI'
+import { passwordResetAPI } from '@/services/password.reset.api'
 
 // ─── Shared singleton state ───────────────────────────────────────────────────
 

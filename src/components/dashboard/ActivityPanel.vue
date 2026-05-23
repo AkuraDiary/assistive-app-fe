@@ -14,41 +14,35 @@ defineProps<{
       <h2 class="activity-panel__title">Aktifitas Belajar</h2>
     </div>
 
-    <div class="activity-panel__body">
-      <div v-if="loading" class="activity-panel__state">
-        <div class="activity-panel__spinner" />
-      </div>
-
-      <div v-else-if="activities.length === 0" class="activity-panel__state">
-        <p class="activity-panel__empty-text">Belum ada aktifitas</p>
-      </div>
-
-      <ul v-else class="activity-panel__list">
-        <li
-          v-for="entry in activities"
-          :key="entry.id"
-          class="activity-panel__item"
-        >
-          <div class="activity-panel__item-dot" />
-          <div class="activity-panel__item-content">
-            <span class="activity-panel__item-topic">{{ entry.topic }}</span>
-            <span class="activity-panel__item-meta">
-              {{ entry.durationMinutes }} menit
-              <template v-if="entry.score != null"> · {{ entry.score }}/100</template>
-            </span>
-          </div>
-          <span class="activity-panel__item-date">
-            {{ new Date(entry.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) }}
-          </span>
-        </li>
-      </ul>
+    <div v-if="loading" class="activity-panel__state">
+      <div class="activity-panel__spinner" />
     </div>
+
+    <div v-else-if="activities.length === 0" class="activity-panel__state">
+      <p class="activity-panel__empty-text">Belum ada aktifitas</p>
+    </div>
+
+    <ul v-else class="activity-panel__list">
+      <li v-for="entry in activities" :key="entry.id" class="activity-panel__item">
+        <div class="activity-panel__item-dot" />
+        <div class="activity-panel__item-content">
+          <span class="activity-panel__item-topic">{{ entry.topic }}</span>
+          <span class="activity-panel__item-meta">
+            {{ entry.durationMinutes }} menit
+            <template v-if="entry.score != null"> · {{ entry.score }}/100</template>
+          </span>
+        </div>
+        <span class="activity-panel__item-date">
+          {{ new Date(entry.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) }}
+        </span>
+      </li>
+    </ul>
   </div>
 </template>
 
 <style scoped>
 .activity-panel {
-  background: #FFF0F5;
+  background: #fff0f5;
   border-radius: 16px;
   padding: 1.5rem;
   display: flex;
@@ -60,7 +54,7 @@ defineProps<{
 .activity-panel__header {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   margin-bottom: 1.25rem;
 }
 
@@ -76,16 +70,11 @@ defineProps<{
   margin: 0;
 }
 
-.activity-panel__body {
+.activity-panel__state {
   flex: 1;
+  min-height: 200px;
   background: #fff;
   border-radius: 10px;
-  overflow: hidden;
-}
-
-.activity-panel__state {
-  height: 100%;
-  min-height: 180px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -106,7 +95,11 @@ defineProps<{
   animation: spin 0.7s linear infinite;
 }
 
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 .activity-panel__list {
   list-style: none;
@@ -122,14 +115,18 @@ defineProps<{
   border-bottom: 1px solid #faf0f4;
   transition: background 0.15s;
 }
-.activity-panel__item:last-child { border-bottom: none; }
-.activity-panel__item:hover { background: #fdf5f8; }
+.activity-panel__item:last-child {
+  border-bottom: none;
+}
+.activity-panel__item:hover {
+  background: #fdf5f8;
+}
 
 .activity-panel__item-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #D4537E;
+  background: #d4537e;
   flex-shrink: 0;
 }
 
