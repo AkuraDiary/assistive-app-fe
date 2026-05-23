@@ -1,31 +1,34 @@
 /* Theme Colors - CSS Variables */
 :root {
   /* Primary Colors */
-  --color-primary:  #8B73F6;
-  --color-primary-light: #8B73F6D9;
+  --color-primary: #8b73f6;
+  --color-primary-light: #8b73f6d9;
   --color-primary-lighter: #8b73f6af;
   --color-primary-muted: #c7b7ff74;
 
   /* Secondary Colors */
-  --color-secondary: #FF3C8A;
-  --color-secondary-light: #FF70A9;
-  --color-secondary-lighter: #FFB3D1;
+  --color-secondary: #ff3c8a;
+  --color-secondary-light: #ff70a9;
+  --color-secondary-lighter: #ffb3d1;
 
   /* Neutral Colors */
-  --color-surface: #F5F5F5;
-  --color-background: #FFFFFF;
-  --color-border: #E5E7EB;
+  --color-surface: #f5f5f5;
+  --color-surface-blue: #eff8ff;
+  --color-surface-primary: #f8efff;
+  --color-surface-green: #effff7;
+  --color-background: #ffffff;
+  --color-border: #e5e7eb;
   --color-text-dark: #000000;
-  --color-text-light: #6B7280;
+  --color-text-light: #6b7280;
 
   /* Semantic Colors */
-  --color-success: #10B981;
+  --color-success: #10b981;
   --color-success-light: #d6f5e8;
-  --color-warning: #F59E0B;
+  --color-warning: #f59e0b;
   --color-warning-light: #ffefd3;
-  --color-error: #EF4444;
+  --color-error: #ef4444;
   --color-error-light: #fde8e8;
-  --color-info: #3B82F6;
+  --color-info: #3b82f6;
   --color-info-light: #ddeeff;
 
   /* Spacing */
@@ -78,19 +81,11 @@ button {
 
 /* Gradient Classes */
 .bg-gradient-primary {
-  background: linear-gradient(
-    to right,
-    var(--color-primary),
-    var(--color-primary-light)
-  );
+  background: linear-gradient(to right, var(--color-primary), var(--color-primary-light));
 }
 
 .bg-gradient-secondary {
-  background: linear-gradient(
-    to right,
-    var(--color-secondary),
-    var(--color-secondary-light)
-  );
+  background: linear-gradient(to right, var(--color-secondary), var(--color-secondary-light));
 }
 
 /* Utility Classes */

@@ -70,21 +70,24 @@ const segments = computed(
           <!-- Child card -->
           <div class="sr__child-card">
             <div class="sr__avatar">
-              <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
-                <circle cx="28" cy="28" r="27" stroke="#b8a9e8" stroke-width="2" />
-                <circle cx="28" cy="23" r="9" stroke="#b8a9e8" stroke-width="2" />
-                <path
-                  d="M10 49c2.5-7 9-11 18-11s15.5 4 18 11"
-                  stroke="#b8a9e8"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                />
-              </svg>
+              <div>
+                <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+                  <circle cx="28" cy="28" r="27" stroke="#b8a9e8" stroke-width="2" />
+                  <circle cx="28" cy="23" r="9" stroke="#b8a9e8" stroke-width="2" />
+                  <path
+                    d="M10 49c2.5-7 9-11 18-11s15.5 4 18 11"
+                    stroke="#b8a9e8"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </div>
+              <div class="sr__child-info">
+                <p class="sr__child-name">{{ childName ?? 'Nama Anak' }}</p>
+                <p class="sr__child-age">Usia : 5 tahun</p>
+              </div>
             </div>
-            <div class="sr__child-info">
-              <p class="sr__child-name">{{ childName ?? 'Nama Anak' }}</p>
-              <p class="sr__child-age">Usia : 5 tahun</p>
-            </div>
+
             <div class="sr__level-badge">Level Disleksia : {{ result.dyslexiaLevel ?? '-' }}</div>
           </div>
 
@@ -187,7 +190,7 @@ const segments = computed(
 }
 
 .sr__page-title {
-  font-size: 22px;
+  font-size: 32px;
   font-weight: 700;
   color: var(--color-text-dark);
   margin: 0;
@@ -217,7 +220,6 @@ const segments = computed(
 .sr__top {
   display: flex;
   gap: 1.25rem;
-  align-items: flex-start;
 }
 
 /* Left column */
@@ -230,7 +232,7 @@ const segments = computed(
 
 /* Child card */
 .sr__child-card {
-  background: var(--color-surface);
+  background: var(--color-surface-primary);
   border-radius: var(--radius-lg);
   padding: 1.25rem 1.5rem;
   box-shadow: var(--shadow-sm);
@@ -240,10 +242,14 @@ const segments = computed(
 }
 .sr__avatar {
   display: flex;
+
+  align-items: center; /* Vertically centers the text with the avatar */
+  gap: 12px;
 }
 .sr__child-info {
   display: flex;
   flex-direction: column;
+
   gap: 2px;
 }
 .sr__child-name {
@@ -312,7 +318,7 @@ const segments = computed(
   flex: 1;
 }
 .sr__pretest-card {
-  background: var(--color-surface);
+  background: var(--color-surface-blue);
   border-radius: var(--radius-lg);
   padding: 1.5rem;
   box-shadow: var(--shadow-sm);
@@ -362,7 +368,7 @@ const segments = computed(
 
 /* Recommendation */
 .sr__recommendation {
-  background: #f0f4f0;
+  background: var(--color-surface-green);
   border-radius: var(--radius-lg);
   padding: 1rem 1.5rem;
   font-size: 14px;
