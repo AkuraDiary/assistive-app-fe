@@ -16,9 +16,12 @@ import type {
 import EmptyChildrenBanner from '@/components/dashboard/EmptyChildrenBanner.vue'
 import ParentScreeningForm from '@/components/forms/ParentScreeningForm.vue'
 import { dashboardService } from '@/services/dashboard.service'
+import { useDashboardOverlay } from '@/composable/useDashboardOverlay'
 
 const { state, hasChildren, initialize, selectChild, addChild, updateChild, updateScreeningUIState } =
   useDashboard()
+  const overlay = useDashboardOverlay()
+
 
 const activeTab = ref<'dashboard' | 'course'>('dashboard')
 const showAddForm = ref(false)
@@ -30,37 +33,74 @@ const screeningLoading = ref(false)
 
 onMounted(initialize)
 async function handleSubmit(payload: AddChildPayload) {
-  formLoading.value = true
+  overlay.loading.value = true
   try {
-    if (editTarget.value) {
-      await updateChild(editTarget.value.id, payload)
+    if (overlay.addChildData.value?.id) {
+      await updateChild(overlay.addChildData.value.id, payload)
     } else {
       await addChild(payload)
     }
-    showAddForm.value = false
-    editTarget.value = null
+    overlay.close()
   } finally {
-    formLoading.value = false
+    overlay.loading.value = false
   }
 }
-async function handleScreeningUIState(id: string, action: ScreeningUIState) {
-  if (action === 'lihat_hasil' || action === 'disable') return
-  screeningTarget.value = { childId: id, type: action }
-  screeningLoading.value = true
-  screeningQuestions.value = await dashboardService.getScreeningQuestions(action)
-  screeningLoading.value = false
-  showScreening.value = true
+
+// async function handleScreeningUIState(id: string, action: ScreeningUIState) {
+//   if (action === 'lihat_hasil' || action === 'disable') return
+//   screeningTarget.value = { childId: id, type: action }
+//   screeningLoading.value = true
+//   screeningQuestions.value = await dashboardService.getScreeningQuestions(action)
+//   screeningLoading.value = false
+//   showScreening.value = true
+// }
+
+// async function handleScreeningSubmit(payload: ScreeningPayload) {
+//   screeningLoading.value = true
+//   try {
+//     await dashboardService.submitScreening(payload)
+//     updateScreeningUIState(payload.childId, 'lihat_hasil')
+//     showScreening.value = false
+//     screeningTarget.value = null
+//   } finally {
+//     screeningLoading.value = false
+//   }
+// }
+
+
+async function handleScreeningAction(id: string, action: ScreeningUIState) {
+  if (action === 'disable' || action === 'lihat_hasil') return
+  overlay.loading.value = true
+  const questions = await dashboardService.getScreeningQuestions(action)
+  overlay.loading.value = false
+  overlay.openScreening(id, action, questions)
 }
 
 async function handleScreeningSubmit(payload: ScreeningPayload) {
-  screeningLoading.value = true
+  overlay.loading.value = true
   try {
     await dashboardService.submitScreening(payload)
     updateScreeningUIState(payload.childId, 'lihat_hasil')
-    showScreening.value = false
-    screeningTarget.value = null
+    overlay.close()
   } finally {
-    screeningLoading.value = false
+    overlay.loading.value = false
+  }
+}
+
+function handleStatusAction(id: string, status: ChildStatus) {
+  if (status === 'diterima') {
+    handleScreeningAction(id, 'orang_tua')
+    return
+  }
+  if (status === 'ditolak') {
+    const record = state.value.childRecords.find((r) => r.id === id)
+    if (!record) return
+    overlay.openEditChild(id, {
+      namaLengkap: record.name,
+      tanggalLahir: record.tanggal ?? '',
+      jenisTerapi: record.lembaga === 'Individu' ? 'individu' : 'lembaga_sekolah',
+      lembagaId: state.value.lembagaList.find((l) => l.name === record.lembaga)?.id,
+    })
   }
 }
 
@@ -76,24 +116,24 @@ function handleChildFormCancel() {
 // handle status pop up action
 const editTarget = ref<{ id: string; data: AddChildPayload } | null>(null)
 
-function handleStatusAction(id: string, status: ChildStatus) {
-  if (status === 'diterima') {
-    handleScreeningUIState(id, 'orang_tua')
-    return
-  }
-  const record = state.value.childRecords.find((r) => r.id === id)
-  if (!record) return
-  editTarget.value = {
-    id,
-    data: {
-      namaLengkap:  record.name,
-      tanggalLahir: record.tanggal ?? '',
-      jenisTerapi:  record.lembaga === 'Individu' ? 'individu' : 'lembaga_sekolah',
-      lembagaId:    state.value.lembagaList.find((l) => l.name === record.lembaga)?.id,
-    },
-  }
-  showAddForm.value = true
-}
+// function handleStatusAction(id: string, status: ChildStatus) {
+//   if (status === 'diterima') {
+//     handleScreeningUIState(id, 'orang_tua')
+//     return
+//   }
+//   const record = state.value.childRecords.find((r) => r.id === id)
+//   if (!record) return
+//   editTarget.value = {
+//     id,
+//     data: {
+//       namaLengkap:  record.name,
+//       tanggalLahir: record.tanggal ?? '',
+//       jenisTerapi:  record.lembaga === 'Individu' ? 'individu' : 'lembaga_sekolah',
+//       lembagaId:    state.value.lembagaList.find((l) => l.name === record.lembaga)?.id,
+//     },
+//   }
+//   showAddForm.value = true
+// }
 </script>
 
 <template>
@@ -165,7 +205,7 @@ function handleStatusAction(id: string, status: ChildStatus) {
             v-else
             :records="state.childRecords"
             :loading="state.loading"
-            @screening-action="handleScreeningUIState"
+            @screening-action="handleScreeningAction"
             @status-action="handleStatusAction"
           />
 
