@@ -34,14 +34,13 @@ export function useDashboard() {
     state.value.loading = true
     state.value.error = null
     try {
-      const [user, children, childRecords, lembagaList] = await Promise.all([
+      const [user, childRecords, lembagaList] = await Promise.all([
         dashboardService.getUser(),
-        dashboardService.getChildren(),
         dashboardService.getChildRecords(),
         dashboardService.getLembagaList(),
       ])
       state.value.user = user
-      state.value.children = children
+
       state.value.childRecords = childRecords
       state.value.lembagaList = lembagaList
     } catch (err) {

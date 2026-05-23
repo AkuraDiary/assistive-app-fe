@@ -69,11 +69,6 @@ const MOCK_COURSES: Course[] = [
   { id: 'cr5', name: 'Course 5', progress: 90, completedSessions: 9, totalSessions: 10 },
 ]
 
-const MOCK_CHILDREN: Child[] = [
-  { id: 'c1', name: 'Fatur Rahman' },
-  { id: 'c2', name: 'Widarini Wijaya' },
-  { id: 'c3', name: 'Azzi Wildan' },
-]
 const MOCK_ACTIVITIES: ActivityEntry[] = []
 
 const MOCK_SCREENING_QUESTIONS_ORTU: ScreeningQuestion[] = [
@@ -113,22 +108,11 @@ export const dashboardService = {
     return request<DashboardUser>('/api/v1/me')
   },
 
-  async getChildren(): Promise<Child[]> {
-    if (USE_MOCK) return MOCK_CHILDREN
-    return request<Child[]>('/api/v1/children')
+  async getChildren(): Promise<ChildRecord[]> {
+    if (USE_MOCK) return MOCK_CHILD_RECORDS
+    return request<ChildRecord[]>('/api/v1/children')
   },
 
-  async addChild(name: string): Promise<Child> {
-    if (USE_MOCK) {
-      const child: Child = { id: `c${Date.now()}`, name }
-      MOCK_CHILDREN.push(child)
-      return child
-    }
-    return request<Child>('/api/v1/children', {
-      method: 'POST',
-      body: JSON.stringify({ name }),
-    })
-  },
 
   async getCourses(childId: string): Promise<Course[]> {
     if (USE_MOCK) return MOCK_COURSES
@@ -226,7 +210,31 @@ export const dashboardService = {
   },
 
   async getScreeningResult(childId: string): Promise<ScreeningResult[]> {
-    if (USE_MOCK) return MOCK_SCREENING_RESULTS.filter((r) => r.childId === childId)
+    if (USE_MOCK) {
+      const existing = MOCK_SCREENING_RESULTS.filter((r) => r.childId === childId)
+      if (existing.length) return existing
+
+      // synthetic demo result so the panel always has data in dev
+      return [
+        {
+          id: `sr-demo-${childId}`,
+          childId,
+          screeningType: 'anak',
+          answers: [],
+          score: 30,
+          completedAt: new Date().toISOString(),
+          recommendation: 'abcdefghijklmnopqrstuvw',
+          dyslexiaLevel: 2,
+          categoryScores: [
+            { label: 'Huruf', score: 7, max: 10 },
+            { label: 'Kata', score: 8, max: 10 },
+            { label: 'Kalimat', score: 9, max: 10 },
+            { label: 'Objek', score: 6, max: 10 },
+            { label: 'Warna', score: 9, max: 10 },
+          ],
+        },
+      ]
+    }
     return request<ScreeningResult[]>(`/api/v1/screening/results?childId=${childId}`)
   },
 }

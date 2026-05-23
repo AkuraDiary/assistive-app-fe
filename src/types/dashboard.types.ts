@@ -74,6 +74,15 @@ export interface ScreeningPayload {
   answers: ScreeningAnswer[]
 }
 
+
+// screening results
+
+export interface CategoryScore {
+  label: string
+  score: number   // raw score
+  max: number     // max possible (e.g. 10)
+}
+
 export interface ScreeningResult {
   id: string
   childId: string
@@ -82,6 +91,8 @@ export interface ScreeningResult {
   score: number
   completedAt: string // ISO string
   recommendation?: string
+  categoryScores?: CategoryScore[]  
+  dyslexiaLevel?: number   
 }
 
 // dashboards
