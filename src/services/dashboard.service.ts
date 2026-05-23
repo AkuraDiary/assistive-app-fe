@@ -24,33 +24,33 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 const MOCK_USER: DashboardUser = { id: 'u1', name: 'Budi Santoso' }
 
 const MOCK_CHILD_RECORDS: ChildRecord[] = [
-  // {
-  //   id: 'c1',
-  //   name: 'Fatur Rahman',
-  //   avatar: undefined,
-  //   tanggal: '2026-05-02',
-  //   lembaga: 'SLB Mutiara',
-  //   status: 'menunggu',
-  //   screeningAction: 'disable',
-  // },
-  // {
-  //   id: 'c2',
-  //   name: 'Widarini Wijaya',
-  //   avatar: undefined,
-  //   tanggal: '2026-05-02',
-  //   lembaga: 'SLB Mutiara',
-  //   status: 'diterima',
-  //   screeningAction: 'orang_tua',
-  // },
-  // {
-  //   id: 'c3',
-  //   name: 'Azzi Wildan',
-  //   avatar: undefined,
-  //   tanggal: '2026-05-02',
-  //   lembaga: 'SLB Mutiara',
-  //   status: 'ditolak',
-  //   screeningAction: 'lihat_hasil',
-  // },
+  {
+    id: 'c1',
+    name: 'Fatur Rahman',
+    avatar: undefined,
+    tanggal: '2026-05-02',
+    lembaga: 'SLB Mutiara',
+    status: 'menunggu',
+    screeningAction: 'disable',
+  },
+  {
+    id: 'c2',
+    name: 'Widarini Wijaya',
+    avatar: undefined,
+    tanggal: '2026-05-02',
+    lembaga: 'SLB Mutiara',
+    status: 'diterima',
+    screeningAction: 'orang_tua',
+  },
+  {
+    id: 'c3',
+    name: 'Azzi Wildan',
+    avatar: undefined,
+    tanggal: '2026-05-02',
+    lembaga: 'SLB Mutiara',
+    status: 'ditolak',
+    screeningAction: 'lihat_hasil',
+  },
 ]
 
 const MOCK_LEMBAGA: Lembaga[] = [
@@ -67,9 +67,9 @@ const MOCK_COURSES: Course[] = [
 ]
 
 const MOCK_CHILDREN: Child[] = [
-  //   { id: 'c1', name: 'Fatur Rahman' },
-  //   { id: 'c2', name: 'Widarini Wijaya' },
-  //   { id: 'c3', name: 'Azzi Wildan' },
+  { id: 'c1', name: 'Fatur Rahman' },
+  { id: 'c2', name: 'Widarini Wijaya' },
+  { id: 'c3', name: 'Azzi Wildan' },
 ]
 const MOCK_ACTIVITIES: ActivityEntry[] = []
 
@@ -116,7 +116,7 @@ export const dashboardService = {
 
   async addChildRecord(payload: AddChildPayload): Promise<ChildRecord> {
     if (USE_MOCK) {
-      const lembaga = MOCK_LEMBAGA.find(l => l.id === payload.lembagaId)
+      const lembaga = MOCK_LEMBAGA.find((l) => l.id === payload.lembagaId)
       const record: ChildRecord = {
         id: `c${Date.now()}`,
         name: payload.namaLengkap,

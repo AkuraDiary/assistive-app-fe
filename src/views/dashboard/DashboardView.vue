@@ -72,9 +72,10 @@ function handleScreeningAction(id: string, action: ScreeningAction) {
                 }}
               </p>
             </div>
+
             <button
               v-if="hasChildren && !state.loading"
-              class="dashboard__add-btn"
+              class="dashboard__add-btn background-secondary"
               @click="showAddForm = true"
             >
               + Tambah Anak
@@ -152,7 +153,7 @@ function handleScreeningAction(id: string, action: ScreeningAction) {
 
 .dashboard__add-btn {
   padding: 10px 20px;
-  background: #7c5ccc;
+  background: #625ccc;
   color: #fff;
   border: none;
   border-radius: 10px;
