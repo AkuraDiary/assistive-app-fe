@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { ChildRecord, ScreeningAction } from '@/types/dashboard.types'
-
+import type { ChildStatus } from '@/types/dashboard.types'
+import ChildStatusPopup from './ChildStatusPopup.vue';
+const popupRecord = ref<{ id: string; status: ChildStatus } | null>(null)
 defineProps<{
   records: ChildRecord[]
   loading?: boolean
@@ -9,6 +11,7 @@ defineProps<{
 
 const emit = defineEmits<{
   (e: 'screening-action', id: string, action: ScreeningAction): void
+  (e: 'status-action', id: string, status: ChildStatus): void
 }>()
 
 const openDropdown = ref<string | null>(null)
@@ -70,7 +73,11 @@ const statusLabel: Record<string, string> = {
           </td>
           <td class="ct__td">{{ formatDate(record.tanggal ?? '') }}</td>
           <td class="ct__td">{{ record.lembaga }}</td>
-          <td class="ct__td">
+          <td
+            class="ct__td"
+            style="cursor: pointer"
+            @click="popupRecord = { id: record.id, status: record.status }"
+          >
             <span class="ct__status" :class="`ct__status--${record.status}`">
               {{ statusLabel[record.status] }}
             </span>
@@ -114,6 +121,14 @@ const statusLabel: Record<string, string> = {
         </tr>
       </tbody>
     </table>
+    <Transition name="fade">
+      <ChildStatusPopup
+        v-if="popupRecord"
+        :status="popupRecord.status"
+         @action="$emit('status-action', popupRecord!.id, popupRecord!.status); popupRecord = null"
+        @back="popupRecord = null"
+      />
+    </Transition>
   </div>
 </template>
 
