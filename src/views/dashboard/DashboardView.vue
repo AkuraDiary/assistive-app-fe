@@ -63,7 +63,7 @@ function handleScreeningAction(id: string, action: ScreeningAction) {
           <!-- Header row -->
           <div class="dashboard__header">
             <div>
-              <h1 class="dashboard__title">Selamat datang "{{ state.user?.name ?? '...' }}"</h1>
+              <h1 class="dashboard__title">Selamat datang {{ state.user?.name ?? '...' }}</h1>
               <p class="dashboard__subtitle">
                 {{
                   hasChildren

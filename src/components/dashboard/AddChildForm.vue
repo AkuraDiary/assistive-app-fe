@@ -18,6 +18,7 @@ const alamat = ref('')
 const jenisKelamin = ref<'laki_laki' | 'perempuan' | ''>('')
 const jenisTerapi = ref<JenisTerapi>('individu')
 const lembagaId = ref('')
+const showTooltip = ref(false)
 
 // const selectedLembaga = computed(
 //   () => props.lembagaList.find((l) => l.id === lembagaId.value) ?? null,
@@ -102,10 +103,52 @@ function handleSubmit() {
     </div>
 
     <!-- Jenis Terapi -->
-    <div class="add-child-form__field">
+    <div class="add-child-form__field add-child-form__field--relative">
       <label class="add-child-form__label">
-        Jenis Terapi <span class="add-child-form__required">*</span>
+        Jenis Terapi
+        <span
+          class="add-child-form__info-trigger"
+          @mouseenter="showTooltip = true"
+          @mouseleave="showTooltip = false"
+          @click="showTooltip = !showTooltip"
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="12" cy="12" r="10" fill="#E05C5C" />
+            <path d="M12 16V12" stroke="white" stroke-width="2" stroke-linecap="round" />
+            <circle cx="12" cy="8" r="1" fill="white" />
+          </svg>
+        </span>
       </label>
+
+      <Transition name="fade">
+        <div v-if="showTooltip" class="add-child-form__popup">
+          <div class="add-child-form__popup-header">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle cx="12" cy="12" r="10" fill="#E05C5C" />
+              <path d="M12 16V12" stroke="white" stroke-width="2" stroke-linecap="round" />
+              <circle cx="12" cy="8" r="1" fill="white" />
+            </svg>
+            <span class="add-child-form__popup-title">Perbedaan Jenis terapi</span>
+          </div>
+          <hr class="add-child-form__popup-divider" />
+          <div class="add-child-form__popup-content">
+            <p><strong>Individu:</strong> belajar mandiri di rumah</p>
+            <p><strong>Lembaga:</strong> belajar di sekolah</p>
+          </div>
+        </div>
+      </Transition>
       <div class="add-child-form__radio-group">
         <button
           class="add-child-form__radio"
@@ -363,5 +406,109 @@ function handleSubmit() {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+.add-child-form__label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #2d2d2d;
+}
+
+.add-child-form__info-trigger {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+/* Info Popup styling */
+/* 1. Anchors the absolute coordinate sandbox to this field container */
+.add-child-form__field--relative {
+  position: relative;
+}
+
+/* 2. Keeps the label text and icon sitting cleanly side-by-side */
+.add-child-form__label-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 3. The true floating card layout */
+.add-child-form__popup {
+  position: absolute;
+  top: 26px; /* Floats right under the label row */
+  left: 105px; /* Shifts it to the right, next to the icon */
+  z-index: 999; /* Ensures it sits on top of everything else */
+  width: 210px;
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 10px 12px;
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.12);
+  border: 1px solid #eaeaea;
+  pointer-events: none; /* Makes it hover-safe so users can still click inputs below it */
+
+  /* 2. Soft drop shadow matching the UI */
+  box-shadow: 0px 8px 24px rgba(149, 157, 165, 0.15);
+  pointer-events: none;
+}
+
+.add-child-form__popup-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.add-child-form__popup-title {
+  font-size: 11px;
+
+  color: #0066ff;
+}
+
+.add-child-form__popup-content {
+  font-size: 11px;
+  line-height: 1.4;
+  color: #4a4a4a;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.add-child-form__label-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.add-child-form__popup-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.add-child-form__popup-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: #4a90e2; /* Clean blue title link text color */
+}
+
+/* Gray separator horizontal rule */
+.add-child-form__popup-divider {
+  border: none;
+  border-top: 1px solid #215c97;
+  margin: 10px 0;
+}
+
+.add-child-form__popup-content {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #555555;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.add-child-form__popup-content p {
+  margin: 0;
 }
 </style>
