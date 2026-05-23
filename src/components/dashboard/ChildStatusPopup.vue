@@ -30,11 +30,10 @@ const emit = defineEmits<{
         }}
       </div>
 
-      <button class="popup__action-btn" @click="emit('action')">
-        {{ status === 'diterima' ? 'Kerjakan' : 'Data Anak' }}
-      </button>
-
-      <button class="popup__back-btn" @click="emit('back')">← Kembali</button>
+      <BaseButton color="ternary" size="lg" full-width @click="emit('action')">
+  {{ status === 'diterima' ? 'Kerjakan' : 'Data Anak' }}
+</BaseButton>
+<button class="popup__back-btn" @click="emit('back')">← Kembali</button>
     </div>
   </div>
 </template>
