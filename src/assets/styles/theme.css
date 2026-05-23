@@ -3,7 +3,8 @@
   /* Primary Colors */
   --color-primary:  #8B73F6;
   --color-primary-light: #8B73F6D9;
-  --color-primary-lighter: #8ED7FF;
+  --color-primary-lighter: #8b73f6af;
+  --color-primary-muted: #c7b7ff74;
 
   /* Secondary Colors */
   --color-secondary: #FF3C8A;
@@ -19,9 +20,13 @@
 
   /* Semantic Colors */
   --color-success: #10B981;
+  --color-success-light: #d6f5e8;
   --color-warning: #F59E0B;
+  --color-warning-light: #ffefd3;
   --color-error: #EF4444;
+  --color-error-light: #fde8e8;
   --color-info: #3B82F6;
+  --color-info-light: #ddeeff;
 
   /* Spacing */
   --spacing-xs: 0.25rem;
