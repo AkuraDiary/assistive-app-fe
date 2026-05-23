@@ -8,6 +8,7 @@ import CourseProgressPanel from '@/components/dashboard/CourseProgressPanel.vue'
 import { useDashboard } from '@/composable/useDashboard'
 import type {
   AddChildPayload,
+  ChildStatus,
   ScreeningAction,
   ScreeningPayload,
   ScreeningQuestion,
@@ -16,7 +17,7 @@ import EmptyChildrenBanner from '@/components/dashboard/EmptyChildrenBanner.vue'
 import ParentScreeningForm from '@/components/forms/ParentScreeningForm.vue'
 import { dashboardService } from '@/services/dashboard.service'
 
-const { state, hasChildren, initialize, selectChild, addChild, updateScreeningAction } =
+const { state, hasChildren, initialize, selectChild, addChild, updateChild, updateScreeningAction } =
   useDashboard()
 
 const activeTab = ref<'dashboard' | 'course'>('dashboard')
@@ -28,12 +29,16 @@ const screeningQuestions = ref<ScreeningQuestion[]>([])
 const screeningLoading = ref(false)
 
 onMounted(initialize)
-
 async function handleSubmit(payload: AddChildPayload) {
   formLoading.value = true
   try {
-    await addChild(payload)
+    if (editTarget.value) {
+      await updateChild(editTarget.value.id, payload)
+    } else {
+      await addChild(payload)
+    }
     showAddForm.value = false
+    editTarget.value = null
   } finally {
     formLoading.value = false
   }
@@ -63,6 +68,32 @@ function handleScreeningCancel() {
   showScreening.value = false
   screeningTarget.value = null
 }
+
+function handleChildFormCancel() {
+  showAddForm.value = false
+  editTarget.value = null
+}
+// handle status pop up action
+const editTarget = ref<{ id: string; data: AddChildPayload } | null>(null)
+
+function handleStatusAction(id: string, status: ChildStatus) {
+  if (status === 'diterima') {
+    handleScreeningAction(id, 'orang_tua')
+    return
+  }
+  const record = state.value.childRecords.find((r) => r.id === id)
+  if (!record) return
+  editTarget.value = {
+    id,
+    data: {
+      namaLengkap:  record.name,
+      tanggalLahir: record.tanggal ?? '',
+      jenisTerapi:  record.lembaga === 'Individu' ? 'individu' : 'lembaga_sekolah',
+      lembagaId:    state.value.lembagaList.find((l) => l.name === record.lembaga)?.id,
+    },
+  }
+  showAddForm.value = true
+}
 </script>
 
 <template>
@@ -81,7 +112,8 @@ function handleScreeningCancel() {
           :lembaga-list="state.lembagaList"
           :loading="formLoading"
           @submit="handleSubmit"
-          @cancel="showAddForm = false"
+          :initial-data="editTarget?.data ?? undefined"
+          @cancel="handleChildFormCancel"
         />
       </Transition>
       <!-- Parent Screening Form (fragment overlay) -->
@@ -134,6 +166,7 @@ function handleScreeningCancel() {
             :records="state.childRecords"
             :loading="state.loading"
             @screening-action="handleScreeningAction"
+            @status-action="handleStatusAction"
           />
 
           <!-- Panels row -->

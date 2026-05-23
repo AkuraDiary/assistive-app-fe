@@ -14,8 +14,6 @@ const state = ref<DashboardState>({
   error: null,
 })
 
-
-
 export function useDashboard() {
   const hasChildren = computed(() => state.value.childRecords.length > 0)
   const selectedChild = computed(
@@ -59,6 +57,12 @@ export function useDashboard() {
     return record
   }
 
+  async function updateChild(id: string, payload: AddChildPayload) {
+    const record = await dashboardService.updateChildRecord(id, payload)
+    const index = state.value.childRecords.findIndex((r) => r.id === id)
+    if (index !== -1) state.value.childRecords[index] = record
+  }
+
   async function loadChildData(childId: string) {
     state.value.loading = true
     try {
@@ -89,6 +93,7 @@ export function useDashboard() {
     initialize,
     selectChild,
     addChild,
+    updateChild,
     loadChildData,
   }
 }

@@ -77,8 +77,18 @@ const MOCK_ACTIVITIES: ActivityEntry[] = []
 
 const MOCK_SCREENING_QUESTIONS_ORTU: ScreeningQuestion[] = [
   { id: 'q1', order: 1, text: 'Apakah beliau mengalami kesulitan dalam mengeja?', required: true },
-  { id: 'q2', order: 2, text: 'Apakah beliau mengalami kesulitan dalam penamaan huruf?', required: true },
-  { id: 'q3', order: 3, text: 'Apakah beliau mengalami kesulitan dalam pelafalan bunyi huruf?', required: true },
+  {
+    id: 'q2',
+    order: 2,
+    text: 'Apakah beliau mengalami kesulitan dalam penamaan huruf?',
+    required: true,
+  },
+  {
+    id: 'q3',
+    order: 3,
+    text: 'Apakah beliau mengalami kesulitan dalam pelafalan bunyi huruf?',
+    required: true,
+  },
   { id: 'q4', order: 4, text: 'Apakah beliau membaca dengan lambat?', required: true },
   { id: 'q5', order: 5, text: 'Apakah beliau sering membalik huruf saat menulis?', required: true },
 ]
@@ -93,10 +103,8 @@ const MOCK_SCREENING_QUESTIONS_ANAK: ScreeningQuestion[] = [
 
 const USE_MOCK = !BASE_URL
 
-
 // ─── Endpoints ────────────────────────────────────────────────────────────────
 export const dashboardService = {
-  
   async getUser(): Promise<DashboardUser> {
     if (USE_MOCK) return MOCK_USER
     return request<DashboardUser>('/api/v1/me')
@@ -154,6 +162,31 @@ export const dashboardService = {
     })
   },
 
+  async updateChildRecord(id: string, payload: AddChildPayload): Promise<ChildRecord> {
+    if (USE_MOCK) {
+      const index = MOCK_CHILD_RECORDS.findIndex((r) => r.id === id)
+      if (index !== -1) {
+        const existing = MOCK_CHILD_RECORDS[index]
+        const updated: ChildRecord = {
+          id: existing?.id ?? '',
+          name: payload.namaLengkap,
+          tanggal: payload.tanggalLahir,
+          lembaga: MOCK_LEMBAGA.find((l) => l.id === payload.lembagaId)?.name ?? 'Individu',
+          avatar: existing?.avatar ?? '',
+          status: 'menunggu',
+          screeningAction: existing?.screeningAction ?? 'orang_tua',
+        }
+        MOCK_CHILD_RECORDS[index] = updated
+        return updated
+      }
+      throw new Error(`Child record ${id} not found`)
+    }
+    return request<ChildRecord>(`/api/v1/children/records/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(payload),
+    })
+  },
+
   async getLembagaList(): Promise<Lembaga[]> {
     if (USE_MOCK) return MOCK_LEMBAGA
     return request<Lembaga[]>('/api/v1/lembaga')
@@ -168,7 +201,7 @@ export const dashboardService = {
     }
     return request<ScreeningQuestion[]>(`/api/v1/screening/questions?type=${type}`)
   },
-  
+
   async submitScreening(payload: ScreeningPayload): Promise<void> {
     if (USE_MOCK) {
       console.log('Mock screening submitted:', payload)

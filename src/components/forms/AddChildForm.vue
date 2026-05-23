@@ -5,19 +5,19 @@ import type { AddChildPayload, JenisTerapi, Lembaga } from '@/types/dashboard.ty
 const props = defineProps<{
   lembagaList: Lembaga[]
   loading?: boolean
+  initialData?: Partial<AddChildPayload>  // ← add this
 }>()
 
 const emit = defineEmits<{
   (e: 'submit', payload: AddChildPayload): void
   (e: 'cancel'): void
 }>()
-
-const namaLengkap = ref('')
-const tanggalLahir = ref('')
-const alamat = ref('')
-const jenisKelamin = ref<'laki_laki' | 'perempuan' | ''>('')
-const jenisTerapi = ref<JenisTerapi>('individu')
-const lembagaId = ref('')
+const namaLengkap  = ref(props.initialData?.namaLengkap  ?? '')
+const tanggalLahir = ref(props.initialData?.tanggalLahir ?? '')
+const alamat       = ref(props.initialData?.alamat        ?? '')
+const jenisKelamin = ref(props.initialData?.jenisKelamin  ?? ref<'laki_laki' | 'perempuan' | ''>(''))
+const jenisTerapi  = ref<JenisTerapi>(props.initialData?.jenisTerapi ?? 'individu')
+const lembagaId    = ref(props.initialData?.lembagaId    ?? '')
 const showTooltip = ref(false)
 
 // const selectedLembaga = computed(
