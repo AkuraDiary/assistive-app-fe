@@ -54,6 +54,24 @@ const MOCK_CHILD_RECORDS: ChildRecord[] = [
     status: 'ditolak',
     screeningAction: 'lihat_hasil',
   },
+  {
+    id: 'c4',
+    name: 'Elsis Anjay',
+    avatar: undefined,
+    tanggal: '2026-05-02',
+    lembaga: 'SLB Mutiara',
+    status: 'menunggu',
+    screeningAction: 'orang_tua',
+  },
+  {
+    id: 'c5',
+    name: 'Elsis Anjay',
+    avatar: undefined,
+    tanggal: '2026-05-02',
+    lembaga: 'SLB Mutiara',
+    status: 'menunggu',
+    screeningAction: 'orang_tua',
+  },
 ]
 
 const MOCK_LEMBAGA: Lembaga[] = [
@@ -112,7 +130,6 @@ export const dashboardService = {
     if (USE_MOCK) return MOCK_CHILD_RECORDS
     return request<ChildRecord[]>('/api/v1/children')
   },
-
 
   async getCourses(childId: string): Promise<Course[]> {
     if (USE_MOCK) return MOCK_COURSES

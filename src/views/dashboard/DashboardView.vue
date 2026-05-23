@@ -71,6 +71,7 @@ async function handleScreeningSubmit(payload: ScreeningPayload) {
 }
 
 function handleStatusAction(id: string, status: ChildStatus) {
+  if(status === 'menunggu') return;
   if (status === 'diterima') {
     handleScreeningAction(id, 'orang_tua')
     return

@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import type { ChildRecord, ScreeningUIState } from '@/types/dashboard.types'
 import type { ChildStatus } from '@/types/dashboard.types'
-import ChildStatusPopup from './ChildStatusPopup.vue';
+import ChildStatusPopup from './ChildStatusPopup.vue'
 const popupRecord = ref<{ id: string; status: ChildStatus } | null>(null)
 defineProps<{
   records: ChildRecord[]
@@ -18,6 +18,22 @@ const openDropdown = ref<string | null>(null)
 
 function toggleDropdown(id: string) {
   openDropdown.value = openDropdown.value === id ? null : id
+}
+
+function handleStatusTap(record: { id: string; status: ChildStatus }) {
+  if (record.status === 'menunggu') {
+    return
+  }
+  popupRecord.value = { id: record.id, status: record.status }
+}
+
+function handleStatusPopUp() {
+  if (popupRecord!.value!.status === 'menunggu') {
+    return
+  }
+
+  emit('status-action', popupRecord!.value!.id, popupRecord!.value!.status)
+  popupRecord.value = null
 }
 
 function selectScreening(id: string, action: ScreeningUIState) {
@@ -70,15 +86,10 @@ const statusLabel: Record<string, string> = {
               </svg>
             </div>
             {{ record.name }}
-            
           </td>
           <td class="ct__td">{{ formatDate(record.tanggal ?? '') }}</td>
           <td class="ct__td">{{ record.lembaga }}</td>
-          <td
-            class="ct__td"
-            style="cursor: pointer"
-            @click="popupRecord = { id: record.id, status: record.status }"
-          >
+          <td class="ct__td" style="cursor: pointer" @click="handleStatusTap(record)">
             <span class="ct__status" :class="`ct__status--${record.status}`">
               {{ statusLabel[record.status] }}
             </span>
@@ -126,7 +137,7 @@ const statusLabel: Record<string, string> = {
       <ChildStatusPopup
         v-if="popupRecord"
         :status="popupRecord.status"
-         @action="$emit('status-action', popupRecord!.id, popupRecord!.status); popupRecord = null"
+        @action="handleStatusPopUp"
         @back="popupRecord = null"
       />
     </Transition>
@@ -134,15 +145,12 @@ const statusLabel: Record<string, string> = {
 </template>
 
 <style scoped>
-
-
 .ct {
   background: var(--color-surface);
-border-radius: var(--radius-lg);
-box-shadow: var(--shadow-md);
-  
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+
   overflow: hidden;
-  
 }
 
 .ct__table {
@@ -162,7 +170,7 @@ box-shadow: var(--shadow-md);
   font-weight: 600;
   font-size: 14px;
   color: var(--color-text-dark);
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 .ct__th--name {
@@ -172,7 +180,7 @@ box-shadow: var(--shadow-md);
 /* Rows */
 .ct__row {
   border-bottom: 1px solid var(--color-border);
-transition: background var(--transition-fast);
+  transition: background var(--transition-fast);
 }
 
 .ct__row:last-child {
@@ -184,7 +192,6 @@ transition: background var(--transition-fast);
 }
 
 .ct__td {
-  
   padding: 16px 20px;
   color: var(--color-text-dark);
   vertical-align: middle;
@@ -211,8 +218,8 @@ transition: background var(--transition-fast);
   object-fit: cover;
 }
 
-.ct__td-screening{
-  width: 20%;  
+.ct__td-screening {
+  width: 20%;
 }
 
 /* Status badges */
@@ -225,7 +232,7 @@ transition: background var(--transition-fast);
 }
 
 .ct__status--menunggu {
-  background:var(--color-info-light);
+  background: var(--color-info-light);
   color: var(--color-info);
 }
 .ct__status--diterima {
@@ -234,7 +241,7 @@ transition: background var(--transition-fast);
 }
 .ct__status--ditolak {
   color: var(--color-error);
-background: var(--color-error-light);
+  background: var(--color-error-light);
 }
 
 /* Buttons */
@@ -254,15 +261,15 @@ background: var(--color-error-light);
 
 .ct__btn--disable {
   color: var(--color-text-light);
-border-color: var(--color-border);
+  border-color: var(--color-border);
   cursor: not-allowed;
 }
 
 .ct__btn--filled {
   background: var(--color-primary);
-border-color: var(--color-primary);
+  border-color: var(--color-primary);
   color: #fff;
-  
+
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -270,7 +277,7 @@ border-color: var(--color-primary);
 
 .ct__btn--filled:hover {
   background: var(--color-primary-light);
-border-color: var(--color-primary-light);
+  border-color: var(--color-primary-light);
 }
 
 .ct__chevron {
@@ -288,8 +295,8 @@ border-color: var(--color-primary-light);
   top: calc(100% + 4px);
   left: 0;
   background: var(--color-surface);
-border-color: var(--color-primary);
-box-shadow: var(--shadow-md);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-md);
   border: 1.5px solid;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -313,7 +320,7 @@ box-shadow: var(--shadow-md);
 
 .ct__dropdown-item:hover {
   color: var(--color-primary);
-background: #f0ebff;
+  background: #f0ebff;
 }
 
 /* Loading */
@@ -327,9 +334,9 @@ background: #f0ebff;
   width: 24px;
   height: 24px;
   border-top-color: var(--color-primary);
-border-color: #ede8fa; 
+  border-color: #ede8fa;
   border: 2px solid;
-  
+
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
