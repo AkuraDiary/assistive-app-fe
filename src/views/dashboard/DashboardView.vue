@@ -1,21 +1,35 @@
-<!-- eslint-disable @typescript-eslint/no-unused-vars -->
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import DashboardNavbar from '@/components/dashboard/DashboardNavbar.vue'
-import EmptyChildrenBanner from '@/components/dashboard/EmptyChildrenBanner.vue'
+import ChildrenTable from '@/components/dashboard/ChildrenTable.vue'
+import AddChildForm from '@/components/dashboard/AddChildForm.vue'
 import ActivityPanel from '@/components/dashboard/ActivityPanel.vue'
 import CourseProgressPanel from '@/components/dashboard/CourseProgressPanel.vue'
 import { useDashboard } from '@/composable/useDashboard'
+import type { AddChildPayload, ScreeningAction } from '@/types/dashboard.types'
+import EmptyChildrenBanner from '@/components/dashboard/EmptyChildrenBanner.vue'
 
 const { state, hasChildren, initialize, selectChild, addChild } = useDashboard()
 
 const activeTab = ref<'dashboard' | 'course'>('dashboard')
-// const showAddModal = ref(false)
+const showAddForm = ref(false)
+const formLoading = ref(false)
 
 onMounted(initialize)
 
-async function handleAddChild(name: string) {
-    
+async function handleSubmit(payload: AddChildPayload) {
+  formLoading.value = true
+  try {
+    await addChild(payload)
+    showAddForm.value = false
+  } finally {
+    formLoading.value = false
+  }
+}
+
+function handleScreeningAction(id: string, action: ScreeningAction) {
+  // route or handle per action type — wire to router when ready
+  console.log('screening action', id, action)
 }
 </script>
 
@@ -28,47 +42,63 @@ async function handleAddChild(name: string) {
     />
 
     <main class="dashboard__main">
-      <!-- Greeting -->
-      <section class="dashboard__greeting">
-        <h1 class="dashboard__greeting-title">Selamat datang "{{ state.user?.name ?? '...' }}"</h1>
-        <p class="dashboard__greeting-subtitle">
-          {{
-            hasChildren
-              ? `${state.children.length} anak terdaftar`
-              : 'Anda belum memiliki data Anak'
-          }}
-        </p>
-      </section>
-
-      <!-- Empty state banner -->
+      <!-- Add Child Form (fragment overlay) -->
       <Transition name="fade">
-        <EmptyChildrenBanner
-          v-if="!hasChildren && !state.loading"
-          @contact-support="
-            () => {
-              /* route to support */
-            }
-          "
+        <AddChildForm
+          v-if="showAddForm"
+          :lembaga-list="state.lembagaList"
+          :loading="formLoading"
+          @submit="handleSubmit"
+          @cancel="showAddForm = false"
         />
       </Transition>
 
-      <!-- Panels row -->
-      <div class="dashboard__panels">
-        <ActivityPanel :activities="state.activities" :loading="state.loading" />
-        <CourseProgressPanel
-          :children="state.children"
-          :selected-child-id="state.selectedChildId"
-          :courses="state.courses"
-          :loading="state.loading"
-          @child-change="selectChild"
-        />
-      </div>
-    </main>
+      <!-- Dashboard content -->
+      <Transition name="fade">
+        <div v-if="!showAddForm" class="dashboard__content">
+          <!-- Header row -->
+          <div class="dashboard__header">
+            <div>
+              <h1 class="dashboard__title">Selamat datang "{{ state.user?.name ?? '...' }}"</h1>
+              <p class="dashboard__subtitle">
+                {{
+                  hasChildren
+                    ? `${state.childRecords.length} anak terdaftar`
+                    : 'Anda belum memiliki data Anak'
+                }}
+              </p>
+            </div>
+            <button v-if="hasChildren && !state.loading" class="dashboard__add-btn" @click="showAddForm = true">+ Tambah Anak</button>
+          </div>
 
-    <!-- Add child modal -->
-    <!-- <Transition name="fade"> -->
-      <!-- <AddChildModal v-if="showAddModal" @confirm="handleAddChild" @close="showAddModal = false" /> -->
-    <!-- </Transition> -->
+          <!-- Children: empty banner or table -->
+          <EmptyChildrenBanner
+            v-if="!hasChildren && !state.loading"
+            @add-child="showAddForm = true"
+            @contact-support="() => {}"
+          />
+
+          <ChildrenTable
+            v-else
+            :records="state.childRecords"
+            :loading="state.loading"
+            @screening-action="handleScreeningAction"
+          />
+
+          <!-- Panels row -->
+          <div class="dashboard__panels">
+            <ActivityPanel :activities="state.activities" :loading="state.loading" />
+            <CourseProgressPanel
+              :children="state.children"
+              :selected-child-id="state.selectedChildId"
+              :courses="state.courses"
+              :loading="state.loading"
+              @child-change="selectChild"
+            />
+          </div>
+        </div>
+      </Transition>
+    </main>
   </div>
 </template>
 
@@ -83,22 +113,47 @@ async function handleAddChild(name: string) {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem 2rem 3rem;
+}
+
+.dashboard__content {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-.dashboard__greeting-title {
+.dashboard__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.dashboard__title {
   font-size: 20px;
   font-weight: 700;
   color: #1a1a1a;
   margin: 0 0 4px;
 }
 
-.dashboard__greeting-subtitle {
+.dashboard__subtitle {
   font-size: 14px;
   color: #888;
   margin: 0;
+}
+
+.dashboard__add-btn {
+  padding: 10px 20px;
+  background: #7c5ccc;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.dashboard__add-btn:hover {
+  background: #6a4db8;
 }
 
 .dashboard__panels {
@@ -113,7 +168,6 @@ async function handleAddChild(name: string) {
   }
 }
 
-/* Global transitions */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.2s ease;
