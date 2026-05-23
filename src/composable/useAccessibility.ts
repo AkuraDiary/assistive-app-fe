@@ -8,15 +8,21 @@ const dyslexiaFont = ref<boolean>(localStorage.getItem('a11y_dyslexia') === 'tru
 watch(fontSize, (v) => localStorage.setItem('a11y_fontSize', v))
 watch(dyslexiaFont, (v) => localStorage.setItem('a11y_dyslexia', String(v)))
 
-const fontSizeClass = computed(() => ({
-  sm: 'a11y--font-sm',
-  md: 'a11y--font-md',
-  lg: 'a11y--font-lg',
-}[fontSize.value]))
+const fontSizeClass = computed(
+  () =>
+    ({
+      sm: 'a11y--font-sm',
+      md: 'a11y--font-md',
+      lg: 'a11y--font-lg',
+    })[fontSize.value],
+)
 
-const dyslexiaClass = computed(() => dyslexiaFont.value ? 'a11y--dyslexia' : '')
+const dyslexiaClass = computed(() => (dyslexiaFont.value ? 'a11y--dyslexia' : ''))
 
 export function useAccessibility() {
+  function fontDefault() {
+    fontSize.value = 'md'
+  }
   function increase() {
     if (fontSize.value === 'sm') fontSize.value = 'md'
     else if (fontSize.value === 'md') fontSize.value = 'lg'
@@ -29,5 +35,14 @@ export function useAccessibility() {
     dyslexiaFont.value = !dyslexiaFont.value
   }
 
-  return { fontSize, dyslexiaFont, fontSizeClass, dyslexiaClass, increase, decrease, toggleDyslexia }
+  return {
+    fontSize,
+    dyslexiaFont,
+    fontSizeClass,
+    dyslexiaClass,
+    increase,
+    fontDefault,
+    decrease,
+    toggleDyslexia,
+  }
 }

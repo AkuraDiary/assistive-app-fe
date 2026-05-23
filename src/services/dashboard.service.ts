@@ -43,7 +43,7 @@ const MOCK_CHILD_RECORDS: ChildRecord[] = [
     tanggal: '2026-05-02',
     lembaga: 'Individu',
     status: 'diterima',
-    screeningAction: 'orang_tua',
+    screeningAction: 'lihat_hasil',
   },
   {
     id: 'c3',

@@ -2,7 +2,8 @@
 import { ref } from 'vue'
 import { useAccessibility } from '@/composable/useAccessibility'
 
-const { fontSize, dyslexiaFont, increase, decrease, toggleDyslexia } = useAccessibility()
+const { fontSize, dyslexiaFont, increase, decrease, fontDefault, toggleDyslexia } =
+  useAccessibility()
 const open = ref(false)
 </script>
 
@@ -14,7 +15,7 @@ const open = ref(false)
           <span class="a11y-menu__label">Font Size</span>
           <div class="a11y-menu__font-btns">
             <button class="a11y-menu__font-btn" @click="decrease">A-</button>
-            <button class="a11y-menu__font-btn a11y-menu__font-btn--active">A</button>
+            <button class="a11y-menu__font-btn" @click="fontDefault">A</button>
             <button class="a11y-menu__font-btn" @click="increase">A+</button>
           </div>
         </div>
@@ -30,16 +31,17 @@ const open = ref(false)
         </div>
       </div>
     </Transition>
-
     <button class="a11y-menu__trigger" @click="open = !open">
-      <span class="a11y-menu__trigger-label">Accessibilitas Menu</span>
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-        <path
-          :d="open ? 'M12 10L8 6L4 10' : 'M4 6L8 10L12 6'"
-          stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round"
-        />
-      </svg>
+      <img
+        src="@/assets/images/ic_a11y.png"
+        alt="Company Logo"
+        class="h-10 w-auto object-contain"
+      />
+      <Transition name="a11y-panel">
+        <div class="flex" v-if="open">
+          <span class="a11y-menu__trigger-label">Accessibility</span>
+        </div>
+      </Transition>
     </button>
   </div>
 </template>
@@ -59,11 +61,12 @@ const open = ref(false)
 .a11y-menu__panel {
   background: var(--color-surface);
   border-radius: var(--radius-lg);
-  padding: 1rem 1.25rem;
+  padding: 1.25rem;
+  gap: 4px;
   box-shadow: var(--shadow-md);
   display: flex;
   flex-direction: column;
-  gap: 0.875rem;
+
   min-width: 200px;
 }
 
@@ -116,7 +119,9 @@ const open = ref(false)
   transition: background var(--transition-fast);
   position: relative;
 }
-.a11y-menu__toggle--on { background: var(--color-primary); }
+.a11y-menu__toggle--on {
+  background: var(--color-primary);
+}
 .a11y-menu__toggle-thumb {
   display: block;
   width: 18px;
@@ -125,7 +130,9 @@ const open = ref(false)
   background: white;
   transition: transform var(--transition-fast);
 }
-.a11y-menu__toggle--on .a11y-menu__toggle-thumb { transform: translateX(18px); }
+.a11y-menu__toggle--on .a11y-menu__toggle-thumb {
+  transform: translateX(18px);
+}
 
 /* Trigger */
 .a11y-menu__trigger {
@@ -136,16 +143,27 @@ const open = ref(false)
   color: white;
   border: none;
   border-radius: var(--radius-full);
-  padding: 0.625rem 1.25rem;
+  padding: 0.625rem;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   box-shadow: var(--shadow-md);
 }
+.a11y-menu__trigger-label {
+  margin: 4px 4px;
+  font-size: 16px;
+}
 
 /* Transition */
 .a11y-panel-enter-active,
-.a11y-panel-leave-active { transition: opacity 0.2s, transform 0.2s; }
+.a11y-panel-leave-active {
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
+}
 .a11y-panel-enter-from,
-.a11y-panel-leave-to { opacity: 0; transform: translateY(8px); }
+.a11y-panel-leave-to {
+  opacity: 0;
+  transform: translateY(8px);
+}
 </style>
