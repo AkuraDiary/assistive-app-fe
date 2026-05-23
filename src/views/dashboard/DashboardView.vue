@@ -5,6 +5,7 @@ import ChildrenTable from '@/components/dashboard/ChildrenTable.vue'
 import AddChildForm from '@/components/forms/AddChildForm.vue'
 import ActivityPanel from '@/components/dashboard/ActivityPanel.vue'
 import CourseProgressPanel from '@/components/dashboard/CourseProgressPanel.vue'
+import ScreeningResultPanel from '@/components/dashboard/ScreeningResultPanel.vue'
 import { useDashboard } from '@/composable/useDashboard'
 import type {
   AddChildPayload,
@@ -46,7 +47,12 @@ async function handleSubmit(payload: AddChildPayload) {
 }
 
 async function handleScreeningAction(id: string, action: ScreeningUIState) {
-  if (action === 'disable' || action === 'lihat_hasil') return
+  if (action === 'disable') return
+
+  if (action === 'lihat_hasil') {
+    overlay.openResult(id)
+    return
+  }
   overlay.loading.value = true
   const questions = await dashboardService.getScreeningQuestions(action)
   overlay.loading.value = false
@@ -111,6 +117,18 @@ function handleStatusAction(id: string, status: ChildStatus) {
           :loading="overlay.loading.value"
           @submit="handleScreeningSubmit"
           @cancel="overlay.close()"
+        />
+      </Transition>
+
+      <Transition name="fade">
+        <ScreeningResultPanel
+          v-if="overlay.mode.value === 'result' && overlay.resultData.value"
+          :child-id="overlay.resultData.value.childId"
+          :child-name="
+            state.childRecords.find((r) => r.id === overlay.resultData.value!.childId)?.name
+          "
+          @back="overlay.close()"
+          @save="overlay.close()"
         />
       </Transition>
 
