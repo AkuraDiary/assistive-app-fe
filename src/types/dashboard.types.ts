@@ -1,6 +1,7 @@
 
 export type ChildStatus = 'menunggu' | 'diterima' | 'ditolak'
-export type ScreeningAction = 'disable' | 'orang_tua' | 'anak' | 'lihat_hasil' 
+export type ScreeningType = 'orang_tua' | 'anak'
+export type ScreeningUIState = 'disable' | 'lihat_hasil' | ScreeningType
 export type JenisKelamin = 'laki_laki' | 'perempuan'
 export type JenisTerapi = 'individu' | 'lembaga_sekolah'
 
@@ -13,7 +14,7 @@ export interface ChildRecord {
   tanggal?: string        // ISO date string
   lembaga: string
   status: ChildStatus
-  screeningAction: ScreeningAction
+  screeningAction: ScreeningUIState
 }
 
 export interface AddChildPayload {
@@ -69,7 +70,7 @@ export interface ScreeningAnswer {
 
 export interface ScreeningPayload {
   childId: string
-  screeningType: 'orang_tua' | 'anak'
+  screeningType: ScreeningType  
   answers: ScreeningAnswer[]
 }
 

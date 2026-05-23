@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { ChildRecord, ScreeningAction } from '@/types/dashboard.types'
+import type { ChildRecord, ScreeningUIState } from '@/types/dashboard.types'
 import type { ChildStatus } from '@/types/dashboard.types'
 import ChildStatusPopup from './ChildStatusPopup.vue';
 const popupRecord = ref<{ id: string; status: ChildStatus } | null>(null)
@@ -10,7 +10,7 @@ defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'screening-action', id: string, action: ScreeningAction): void
+  (e: 'screening-action', id: string, action: ScreeningUIState): void
   (e: 'status-action', id: string, status: ChildStatus): void
 }>()
 
@@ -20,7 +20,7 @@ function toggleDropdown(id: string) {
   openDropdown.value = openDropdown.value === id ? null : id
 }
 
-function selectScreening(id: string, action: ScreeningAction) {
+function selectScreening(id: string, action: ScreeningUIState) {
   openDropdown.value = null
   emit('screening-action', id, action)
 }

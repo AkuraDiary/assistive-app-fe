@@ -9,7 +9,7 @@ import { useDashboard } from '@/composable/useDashboard'
 import type {
   AddChildPayload,
   ChildStatus,
-  ScreeningAction,
+  ScreeningUIState,
   ScreeningPayload,
   ScreeningQuestion,
 } from '@/types/dashboard.types'
@@ -17,7 +17,7 @@ import EmptyChildrenBanner from '@/components/dashboard/EmptyChildrenBanner.vue'
 import ParentScreeningForm from '@/components/forms/ParentScreeningForm.vue'
 import { dashboardService } from '@/services/dashboard.service'
 
-const { state, hasChildren, initialize, selectChild, addChild, updateChild, updateScreeningAction } =
+const { state, hasChildren, initialize, selectChild, addChild, updateChild, updateScreeningUIState } =
   useDashboard()
 
 const activeTab = ref<'dashboard' | 'course'>('dashboard')
@@ -43,7 +43,7 @@ async function handleSubmit(payload: AddChildPayload) {
     formLoading.value = false
   }
 }
-async function handleScreeningAction(id: string, action: ScreeningAction) {
+async function handleScreeningUIState(id: string, action: ScreeningUIState) {
   if (action === 'lihat_hasil' || action === 'disable') return
   screeningTarget.value = { childId: id, type: action }
   screeningLoading.value = true
@@ -56,7 +56,7 @@ async function handleScreeningSubmit(payload: ScreeningPayload) {
   screeningLoading.value = true
   try {
     await dashboardService.submitScreening(payload)
-    updateScreeningAction(payload.childId, 'lihat_hasil')
+    updateScreeningUIState(payload.childId, 'lihat_hasil')
     showScreening.value = false
     screeningTarget.value = null
   } finally {
@@ -78,7 +78,7 @@ const editTarget = ref<{ id: string; data: AddChildPayload } | null>(null)
 
 function handleStatusAction(id: string, status: ChildStatus) {
   if (status === 'diterima') {
-    handleScreeningAction(id, 'orang_tua')
+    handleScreeningUIState(id, 'orang_tua')
     return
   }
   const record = state.value.childRecords.find((r) => r.id === id)
@@ -165,7 +165,7 @@ function handleStatusAction(id: string, status: ChildStatus) {
             v-else
             :records="state.childRecords"
             :loading="state.loading"
-            @screening-action="handleScreeningAction"
+            @screening-action="handleScreeningUIState"
             @status-action="handleStatusAction"
           />
 
