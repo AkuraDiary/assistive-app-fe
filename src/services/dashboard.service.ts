@@ -43,7 +43,7 @@ const MOCK_CHILD_RECORDS: ChildRecord[] = [
     tanggal: '2026-05-02',
     lembaga: 'Individu',
     status: 'diterima',
-    screeningAction: 'lihat_hasil',
+    screeningAction: 'orang_tua',
   },
   {
     id: 'c3',
@@ -106,15 +106,34 @@ const MOCK_SCREENING_QUESTIONS_ORTU: ScreeningQuestion[] = [
   { id: 'q4', order: 4, text: 'Apakah beliau membaca dengan lambat?', required: true },
   { id: 'q5', order: 5, text: 'Apakah beliau sering membalik huruf saat menulis?', required: true },
 ]
-
 const MOCK_SCREENING_QUESTIONS_ANAK: ScreeningQuestion[] = [
-  { id: 'q1', order: 1, text: 'Apakah kamu kesulitan mengeja kata-kata?', required: true },
-  { id: 'q2', order: 2, text: 'Apakah kamu kesulitan mengenal huruf?', required: true },
-  { id: 'q3', order: 3, text: 'Apakah kamu kesulitan membaca dengan lancar?', required: true },
-  { id: 'q4', order: 4, text: 'Apakah kamu sering lupa urutan huruf?', required: true },
-  { id: 'q5', order: 5, text: 'Apakah kamu kesulitan menulis dengan rapi?', required: true },
+  { id: 'q1', order: 1, text: '', required: true, questionType: 'tap', mediaLabel: 'Animasi' },
+  {
+    id: 'q2',
+    order: 2,
+    text: '',
+    required: true,
+    questionType: 'tap',
+    mediaLabel: 'Animasi',
+    options: ['A', 'I', 'U'],
+  },
+  {
+    id: 'q3',
+    order: 3,
+    text: 'Ini dibaca apa?',
+    required: true,
+    questionType: 'voice',
+    mediaLabel: 'Huruf/Teks',
+  },
+  {
+    id: 'q4',
+    order: 4,
+    text: 'Tulislah jawaban Anda di kertas, lalu unggah sebagai foto/gambar.',
+    required: true,
+    questionType: 'upload',
+    mediaLabel: 'Huruf/Teks',
+  },
 ]
-
 const MOCK_SCREENING_RESULTS: ScreeningResult[] = []
 
 const USE_MOCK = !BASE_URL

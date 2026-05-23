@@ -56,12 +56,7 @@ export interface ActivityEntry {
 }
 
 //screening
-export interface ScreeningQuestion {
-  id: string
-  order: number
-  text: string
-  required: boolean
-}
+
 
 export interface ScreeningAnswer {
   questionId: string
@@ -74,6 +69,16 @@ export interface ScreeningPayload {
   answers: ScreeningAnswer[]
 }
 
+export interface ScreeningQuestion {
+  id: string
+  order: number
+  text: string
+  required: boolean
+  questionType?: QuestionType        // ← new
+  mediaLabel?: string               // e.g. "Animasi", "Huruf/Teks" shown on the card
+  mediaUrl?: string                 // image/animation URL from backend
+  options?: string[]                // for tap: A, I, U choices
+}
 
 // screening results
 
@@ -94,6 +99,9 @@ export interface ScreeningResult {
   categoryScores?: CategoryScore[]  
   dyslexiaLevel?: number   
 }
+
+export type QuestionType = 'tap' | 'voice' | 'upload'
+
 
 // dashboards
 export interface DashboardUser {

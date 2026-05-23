@@ -17,6 +17,8 @@ import EmptyChildrenBanner from '@/components/dashboard/EmptyChildrenBanner.vue'
 import ParentScreeningForm from '@/components/forms/ParentScreeningForm.vue'
 import { dashboardService } from '@/services/dashboard.service'
 import { useDashboardOverlay } from '@/composable/useDashboardOverlay'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
 const {
   state,
@@ -53,6 +55,12 @@ async function handleScreeningAction(id: string, action: ScreeningUIState) {
     overlay.openResult(id)
     return
   }
+
+  if (action === 'anak') {
+    router.push(`/screening/${id}/anak`) // dedicated page
+    return
+  }
+
   overlay.loading.value = true
   const questions = await dashboardService.getScreeningQuestions(action)
   overlay.loading.value = false
@@ -71,7 +79,7 @@ async function handleScreeningSubmit(payload: ScreeningPayload) {
 }
 
 function handleStatusAction(id: string, status: ChildStatus) {
-  if(status === 'menunggu') return;
+  if (status === 'menunggu') return
   if (status === 'diterima') {
     handleScreeningAction(id, 'orang_tua')
     return

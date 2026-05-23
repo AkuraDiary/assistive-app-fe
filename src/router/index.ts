@@ -7,6 +7,7 @@ import VerifyOtpView from '@/views/auth/VerifyOtpView.vue'
 import ForgotPasswordView from '@/views/auth/ForgotPasswordView.vue'
 import ResetPasswordView from '@/views/auth/ResetPasswordView.vue'
 import DashboardView from '@/views/dashboard/DashboardView.vue'
+import ScreeningView from '@/views/screening/ScreeningView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -46,6 +47,13 @@ const router = createRouter({
       name: 'reset-password',
       component: ResetPasswordView,
       meta: { requiresGuest: true },
+    },
+
+    {
+      path: '/screening/:childId/:type',
+      name: 'screening',
+      component: ScreeningView,
+      // meta: { requiresAuth: true },
     },
 
     {

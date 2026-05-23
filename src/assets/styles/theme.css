@@ -117,3 +117,16 @@ button {
 html {
   scroll-behavior: smooth;
 }
+
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('/fonts/OpenDyslexic-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.a11y--font-sm  { font-size: 14px; }
+.a11y--font-md  { font-size: 16px; }
+.a11y--font-lg  { font-size: 20px; }
+.a11y--dyslexia { font-family: 'OpenDyslexic', sans-serif !important; }
+.a11y--dyslexia * { font-family: 'OpenDyslexic', sans-serif !important; }
