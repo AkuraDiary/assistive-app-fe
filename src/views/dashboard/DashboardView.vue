@@ -179,7 +179,7 @@ function handleStatusAction(id: string, status: ChildStatus) {
           <div class="dashboard__panels">
             <ActivityPanel :activities="state.activities" :loading="state.loading" />
             <CourseProgressPanel
-              :children="state.children"
+              :children="state.childRecords"
               :selected-child-id="state.selectedChildId"
               :courses="state.courses"
               :loading="state.loading"

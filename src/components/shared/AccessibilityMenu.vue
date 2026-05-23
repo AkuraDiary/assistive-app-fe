@@ -66,7 +66,6 @@ const open = ref(false)
   box-shadow: var(--shadow-md);
   display: flex;
   flex-direction: column;
-
   min-width: 200px;
 }
 

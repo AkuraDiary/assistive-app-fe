@@ -145,10 +145,9 @@ const statusLabel: Record<string, string> = {
 
 <style scoped>
 .ct {
-  background: var(--color-surface);
+  background: var(--color-white);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
-
   overflow: visible;
 }
 
@@ -160,7 +159,17 @@ const statusLabel: Record<string, string> = {
 
 /* Head */
 .ct__head-row {
-  background: var(--color-primary-lighter);
+  background: var(--color-info-light);
+  border-radius: var(--radius-lg);
+}
+/* 2. Round the top-left cell */
+thead tr:first-child th:first-child {
+  border-top-left-radius: 10px;
+}
+
+/* 3. Round the top-right cell */
+thead tr:first-child th:last-child {
+  border-top-right-radius: 10px;
 }
 
 .ct__th {
@@ -187,7 +196,7 @@ const statusLabel: Record<string, string> = {
 }
 
 .ct__row:hover {
-  background: var(--color-primary-muted);
+  background: var(--color-surface-blue);
 }
 
 .ct__td {
@@ -293,7 +302,7 @@ const statusLabel: Record<string, string> = {
   position: absolute;
   top: calc(100% + 4px);
   left: 0;
-  background: var(--color-surface);
+  background: var(--color-white);
   border-color: var(--color-primary);
   box-shadow: var(--shadow-md);
   border: 1.5px solid;

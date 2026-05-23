@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import type { Child, Course } from '@/types/dashboard.types'
+import type { ChildRecord, Course } from '@/types/dashboard.types'
 
 const props = defineProps<{
-  children: Child[]
+  children: ChildRecord[]
   selectedChildId: string | null
   courses: Course[]
   loading?: boolean
