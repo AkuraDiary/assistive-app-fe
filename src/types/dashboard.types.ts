@@ -4,6 +4,8 @@ export type ScreeningAction = 'disable' | 'orang_tua' | 'anak' | 'lihat_hasil'
 export type JenisKelamin = 'laki_laki' | 'perempuan'
 export type JenisTerapi = 'individu' | 'lembaga_sekolah'
 
+
+// records
 export interface ChildRecord {
   id: string
   name: string
@@ -52,6 +54,27 @@ export interface ActivityEntry {
   score?: number
 }
 
+//screening
+export interface ScreeningQuestion {
+  id: string
+  order: number
+  text: string
+  required: boolean
+}
+
+export interface ScreeningAnswer {
+  questionId: string
+  value: number  // 1–5
+}
+
+export interface ScreeningPayload {
+  childId: string
+  screeningType: 'orang_tua' | 'anak'
+  answers: ScreeningAnswer[]
+}
+
+
+// dashboards
 export interface DashboardUser {
   id: string
   name: string

@@ -2,12 +2,19 @@
 import { ref, onMounted } from 'vue'
 import DashboardNavbar from '@/components/dashboard/DashboardNavbar.vue'
 import ChildrenTable from '@/components/dashboard/ChildrenTable.vue'
-import AddChildForm from '@/components/dashboard/AddChildForm.vue'
+import AddChildForm from '@/components/forms/AddChildForm.vue'
 import ActivityPanel from '@/components/dashboard/ActivityPanel.vue'
 import CourseProgressPanel from '@/components/dashboard/CourseProgressPanel.vue'
 import { useDashboard } from '@/composable/useDashboard'
-import type { AddChildPayload, ScreeningAction } from '@/types/dashboard.types'
+import type {
+  AddChildPayload,
+  ScreeningAction,
+  ScreeningPayload,
+  ScreeningQuestion,
+} from '@/types/dashboard.types'
 import EmptyChildrenBanner from '@/components/dashboard/EmptyChildrenBanner.vue'
+import ParentScreeningForm from '@/components/forms/ParentScreeningForm.vue'
+import { dashboardService } from '@/services/dashboard.service'
 
 const { state, hasChildren, initialize, selectChild, addChild, updateScreeningAction } =
   useDashboard()
@@ -15,6 +22,10 @@ const { state, hasChildren, initialize, selectChild, addChild, updateScreeningAc
 const activeTab = ref<'dashboard' | 'course'>('dashboard')
 const showAddForm = ref(false)
 const formLoading = ref(false)
+const showScreening = ref(false)
+const screeningTarget = ref<{ childId: string; type: 'orang_tua' | 'anak' } | null>(null)
+const screeningQuestions = ref<ScreeningQuestion[]>([])
+const screeningLoading = ref(false)
 
 onMounted(initialize)
 
@@ -27,13 +38,30 @@ async function handleSubmit(payload: AddChildPayload) {
     formLoading.value = false
   }
 }
+async function handleScreeningAction(id: string, action: ScreeningAction) {
+  if (action === 'lihat_hasil' || action === 'disable') return
+  screeningTarget.value = { childId: id, type: action }
+  screeningLoading.value = true
+  screeningQuestions.value = await dashboardService.getScreeningQuestions(action)
+  screeningLoading.value = false
+  showScreening.value = true
+}
 
-function handleScreeningAction(id: string, action: ScreeningAction) {
-  if (action === 'lihat_hasil') {
-    // route here later
-    return
+async function handleScreeningSubmit(payload: ScreeningPayload) {
+  screeningLoading.value = true
+  try {
+    await dashboardService.submitScreening(payload)
+    updateScreeningAction(payload.childId, 'lihat_hasil')
+    showScreening.value = false
+    screeningTarget.value = null
+  } finally {
+    screeningLoading.value = false
   }
-  updateScreeningAction(id, action)
+}
+
+function handleScreeningCancel() {
+  showScreening.value = false
+  screeningTarget.value = null
 }
 </script>
 
@@ -46,7 +74,7 @@ function handleScreeningAction(id: string, action: ScreeningAction) {
     />
 
     <main class="dashboard__main">
-      <!-- Add Child Form (fragment overlay) -->
+      <!-- Child Form (fragment overlay) -->
       <Transition name="fade">
         <AddChildForm
           v-if="showAddForm"
@@ -56,10 +84,22 @@ function handleScreeningAction(id: string, action: ScreeningAction) {
           @cancel="showAddForm = false"
         />
       </Transition>
+      <!-- Parent Screening Form (fragment overlay) -->
+      <Transition name="fade">
+        <ParentScreeningForm
+          v-if="showScreening && screeningTarget"
+          :child-id="screeningTarget.childId"
+          :screening-type="screeningTarget.type"
+          :questions="screeningQuestions"
+          :loading="screeningLoading"
+          @submit="handleScreeningSubmit"
+          @cancel="handleScreeningCancel"
+        />
+      </Transition>
 
       <!-- Dashboard content -->
       <Transition name="fade">
-        <div v-if="!showAddForm" class="dashboard__content">
+        <div v-if="!showAddForm && !showScreening" class="dashboard__content">
           <!-- Header row -->
           <div class="dashboard__header">
             <div>

@@ -6,6 +6,8 @@ import type {
   ChildRecord,
   AddChildPayload,
   Lembaga,
+  ScreeningQuestion,
+  ScreeningPayload,
 } from '@/types/dashboard.types'
 
 // ─── Config ──────────────────────────────────────────────────────────────────
@@ -73,10 +75,28 @@ const MOCK_CHILDREN: Child[] = [
 ]
 const MOCK_ACTIVITIES: ActivityEntry[] = []
 
+const MOCK_SCREENING_QUESTIONS_ORTU: ScreeningQuestion[] = [
+  { id: 'q1', order: 1, text: 'Apakah beliau mengalami kesulitan dalam mengeja?', required: true },
+  { id: 'q2', order: 2, text: 'Apakah beliau mengalami kesulitan dalam penamaan huruf?', required: true },
+  { id: 'q3', order: 3, text: 'Apakah beliau mengalami kesulitan dalam pelafalan bunyi huruf?', required: true },
+  { id: 'q4', order: 4, text: 'Apakah beliau membaca dengan lambat?', required: true },
+  { id: 'q5', order: 5, text: 'Apakah beliau sering membalik huruf saat menulis?', required: true },
+]
+
+const MOCK_SCREENING_QUESTIONS_ANAK: ScreeningQuestion[] = [
+  { id: 'q1', order: 1, text: 'Apakah kamu kesulitan mengeja kata-kata?', required: true },
+  { id: 'q2', order: 2, text: 'Apakah kamu kesulitan mengenal huruf?', required: true },
+  { id: 'q3', order: 3, text: 'Apakah kamu kesulitan membaca dengan lancar?', required: true },
+  { id: 'q4', order: 4, text: 'Apakah kamu sering lupa urutan huruf?', required: true },
+  { id: 'q5', order: 5, text: 'Apakah kamu kesulitan menulis dengan rapi?', required: true },
+]
+
 const USE_MOCK = !BASE_URL
+
 
 // ─── Endpoints ────────────────────────────────────────────────────────────────
 export const dashboardService = {
+  
   async getUser(): Promise<DashboardUser> {
     if (USE_MOCK) return MOCK_USER
     return request<DashboardUser>('/api/v1/me')
@@ -137,5 +157,26 @@ export const dashboardService = {
   async getLembagaList(): Promise<Lembaga[]> {
     if (USE_MOCK) return MOCK_LEMBAGA
     return request<Lembaga[]>('/api/v1/lembaga')
+  },
+
+  // mock stubs for screening
+  async getScreeningQuestions(type: 'orang_tua' | 'anak'): Promise<ScreeningQuestion[]> {
+    if (USE_MOCK) {
+      return type === 'orang_tua'
+        ? [...MOCK_SCREENING_QUESTIONS_ORTU]
+        : [...MOCK_SCREENING_QUESTIONS_ANAK]
+    }
+    return request<ScreeningQuestion[]>(`/api/v1/screening/questions?type=${type}`)
+  },
+  
+  async submitScreening(payload: ScreeningPayload): Promise<void> {
+    if (USE_MOCK) {
+      console.log('Mock screening submitted:', payload)
+      return
+    }
+    return request<void>('/api/v1/screening/submit', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    })
   },
 }
