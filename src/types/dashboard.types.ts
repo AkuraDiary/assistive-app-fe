@@ -1,6 +1,6 @@
 
 export type ChildStatus = 'menunggu' | 'diterima' | 'ditolak'
-export type ScreeningAction = 'disable' | 'orang_tua' | 'lihat_hasil'
+export type ScreeningAction = 'disable' | 'orang_tua' | 'anak' | 'lihat_hasil' 
 export type JenisKelamin = 'laki_laki' | 'perempuan'
 export type JenisTerapi = 'individu' | 'lembaga_sekolah'
 

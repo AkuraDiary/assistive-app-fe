@@ -1,5 +1,5 @@
 import { ref, computed, watch } from 'vue'
-import type { DashboardState, Child, AddChildPayload } from '@/types/dashboard.types'
+import type { DashboardState, Child, AddChildPayload, ScreeningAction } from '@/types/dashboard.types'
 import { dashboardService } from '@/services/dashboard.service'
 
 const state = ref<DashboardState>({
@@ -14,11 +14,19 @@ const state = ref<DashboardState>({
   error: null,
 })
 
+
+
 export function useDashboard() {
   const hasChildren = computed(() => state.value.childRecords.length > 0)
   const selectedChild = computed(
     () => state.value.children.find((c) => c.id === state.value.selectedChildId) ?? null,
   )
+
+  function updateScreeningAction(id: string, action: ScreeningAction) {
+    const record = state.value.childRecords.find((r) => r.id === id)
+    if (record) record.screeningAction = action
+  }
+
 
   async function initialize() {
     state.value.loading = true
@@ -77,6 +85,7 @@ export function useDashboard() {
     state,
     hasChildren,
     selectedChild,
+    updateScreeningAction,
     initialize,
     selectChild,
     addChild,

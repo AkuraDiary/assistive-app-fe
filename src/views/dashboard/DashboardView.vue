@@ -9,7 +9,8 @@ import { useDashboard } from '@/composable/useDashboard'
 import type { AddChildPayload, ScreeningAction } from '@/types/dashboard.types'
 import EmptyChildrenBanner from '@/components/dashboard/EmptyChildrenBanner.vue'
 
-const { state, hasChildren, initialize, selectChild, addChild } = useDashboard()
+const { state, hasChildren, initialize, selectChild, addChild, updateScreeningAction } =
+  useDashboard()
 
 const activeTab = ref<'dashboard' | 'course'>('dashboard')
 const showAddForm = ref(false)
@@ -28,8 +29,11 @@ async function handleSubmit(payload: AddChildPayload) {
 }
 
 function handleScreeningAction(id: string, action: ScreeningAction) {
-  // route or handle per action type — wire to router when ready
-  console.log('screening action', id, action)
+  if (action === 'lihat_hasil') {
+    // route here later
+    return
+  }
+  updateScreeningAction(id, action)
 }
 </script>
 
@@ -68,7 +72,13 @@ function handleScreeningAction(id: string, action: ScreeningAction) {
                 }}
               </p>
             </div>
-            <button v-if="hasChildren && !state.loading" class="dashboard__add-btn" @click="showAddForm = true">+ Tambah Anak</button>
+            <button
+              v-if="hasChildren && !state.loading"
+              class="dashboard__add-btn"
+              @click="showAddForm = true"
+            >
+              + Tambah Anak
+            </button>
           </div>
 
           <!-- Children: empty banner or table -->

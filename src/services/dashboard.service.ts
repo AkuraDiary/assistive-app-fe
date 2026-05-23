@@ -110,19 +110,20 @@ export const dashboardService = {
   },
 
   async getChildRecords(): Promise<ChildRecord[]> {
-    if (USE_MOCK) return MOCK_CHILD_RECORDS
+    if (USE_MOCK) return [...MOCK_CHILD_RECORDS]
     return request<ChildRecord[]>('/api/v1/children/records')
   },
 
   async addChildRecord(payload: AddChildPayload): Promise<ChildRecord> {
     if (USE_MOCK) {
+      const lembaga = MOCK_LEMBAGA.find(l => l.id === payload.lembagaId)
       const record: ChildRecord = {
         id: `c${Date.now()}`,
         name: payload.namaLengkap,
         tanggal: new Date().toISOString().split('T')[0],
-        lembaga: payload.lembagaId ?? 'Individu',
+        lembaga: lembaga?.name ?? 'Individu',
         status: 'menunggu',
-        screeningAction: 'disable',
+        screeningAction: payload.jenisTerapi === 'lembaga_sekolah' ? 'disable' : 'orang_tua',
       }
       MOCK_CHILD_RECORDS.push(record)
       return record
