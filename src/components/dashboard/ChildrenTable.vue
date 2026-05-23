@@ -114,7 +114,6 @@ const statusLabel: Record<string, string> = {
             </button>
 
             <!-- Dropdown: Orang Tua / Anak -->
-
             <div v-else class="ct__dropdown-wrap">
               <button class="ct__btn ct__btn--filled" @click="toggleDropdown(record.id)">
                 {{ record.screeningAction === 'orang_tua' ? 'Orang Tua' : 'Anak' }}
@@ -150,7 +149,7 @@ const statusLabel: Record<string, string> = {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
 
-  overflow: hidden;
+  overflow: visible;
 }
 
 .ct__table {
