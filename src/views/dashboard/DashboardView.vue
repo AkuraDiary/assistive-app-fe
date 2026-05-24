@@ -20,7 +20,7 @@ import { useDashboardOverlay } from '@/composable/useDashboardOverlay'
 import { useRouter } from 'vue-router'
 import DailyReminderBanner from '@/components/dashboard/DailyReminderBanner.vue'
 import BaseButton from '@/components/shared/button/BaseButton.vue'
-import ConfirmModal from '@/components/shared/popup-modal/ConfirmModal.vue'
+import ConfirmModal from '@/components/shared/modal/ConfirmModal.vue'
 const router = useRouter()
 
 const {

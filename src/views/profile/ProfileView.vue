@@ -5,7 +5,7 @@ import { LogOut, ArrowLeft, Pencil } from 'lucide-vue-next'
 import BaseTextField from '@/components/shared/input/BaseTextField.vue'
 import BaseButton from '@/components/shared/button/BaseButton.vue'
 import { useProfile } from '@/composable/useProfile'
-import ConfirmModal from '@/components/shared/popup-modal/ConfirmModal.vue'
+import ConfirmModal from '@/components/shared/modal/ConfirmModal.vue'
 
 const showLogoutConfirm = ref(false)
 
