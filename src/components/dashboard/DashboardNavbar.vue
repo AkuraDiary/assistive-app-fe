@@ -7,6 +7,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 const showProfile = ref(false)
 
+
 const props = defineProps<{
   user: DashboardUser | null
   activeTab: 'dashboard' | 'course'

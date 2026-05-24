@@ -5,6 +5,9 @@ import { LogOut, ArrowLeft, Pencil } from 'lucide-vue-next'
 import BaseTextField from '@/components/shared/input/BaseTextField.vue'
 import BaseButton from '@/components/shared/button/BaseButton.vue'
 import { useProfile } from '@/composable/useProfile'
+import ConfirmPopup from '@/components/shared/popup/ConfirmPopup.vue'
+
+const showLogoutConfirm = ref(false)
 
 const router = useRouter()
 const { user, loading, error, fetchProfile, saveProfile, uploadAvatar } = useProfile()
@@ -119,12 +122,14 @@ function logout() {
           <BaseTextField
             v-model="form.namaLengkap"
             label="Nama Lengkap"
+            border="border border-primary"
             placeholder="Nama lengkap"
             :disabled="!isEditing"
           />
           <BaseTextField
             v-model="form.namapengguna"
             label="Nama Pengguna"
+            border="border border-primary"
             placeholder="Nama pengguna"
             :disabled="!isEditing"
           />
@@ -135,13 +140,20 @@ function logout() {
               <span class="pv__label">Email</span>
               <span class="pv__verified">● Verified</span>
             </div>
-            <BaseTextField v-model="form.email" type="email" placeholder="Email" disabled />
+            <BaseTextField
+              v-model="form.email"
+              border="border border-primary"
+              type="email"
+              placeholder="Email"
+              disabled
+            />
           </div>
 
           <BaseTextField
             v-model="form.kataSandi"
             label="Kata Sandi"
             type="password"
+            border="border border-primary"
             placeholder="Kata sandi"
             :disabled="!isEditing"
           />
@@ -149,12 +161,14 @@ function logout() {
           <BaseTextField
             v-model="form.alamat"
             label="Alamat"
+            border="border border-primary"
             placeholder="Alamat"
             :disabled="!isEditing"
           />
           <BaseTextField
             v-model="form.noTelepon"
             label="No. Telepon"
+            border="border border-primary"
             placeholder="+62"
             :disabled="!isEditing"
           />
@@ -182,12 +196,25 @@ function logout() {
       </div>
 
       <!-- Logout -->
-      <BaseButton variant="outline" color="primary" @click="logout">
+      <BaseButton variant="outline" color="primary" @click="showLogoutConfirm = true">
         <template #leading><LogOut :size="16" /></template>
         KELUAR
       </BaseButton>
     </div>
   </div>
+
+  <Transition name="fade">
+    <ConfirmPopup
+      v-if="showLogoutConfirm"
+      message="Apakah Anda Yakin Keluar?"
+      confirm-label="IYA"
+      cancel-label="TIDAK"
+      confirm-color="info"
+      cancel-color="error"
+      @confirm="logout"
+      @cancel="showLogoutConfirm = false"
+    />
+  </Transition>
 </template>
 
 <style scoped>

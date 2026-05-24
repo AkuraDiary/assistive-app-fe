@@ -4,7 +4,7 @@ import { ui } from '@/lib/ui'
 
 interface Props {
   variant?: 'solid' | 'outline' | 'ghost'
-  color?: 'primary' | 'secondary' | 'ternary'
+  color?: 'primary' | 'secondary' | 'ternary' | 'warning' | 'info' | 'success' | 'error'
   size?: 'sm' | 'md' | 'lg'
   disabled?: boolean
   fullWidth?: boolean

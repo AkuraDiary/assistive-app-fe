@@ -20,6 +20,7 @@ import { useDashboardOverlay } from '@/composable/useDashboardOverlay'
 import { useRouter } from 'vue-router'
 import DailyReminderBanner from '@/components/dashboard/DailyReminderBanner.vue'
 import BaseButton from '@/components/shared/button/BaseButton.vue'
+import ConfirmPopup from '@/components/shared/popup/ConfirmPopup.vue'
 const router = useRouter()
 
 const {
@@ -34,6 +35,7 @@ const {
 const overlay = useDashboardOverlay()
 
 const activeTab = ref<'dashboard' | 'course'>('dashboard')
+const showLogoutConfirm = ref(false)
 
 onMounted(initialize)
 async function handleSubmit(payload: AddChildPayload) {
@@ -126,6 +128,11 @@ const formattedDate = computed(() => {
     year: 'numeric',
   })
 })
+
+function handleLogout() {
+  // TODO: clear auth store
+  router.push('/login')
+}
 </script>
 
 <template>
@@ -134,9 +141,11 @@ const formattedDate = computed(() => {
       :user="state.user"
       :active-tab="activeTab"
       @tab-change="(tab) => (activeTab = tab)"
+      @logout="showLogoutConfirm = true"
     />
 
     <main class="dashboard__main">
+      
       <Transition name="fade">
         <AddChildForm
           v-if="overlay.mode.value === 'add_child' || overlay.mode.value === 'edit_child'"
@@ -210,7 +219,8 @@ const formattedDate = computed(() => {
           <BaseButton
             v-if="hasChildren && !state.loading"
             class="dashboard__add-btn"
-            @click="overlay.openAddChild()">
+            @click="overlay.openAddChild()"
+          >
             + Tambah Anak
           </BaseButton>
           <div class="dashboard__panels">
@@ -224,6 +234,17 @@ const formattedDate = computed(() => {
             />
           </div>
         </div>
+      </Transition>
+
+      <Transition name="fade">
+        <ConfirmPopup
+          v-if="showLogoutConfirm"
+          message="Apakah Anda Yakin Keluar?"
+          confirm-label="IYA"
+          cancel-label="TIDAK"
+          @confirm="handleLogout"
+          @cancel="showLogoutConfirm = false"
+        />
       </Transition>
     </main>
   </div>
