@@ -44,7 +44,7 @@ function handleSubmit() {
 
 <template>
   <div class="add-child-form">
-    <h2 class="add-child-form__title">Masukan Data Anak</h2>
+    <h2 class="add-child-form__title">{{ props.initialData == null? 'Masukkan' : 'Edit' }} Data Anak</h2>
 
     <!-- Nama Lengkap -->
     <div class="add-child-form__field">
