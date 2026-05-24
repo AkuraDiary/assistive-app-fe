@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import DashboardNavbar from '@/components/dashboard/DashboardNavbar.vue'
 import ChildrenTable from '@/components/dashboard/ChildrenTable.vue'
 import AddChildForm from '@/components/forms/AddChildForm.vue'
@@ -18,6 +18,8 @@ import ParentScreeningForm from '@/components/forms/ParentScreeningForm.vue'
 import { dashboardService } from '@/services/dashboard.service'
 import { useDashboardOverlay } from '@/composable/useDashboardOverlay'
 import { useRouter } from 'vue-router'
+import DailyReminderBanner from '@/components/dashboard/DailyReminderBanner.vue'
+import BaseButton from '@/components/shared/button/BaseButton.vue'
 const router = useRouter()
 
 const {
@@ -111,6 +113,19 @@ function handleStatusAction(id: string, status: ChildStatus) {
     })
   }
 }
+
+const props = defineProps<{
+  date?: string // ISO string, defaults to today
+}>()
+const formattedDate = computed(() => {
+  const d = props.date ? new Date(props.date) : new Date()
+  return d.toLocaleDateString('id-ID', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  })
+})
 </script>
 
 <template>
@@ -170,13 +185,11 @@ function handleStatusAction(id: string, status: ChildStatus) {
                 }}
               </p>
             </div>
-            <button
-              v-if="hasChildren && !state.loading"
-              class="dashboard__add-btn"
-              @click="overlay.openAddChild()"
-            >
-              + Tambah Anak
-            </button>
+            <div class="dashboard__header-right">
+              <DailyReminderBanner />
+
+              <div class="dashboard__date-chip">{{ formattedDate }}</div>
+            </div>
           </div>
 
           <EmptyChildrenBanner
@@ -194,7 +207,12 @@ function handleStatusAction(id: string, status: ChildStatus) {
             @screening-action="handleScreeningAction"
             @status-action="handleStatusAction"
           />
-
+          <BaseButton
+            v-if="hasChildren && !state.loading"
+            class="dashboard__add-btn"
+            @click="overlay.openAddChild()">
+            + Tambah Anak
+          </BaseButton>
           <div class="dashboard__panels">
             <ActivityPanel :activities="state.activities" :loading="state.loading" />
             <CourseProgressPanel
@@ -216,6 +234,22 @@ function handleStatusAction(id: string, status: ChildStatus) {
   min-height: 100vh;
   background: var(--color-background);
   font-family: 'Inter', system-ui, sans-serif;
+}
+
+.dashboard__header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.dashboard__date-chip {
+  background: #ede8fa;
+  color: var(--color-primary);
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .dashboard__main {
