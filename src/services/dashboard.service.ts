@@ -11,8 +11,8 @@ import type {
   ScreeningResult,
 } from '@/types/dashboard.types'
 
-// ─── Config ──────────────────────────────────────────────────────────────────
 const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? ''
+const USE_MOCK = !BASE_URL
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE_URL}${path}`, {
@@ -136,7 +136,7 @@ const MOCK_SCREENING_QUESTIONS_ANAK: ScreeningQuestion[] = [
 ]
 const MOCK_SCREENING_RESULTS: ScreeningResult[] = []
 
-const USE_MOCK = !BASE_URL
+
 
 // ─── Endpoints ────────────────────────────────────────────────────────────────
 export const dashboardService = {

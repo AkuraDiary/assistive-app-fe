@@ -3,7 +3,8 @@ import type { DashboardUser } from '@/types/dashboard.types'
 import AppLogo from '../shared/AppLogo.vue'
 import { ref } from 'vue'
 import ProfilePopup from './ProfilePopup.vue'
-
+import { useRouter } from 'vue-router'
+const router = useRouter()
 const showProfile = ref(false)
 
 const props = defineProps<{
@@ -13,6 +14,7 @@ const props = defineProps<{
 
 function emmitProfile() {
   emit('profile')
+  router.push('/profile')
   showProfile.value = false
 }
 
@@ -62,15 +64,15 @@ const emit = defineEmits<{
       <div class="navbar__avatar-wrap">
         <button class="navbar__avatar" @click="showProfile = !showProfile">
           <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-          <circle cx="16" cy="16" r="15" stroke="#8B73F6D9" stroke-width="2" />
-          <circle cx="16" cy="13" r="5" stroke="#8B73F6D9" stroke-width="2" />
-          <path
-            d="M6 27c1.5-4 5-6 10-6s8.5 2 10 6"
-            stroke="#8B73F6D9"
-            stroke-width="2"
-            stroke-linecap="round"
-          />
-        </svg>
+            <circle cx="16" cy="16" r="15" stroke="#8B73F6D9" stroke-width="2" />
+            <circle cx="16" cy="13" r="5" stroke="#8B73F6D9" stroke-width="2" />
+            <path
+              d="M6 27c1.5-4 5-6 10-6s8.5 2 10 6"
+              stroke="#8B73F6D9"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
         </button>
         <Transition name="pp-fade">
           <ProfilePopup

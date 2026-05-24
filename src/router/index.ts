@@ -8,6 +8,7 @@ import ForgotPasswordView from '@/views/auth/ForgotPasswordView.vue'
 import ResetPasswordView from '@/views/auth/ResetPasswordView.vue'
 import DashboardView from '@/views/dashboard/DashboardView.vue'
 import ScreeningView from '@/views/screening/ScreeningView.vue'
+import ProfileView from '@/views/profile/ProfileView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -55,7 +56,12 @@ const router = createRouter({
       component: ScreeningView,
       // meta: { requiresAuth: true },
     },
-
+    {
+      path: '/profile',
+      name: 'profile',
+      component: ProfileView,
+      meta: { requiresAuth: true },
+    },
     {
       path: '/dashboard',
       name: 'dashboard',
