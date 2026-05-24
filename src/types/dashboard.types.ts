@@ -1,17 +1,16 @@
-
 export type ChildStatus = 'menunggu' | 'diterima' | 'ditolak'
 export type ScreeningType = 'orang_tua' | 'anak'
 export type ScreeningUIState = 'disable' | 'lihat_hasil' | ScreeningType
 export type JenisKelamin = 'laki_laki' | 'perempuan'
 export type JenisTerapi = 'individu' | 'lembaga_sekolah'
-
+export type QuestionType = 'tap' | 'voice' | 'upload'
 
 // records
 export interface ChildRecord {
   id: string
   name: string
   avatar?: string
-  tanggal?: string        // ISO date string
+  tanggal?: string // ISO date string
   lembaga: string
   status: ChildStatus
   screeningAction: ScreeningUIState
@@ -23,7 +22,7 @@ export interface AddChildPayload {
   alamat?: string
   jenisKelamin?: JenisKelamin
   jenisTerapi: JenisTerapi
-  lembagaId?: string     // required if jenisTerapi === 'lembaga_sekolah'
+  lembagaId?: string // required if jenisTerapi === 'lembaga_sekolah'
 }
 
 export interface Lembaga {
@@ -57,15 +56,14 @@ export interface ActivityEntry {
 
 //screening
 
-
 export interface ScreeningAnswer {
   questionId: string
-  value: number  // 1–5
+  value: number // 1–5
 }
 
 export interface ScreeningPayload {
   childId: string
-  screeningType: ScreeningType  
+  screeningType: ScreeningType
   answers: ScreeningAnswer[]
 }
 
@@ -74,18 +72,18 @@ export interface ScreeningQuestion {
   order: number
   text: string
   required: boolean
-  questionType?: QuestionType        // ← new
-  mediaLabel?: string               // e.g. "Animasi", "Huruf/Teks" shown on the card
-  mediaUrl?: string                 // image/animation URL from backend
-  options?: string[]                // for tap: A, I, U choices
+  questionType?: QuestionType // ← new
+  mediaLabel?: string // e.g. "Animasi", "Huruf/Teks" shown on the card
+  mediaUrl?: string // image/animation URL from backend
+  options?: string[] // for tap: A, I, U choices
 }
 
 // screening results
 
 export interface CategoryScore {
   label: string
-  score: number   // raw score
-  max: number     // max possible (e.g. 10)
+  score: number // raw score
+  max: number // max possible (e.g. 10)
 }
 
 export interface ScreeningResult {
@@ -96,12 +94,9 @@ export interface ScreeningResult {
   score: number
   completedAt: string // ISO string
   recommendation?: string
-  categoryScores?: CategoryScore[]  
-  dyslexiaLevel?: number   
+  categoryScores?: CategoryScore[]
+  dyslexiaLevel?: number
 }
-
-export type QuestionType = 'tap' | 'voice' | 'upload'
-
 
 // dashboards
 export interface DashboardUser {
@@ -113,11 +108,11 @@ export interface DashboardUser {
 export interface DashboardState {
   user: DashboardUser | null
   children: Child[]
-  childRecords: ChildRecord[]   
+  childRecords: ChildRecord[]
   selectedChildId: string | null
   courses: Course[]
   activities: ActivityEntry[]
-  lembagaList: Lembaga[]        
+  lembagaList: Lembaga[]
   loading: boolean
   error: string | null
 }
