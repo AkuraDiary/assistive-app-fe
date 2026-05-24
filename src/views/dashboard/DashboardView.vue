@@ -20,7 +20,7 @@ import { useDashboardOverlay } from '@/composable/useDashboardOverlay'
 import { useRouter } from 'vue-router'
 import DailyReminderBanner from '@/components/dashboard/DailyReminderBanner.vue'
 import BaseButton from '@/components/shared/button/BaseButton.vue'
-import ConfirmPopup from '@/components/shared/popup/ConfirmPopup.vue'
+import ConfirmModal from '@/components/shared/popup-modal/ConfirmModal.vue'
 const router = useRouter()
 
 const {
@@ -145,7 +145,6 @@ function handleLogout() {
     />
 
     <main class="dashboard__main">
-      
       <Transition name="fade">
         <AddChildForm
           v-if="overlay.mode.value === 'add_child' || overlay.mode.value === 'edit_child'"
@@ -237,7 +236,7 @@ function handleLogout() {
       </Transition>
 
       <Transition name="fade">
-        <ConfirmPopup
+        <ConfirmModal
           v-if="showLogoutConfirm"
           message="Apakah Anda Yakin Keluar?"
           confirm-label="IYA"

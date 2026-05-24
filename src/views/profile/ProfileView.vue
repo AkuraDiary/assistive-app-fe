@@ -5,7 +5,7 @@ import { LogOut, ArrowLeft, Pencil } from 'lucide-vue-next'
 import BaseTextField from '@/components/shared/input/BaseTextField.vue'
 import BaseButton from '@/components/shared/button/BaseButton.vue'
 import { useProfile } from '@/composable/useProfile'
-import ConfirmPopup from '@/components/shared/popup/ConfirmPopup.vue'
+import ConfirmModal from '@/components/shared/popup-modal/ConfirmModal.vue'
 
 const showLogoutConfirm = ref(false)
 
@@ -204,7 +204,7 @@ function logout() {
   </div>
 
   <Transition name="fade">
-    <ConfirmPopup
+    <ConfirmModal
       v-if="showLogoutConfirm"
       message="Apakah Anda Yakin Keluar?"
       confirm-label="IYA"
