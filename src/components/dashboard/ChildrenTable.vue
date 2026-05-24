@@ -7,14 +7,31 @@ const popupRecord = ref<{ id: string; status: ChildStatus } | null>(null)
 defineProps<{
   records: ChildRecord[]
   loading?: boolean
+  showActions?: boolean // NEW
 }>()
 
 const emit = defineEmits<{
   (e: 'screening-action', id: string, action: ScreeningUIState): void
   (e: 'status-action', id: string, status: ChildStatus): void
+  (e: 'edit', id: string): void
+  (e: 'delete', id: string): void
 }>()
 
 const openDropdown = ref<string | null>(null)
+const openActionMenu = ref<string | null>(null)
+
+function toggleActionMenu(id: string) {
+  openActionMenu.value = openActionMenu.value === id ? null : id
+  openDropdown.value = null
+}
+function handleEdit(id: string) {
+  openActionMenu.value = null
+  emit('edit', id)
+}
+function handleDelete(id: string) {
+  openActionMenu.value = null
+  emit('delete', id)
+}
 
 function toggleDropdown(id: string) {
   openDropdown.value = openDropdown.value === id ? null : id
@@ -67,6 +84,7 @@ const statusLabel: Record<string, string> = {
           <th class="ct__th">Lembaga</th>
           <th class="ct__th">Status</th>
           <th class="ct__th">Screening ↓</th>
+          <th v-if="showActions" class="ct__th ct__th--actions" />
         </tr>
       </thead>
       <tbody>
@@ -125,6 +143,20 @@ const statusLabel: Record<string, string> = {
                 </button>
                 <button class="ct__dropdown-item" @click="selectScreening(record.id, 'anak')">
                   Anak
+                </button>
+              </div>
+            </div>
+          </td>
+          <td v-if="showActions" class="ct__td ct__td--actions">
+            <div class="ct__action-wrap">
+              <button class="ct__dots-btn" @click="toggleActionMenu(record.id)">···</button>
+              <div v-if="openActionMenu === record.id" class="ct__dropdown ct__dropdown--right">
+                <button class="ct__dropdown-item" @click="handleEdit(record.id)">Edit</button>
+                <button
+                  class="ct__dropdown-item ct__dropdown-item--danger"
+                  @click="handleDelete(record.id)"
+                >
+                  Hapus
                 </button>
               </div>
             </div>
@@ -227,7 +259,7 @@ thead tr:first-child th:last-child {
 }
 
 .ct__td-screening {
-  width: 20%;
+  width: 14%;
 }
 
 /* Status badges */
@@ -347,5 +379,43 @@ thead tr:first-child th:last-child {
 
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
+}
+
+.ct__th--actions,
+.ct__td--actions {
+  width: 48px;
+  text-align: center;
+}
+.ct__action-wrap {
+  position: relative;
+  display: inline-block;
+}
+.ct__dropdown--right {
+  left: auto;
+  right: 0;
+  border-color: var(--color-border);
+  min-width: 130px;
+}
+.ct__dropdown-item--danger {
+  color: var(--color-error);
+}
+.ct__dropdown-item--danger:hover {
+  background: var(--color-error-light);
+  color: var(--color-error);
+}
+.ct__dots-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  letter-spacing: 2px;
+  color: var(--color-text-light);
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+.ct__dots-btn:hover {
+  background: var(--color-surface-blue);
+  color: var(--color-text-dark);
 }
 </style>

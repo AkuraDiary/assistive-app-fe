@@ -1,14 +1,35 @@
 <script setup lang="ts">
 import type { DashboardUser } from '@/types/dashboard.types'
-import AppLogo from '../shared/AppLogo.vue';
+import AppLogo from '../shared/AppLogo.vue'
+import { ref } from 'vue'
+import ProfilePopup from './ProfilePopup.vue'
+
+const showProfile = ref(false)
 
 const props = defineProps<{
   user: DashboardUser | null
   activeTab: 'dashboard' | 'course'
 }>()
 
+function emmitProfile() {
+  emit('profile')
+  showProfile.value = false
+}
+
+function emmitSettings() {
+  emit('settings')
+  showProfile.value = false
+}
+
+function emmitLogout() {
+  emit('logout')
+  showProfile.value = false
+}
 const emit = defineEmits<{
   (e: 'tab-change', tab: 'dashboard' | 'course'): void
+  (e: 'logout'): void // NEW
+  (e: 'profile'): void // NEW
+  (e: 'settings'): void // NEW
 }>()
 </script>
 
@@ -16,7 +37,7 @@ const emit = defineEmits<{
   <nav class="navbar">
     <div class="navbar__brand">
       <div class="navbar__logo">
-        <AppLogo/>
+        <AppLogo />
       </div>
     </div>
 
@@ -38,8 +59,9 @@ const emit = defineEmits<{
     </div>
 
     <div class="navbar__user">
-      <div class="navbar__avatar">
-        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <div class="navbar__avatar-wrap">
+        <button class="navbar__avatar" @click="showProfile = !showProfile">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
           <circle cx="16" cy="16" r="15" stroke="#8B73F6D9" stroke-width="2" />
           <circle cx="16" cy="13" r="5" stroke="#8B73F6D9" stroke-width="2" />
           <path
@@ -49,6 +71,16 @@ const emit = defineEmits<{
             stroke-linecap="round"
           />
         </svg>
+        </button>
+        <Transition name="pp-fade">
+          <ProfilePopup
+            v-if="showProfile"
+            @profile="emmitProfile"
+            @settings="emmitSettings"
+            @logout="emmitLogout"
+            @close="showProfile = false"
+          />
+        </Transition>
       </div>
     </div>
   </nav>
@@ -107,5 +139,28 @@ const emit = defineEmits<{
 }
 .navbar__avatar:hover {
   opacity: 0.7;
+}
+
+.navbar__avatar-wrap {
+  position: relative;
+}
+.navbar__avatar {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.pp-fade-enter-active,
+.pp-fade-leave-active {
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+}
+.pp-fade-enter-from,
+.pp-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
 }
 </style>

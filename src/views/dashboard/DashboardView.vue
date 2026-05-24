@@ -48,6 +48,22 @@ async function handleSubmit(payload: AddChildPayload) {
   }
 }
 
+function handleEdit(id: string) {
+  const record = state.value.childRecords.find((r) => r.id === id)
+  if (!record) return
+  overlay.openEditChild(id, {
+    namaLengkap: record.name,
+    tanggalLahir: record.tanggal ?? '',
+    jenisTerapi: record.lembaga === 'Individu' ? 'individu' : 'lembaga_sekolah',
+    lembagaId: state.value.lembagaList.find((l) => l.name === record.lembaga)?.id,
+  })
+}
+
+function handleDelete(id: string) {
+  // wire to your delete API when ready
+  console.log('delete', id)
+}
+
 async function handleScreeningAction(id: string, action: ScreeningUIState) {
   if (action === 'disable') return
 
@@ -172,6 +188,9 @@ function handleStatusAction(id: string, status: ChildStatus) {
             v-else
             :records="state.childRecords"
             :loading="state.loading"
+            :show-actions="true"
+            @edit="handleEdit"
+            @delete="handleDelete"
             @screening-action="handleScreeningAction"
             @status-action="handleStatusAction"
           />
