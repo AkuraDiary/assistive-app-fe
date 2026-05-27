@@ -1,4 +1,4 @@
-import type { DashboardUser } from '@/types/dashboard.types'
+import type { ActivityEntry } from '@/types/activity.types'
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? ''
 const USE_MOCK = !BASE_URL
@@ -12,11 +12,11 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
   return res.json() as Promise<T>
 }
 
-const MOCK_USER: DashboardUser = { id: 'u1', name: 'Budi Santoso' }
+const MOCK_ACTIVITIES: ActivityEntry[] = []
 
-export const dashboardService = {
-  async getUser(): Promise<DashboardUser> {
-    if (USE_MOCK) return MOCK_USER
-    return request<DashboardUser>('/api/v1/me')
+export const activityService = {
+  async getActivities(childId: string): Promise<ActivityEntry[]> {
+    if (USE_MOCK) return MOCK_ACTIVITIES
+    return request<ActivityEntry[]>(`/api/v1/children/${childId}/activities`)
   },
 }
