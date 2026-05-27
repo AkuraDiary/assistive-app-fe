@@ -7,12 +7,8 @@ import ActivityPanel from '@/components/dashboard/ActivityPanel.vue'
 import CourseProgressPanel from '@/components/dashboard/CourseProgressPanel.vue'
 import ScreeningResultPanel from '@/components/dashboard/ScreeningResultPanel.vue'
 import { useDashboard } from '@/composable/useDashboard'
-import type {
-  AddChildPayload,
-  ChildStatus,
-  ScreeningUIState,
-  ScreeningPayload,
-} from '@/types/dashboard.types'
+import type { AddChildPayload, ChildStatus } from '@/types/child.types'
+import type { ScreeningUIState } from '@/types/screening.types'
 import EmptyChildrenBanner from '@/components/dashboard/EmptyChildrenBanner.vue'
 import ParentScreeningForm from '@/components/forms/ParentScreeningForm.vue'
 import { dashboardService } from '@/services/dashboard.service'
@@ -173,7 +169,7 @@ function handleLogout() {
           v-if="overlay.mode.value === 'result' && overlay.resultData.value"
           :child-id="overlay.resultData.value.childId"
           :child-name="
-            state.childRecords.find((r) => r.id === overlay.resultData.value!.childId)?.name
+            state.childRecords.find((r: { id: string }) => r.id === overlay.resultData.value!.childId)?.name
           "
           @back="overlay.close()"
           @save="overlay.close()"

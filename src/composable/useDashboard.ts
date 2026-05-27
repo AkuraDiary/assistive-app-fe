@@ -1,104 +1,68 @@
 import { ref, computed, watch } from 'vue'
-import type {
-  DashboardState,
-  Child,
-  AddChildPayload,
-  ScreeningUIState,
-} from '@/types/dashboard.types'
+import type { DashboardUser } from '@/types/dashboard.types'
 import { dashboardService } from '@/services/dashboard.service'
+import { useChildren } from './useChildren'
+import { useScreening } from './useScreening'
+import { useCourse } from './useCourse'
+import { useActivity } from './useActivity'
 
-const state = ref<DashboardState>({
-  user: null,
-  children: [],
-  childRecords: [],
-  selectedChildId: null,
-  courses: [],
-  activities: [],
-  lembagaList: [],
-  loading: false,
-  error: null,
-})
+const user = ref<DashboardUser | null>(null)
+const loading = ref(false)
+const error = ref<string | null>(null)
+const selectedChildId = ref<string | null>(null)
 
 export function useDashboard() {
-  const hasChildren = computed(() => state.value.childRecords.length > 0)
+  const children = useChildren()
+  const screening = useScreening(children.childRecords)
+  const course = useCourse()
+  const activity = useActivity()
+
   const selectedChild = computed(
-    () => state.value.children.find((c) => c.id === state.value.selectedChildId) ?? null,
+    () => children.childRecords.value.find((c) => c.id === selectedChildId.value) ?? null,
   )
 
-  function updateScreeningUIState(id: string, action: ScreeningUIState) {
-    const record = state.value.childRecords.find((r) => r.id === id)
-    if (record) record.screeningAction = action
+  async function selectChild(id: string) {
+    selectedChildId.value = id
   }
 
   async function initialize() {
-    state.value.loading = true
-    state.value.error = null
+    loading.value = true
+    error.value = null
     try {
-      const [user, childRecords, lembagaList] = await Promise.all([
+      const [fetchedUser] = await Promise.all([
         dashboardService.getUser(),
-        dashboardService.getChildRecords(),
-        dashboardService.getLembagaList(),
+        children.fetchChildren(),
       ])
-      state.value.user = user
-
-      state.value.childRecords = childRecords
-      state.value.lembagaList = lembagaList
+      user.value = fetchedUser
     } catch (err) {
-      state.value.error = (err as Error).message
+      error.value = (err as Error).message
     } finally {
-      state.value.loading = false
+      loading.value = false
     }
   }
 
-  async function selectChild(id: string) {
-    state.value.selectedChildId = id
-  }
-
-  async function addChild(payload: AddChildPayload) {
-    const record = await dashboardService.addChildRecord(payload)
-    state.value.childRecords.push(record)
-    return record
-  }
-
-  async function updateChild(id: string, payload: AddChildPayload) {
-    const record = await dashboardService.updateChildRecord(id, payload)
-    const index = state.value.childRecords.findIndex((r) => r.id === id)
-    if (index !== -1) state.value.childRecords[index] = record
-  }
-
-  async function loadChildData(childId: string) {
-    state.value.loading = true
-    try {
-      const [courses, activities] = await Promise.all([
-        dashboardService.getCourses(childId),
-        dashboardService.getActivities(childId),
-      ])
-      state.value.courses = courses
-      state.value.activities = activities
-    } catch (err) {
-      state.value.error = (err as Error).message
-    } finally {
-      state.value.loading = false
+  watch(selectedChildId, (id) => {
+    if (id) {
+      course.fetchCourses(id)
+      activity.fetchActivities(id)
     }
-  }
-
-  watch(
-    () => state.value.selectedChildId,
-    (id) => {
-      if (id) loadChildData(id)
-    },
-    { immediate: true },
-  )
+  }, { immediate: true })
 
   return {
-    state,
-    hasChildren,
+    // state
+    user,
+    loading,
+    error,
+    selectedChildId,
     selectedChild,
-    updateScreeningUIState,
+    
+    ...children,
+    ...screening,
+    ...course,
+    ...activity,
+    
+    // actions
     initialize,
     selectChild,
-    addChild,
-    updateChild,
-    loadChildData,
   }
 }
