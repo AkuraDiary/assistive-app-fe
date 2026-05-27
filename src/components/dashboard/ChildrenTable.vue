@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { ChildRecord, ScreeningUIState } from '@/types/dashboard.types'
-import type { ChildStatus } from '@/types/dashboard.types'
+import type { ScreeningUIState } from '@/types/screening.types'
+import type { ChildStatus, ChildRecord } from '@/types/child.types'
 import ChildStatusPopup from './ChildStatusPopup.vue'
 const popupRecord = ref<{ id: string; status: ChildStatus } | null>(null)
 defineProps<{

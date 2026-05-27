@@ -1,3 +1,5 @@
+export type ActivityStatus = 'belum' | 'dipelajari' | 'selesai'
+
 export interface ActivityEntry {
     id: string
     childId: string
@@ -5,4 +7,6 @@ export interface ActivityEntry {
     durationMinutes: number
     topic: string
     score?: number
+    status: ActivityStatus
+    progress: number  
   }

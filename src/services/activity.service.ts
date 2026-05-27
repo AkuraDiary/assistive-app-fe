@@ -8,7 +8,8 @@ const MOCK_ACTIVITIES: ActivityEntry[] = [
     date: '2026-05-27T10:00:00Z',
     durationMinutes: 30,
     topic: 'Mengenal Huruf A-E',
-    score: 85,
+    status: 'belum',
+    progress: 80,
   },
   {
     id: 'act2',
@@ -17,6 +18,8 @@ const MOCK_ACTIVITIES: ActivityEntry[] = [
     durationMinutes: 45,
     topic: 'Menulis Angka 1-10',
     score: 90,
+    status: 'belum',
+    progress: 80,
   },
   {
     id: 'act3',
@@ -25,6 +28,8 @@ const MOCK_ACTIVITIES: ActivityEntry[] = [
     durationMinutes: 20,
     topic: 'Bermain Warna',
     score: 100,
+    status: 'belum',
+    progress: 80,
   },
   {
     id: 'act4',
@@ -33,6 +38,8 @@ const MOCK_ACTIVITIES: ActivityEntry[] = [
     durationMinutes: 60,
     topic: 'Membaca Suku Kata',
     score: 75,
+    status: 'belum',
+    progress: 80,
   },
   {
     id: 'act5',
@@ -41,6 +48,8 @@ const MOCK_ACTIVITIES: ActivityEntry[] = [
     durationMinutes: 30,
     topic: 'Mengenal Hewan',
     score: 95,
+    status: 'belum',
+    progress: 80,
   },
   {
     id: 'act6',
@@ -49,6 +58,8 @@ const MOCK_ACTIVITIES: ActivityEntry[] = [
     durationMinutes: 15,
     topic: 'Menyusun Puzzle',
     score: 80,
+    status: 'belum',
+    progress: 80,
   },
   {
     id: 'act7',
@@ -57,6 +68,8 @@ const MOCK_ACTIVITIES: ActivityEntry[] = [
     durationMinutes: 15,
     topic: 'Menyusun Puzzle',
     score: 80,
+    status: 'belum',
+    progress: 80,
   },
   {
     id: 'act7',
@@ -64,6 +77,8 @@ const MOCK_ACTIVITIES: ActivityEntry[] = [
     date: '2026-05-22T08:00:00Z',
     durationMinutes: 15,
     topic: 'Menyusun Puzzle',
+    status: 'belum',
+    progress: 80,
     score: 80,
   },
   {
@@ -73,12 +88,16 @@ const MOCK_ACTIVITIES: ActivityEntry[] = [
     durationMinutes: 15,
     topic: 'Menyusun Puzzle',
     score: 80,
+    status: 'selesai',
+    progress: 100,
   },
   {
     id: 'act9',
     childId: 'c1',
     date: '2026-05-22T08:00:00Z',
     durationMinutes: 15,
+    status: 'belum',
+    progress: 70,
     topic: 'Menyusun Puzzle',
     score: 80,
   },
@@ -89,6 +108,8 @@ const MOCK_ACTIVITIES: ActivityEntry[] = [
     durationMinutes: 15,
     topic: 'Menyusun Puzzle',
     score: 80,
+    status: 'belum',
+    progress: 90,
   },
 ]
 

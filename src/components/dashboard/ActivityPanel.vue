@@ -1,16 +1,44 @@
 <script setup lang="ts">
-import type { ActivityEntry } from '@/types/activity.types'
+import type { ActivityEntry, ActivityStatus } from '@/types/activity.types'
 
 defineProps<{
   activities: ActivityEntry[]
   loading?: boolean
 }>()
-</script>
 
+const statusConfig: Record<ActivityStatus, { label: string; class: string }> = {
+  belum:      { label: 'Belum',      class: 'badge--belum' },
+  dipelajari: { label: 'Dipelajari', class: 'badge--dipelajari' },
+  selesai:    { label: 'Selesai',    class: 'badge--selesai' },
+}
+
+const actionLabel: Record<ActivityStatus, string> = {
+  belum:      'Mulai',
+  dipelajari: 'Lanjutkan Modul',
+  selesai:    'Lihat Modul',
+}
+
+const datePrefix: Record<ActivityStatus, string> = {
+  belum:      'Selesai',
+  dipelajari: 'Mulai',
+  selesai:    'Selesai',
+}
+
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
+}
+</script>
 <template>
   <div class="activity-panel">
     <div class="activity-panel__header">
-      <span class="activity-panel__icon">≡</span>
+      <span class="activity-panel__icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+             stroke="#2d2d2d" stroke-width="2.5" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </span>
       <h2 class="activity-panel__title">Aktifitas Belajar</h2>
     </div>
 
@@ -24,17 +52,29 @@ defineProps<{
 
     <ul v-else class="activity-panel__list">
       <li v-for="entry in activities" :key="entry.id" class="activity-panel__item">
-        <div class="activity-panel__item-dot" />
-        <div class="activity-panel__item-content">
-          <span class="activity-panel__item-topic">{{ entry.topic }}</span>
-          <span class="activity-panel__item-meta">
-            {{ entry.durationMinutes }} menit
-            <template v-if="entry.score != null"> · {{ entry.score }}/100</template>
-          </span>
-        </div>
-        <span class="activity-panel__item-date">
-          {{ new Date(entry.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) }}
+        <span class="activity-panel__badge" :class="statusConfig[entry.status].class">
+          {{ statusConfig[entry.status].label }}
         </span>
+        <div class="activity-panel__item-title">{{ entry.topic }}</div>
+        <div class="activity-panel__progress-row">
+          <div class="activity-panel__progress-bar">
+            <div
+              class="activity-panel__progress-fill"
+              :class="`progress--${entry.status}`"
+              :style="{ width: `${entry.progress}%` }"
+            />
+          </div>
+          <span class="activity-panel__progress-pct">{{ entry.progress }}%</span>
+        </div>
+        <div class="activity-panel__item-footer">
+          <span class="activity-panel__item-date">
+            {{ datePrefix[entry.status] }}: {{ formatDate(entry.date) }}
+          </span>
+          <button class="activity-panel__action">
+            {{ actionLabel[entry.status] }}
+            <span>&#9654;</span>
+          </button>
+        </div>
       </li>
     </ul>
   </div>
@@ -47,6 +87,7 @@ defineProps<{
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
+  gap: 1.25rem;
   min-height: 320px;
   height: 600px;
   flex: 1;
@@ -55,13 +96,7 @@ defineProps<{
 .activity-panel__header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 1.25rem;
-}
-
-.activity-panel__icon {
-  font-size: 20px;
-  color: #2d2d2d;
+  gap: 10px;
 }
 
 .activity-panel__title {
@@ -71,22 +106,116 @@ defineProps<{
   margin: 0;
 }
 
+.activity-panel__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  flex: 1;
+}
+.activity-panel__list::-webkit-scrollbar { display: none; }
+
+.activity-panel__item {
+  background: #fff;
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Status badges */
+.activity-panel__badge {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  align-self: flex-start;
+}
+.badge--belum      { background: #ede0ff; color: #7c3aed; }
+.badge--dipelajari { background: #dbeafe; color: #2563eb; }
+.badge--selesai    { background: #dcfce7; color: #16a34a; }
+
+.activity-panel__item-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+/* Progress */
+.activity-panel__progress-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.activity-panel__progress-bar {
+  flex: 1;
+  height: 8px;
+  background: #e8e8e8;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.activity-panel__progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.5s ease;
+}
+.progress--belum      { background: #e88a9a; }
+.progress--dipelajari { background: #e88a9a; }
+.progress--selesai    { background: #22c55e; }
+
+.activity-panel__progress-pct {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+  white-space: nowrap;
+}
+
+/* Footer row */
+.activity-panel__item-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2px;
+}
+.activity-panel__item-date {
+  font-size: 13px;
+  color: #888;
+}
+.activity-panel__action {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f9d8e8;
+  border: none;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1a1a1a;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.activity-panel__action:hover { background: #f5bcd8; }
+
+/* States */
 .activity-panel__state {
   flex: 1;
-  min-height: 200px;
   background: #fff;
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-
 .activity-panel__empty-text {
   font-size: 14px;
   color: #aaa;
   margin: 0;
 }
-
 .activity-panel__spinner {
   width: 24px;
   height: 24px;
@@ -95,78 +224,5 @@ defineProps<{
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Custom Scrollbar Styling */
-.activity-panel__list::-webkit-scrollbar {
-  width: 6px;
-}
-.activity-panel__list::-webkit-scrollbar-track {
-  background: #faf0f4;
-  border-radius: 4px;
-}
-.activity-panel__list::-webkit-scrollbar-thumb {
-  border-radius: 4px;
-}
-.activity-panel__list {
-  list-style: none;
-  margin: 0;
-  padding: 0.5rem 0;
-  /* Add scrolling for multiple items */
-  height: 500px;
-  overflow-y: auto;
-  padding-right: 8px; /* Prevents text from hiding behind scrollbar */
-}
-
-.activity-panel__item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 1rem;
-  border-bottom: 1px solid #faf0f4;
-  transition: background 0.15s;
-}
-.activity-panel__item:last-child {
-  border-bottom: none;
-}
-.activity-panel__item:hover {
-  background: #fdf5f8;
-}
-
-.activity-panel__item-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #d4537e;
-  flex-shrink: 0;
-}
-
-.activity-panel__item-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.activity-panel__item-topic {
-  font-size: 14px;
-  font-weight: 500;
-  color: #2d2d2d;
-}
-
-.activity-panel__item-meta {
-  font-size: 12px;
-  color: #9a8a90;
-}
-
-.activity-panel__item-date {
-  font-size: 12px;
-  color: #b0a0a8;
-  flex-shrink: 0;
-}
+@keyframes spin { to { transform: rotate(360deg); } }
 </style>
