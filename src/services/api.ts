@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 // API Configuration
-const API_BASE_URL = 'http://localhost:3000/api'
+
+// to this
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? ''
+export const USE_MOCK = !API_BASE_URL
 
 export interface ApiResponse<T = any> {
   success: boolean
@@ -149,3 +152,4 @@ class ApiService {
 }
 
 export const authAPI = new ApiService()
+

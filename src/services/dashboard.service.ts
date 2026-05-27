@@ -1,22 +1,12 @@
 import type { DashboardUser } from '@/types/dashboard.types'
-
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? ''
-const USE_MOCK = !BASE_URL
-
-async function request<T>(path: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(`${BASE_URL}${path}`, {
-    headers: { 'Content-Type': 'application/json' },
-    ...options,
-  })
-  if (!res.ok) throw new Error(`API error ${res.status}: ${res.statusText}`)
-  return res.json() as Promise<T>
-}
+import { authAPI, USE_MOCK } from './api'
 
 const MOCK_USER: DashboardUser = { id: 'u1', name: 'Budi Santoso' }
 
 export const dashboardService = {
   async getUser(): Promise<DashboardUser> {
     if (USE_MOCK) return MOCK_USER
-    return request<DashboardUser>('/api/v1/me')
+    const res = await authAPI.get<DashboardUser>('/me')
+    return res.data!
   },
 }
