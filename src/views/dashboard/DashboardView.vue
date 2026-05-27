@@ -1,3 +1,4 @@
+<!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import DashboardNavbar from '@/components/dashboard/DashboardNavbar.vue'
@@ -8,26 +9,40 @@ import CourseProgressPanel from '@/components/dashboard/CourseProgressPanel.vue'
 import ScreeningResultPanel from '@/components/dashboard/ScreeningResultPanel.vue'
 import { useDashboard } from '@/composable/useDashboard'
 import type { AddChildPayload, ChildStatus } from '@/types/child.types'
-import type { ScreeningUIState } from '@/types/screening.types'
+import type { ScreeningPayload, ScreeningUIState } from '@/types/screening.types'
 import EmptyChildrenBanner from '@/components/dashboard/EmptyChildrenBanner.vue'
 import ParentScreeningForm from '@/components/forms/ParentScreeningForm.vue'
-import { dashboardService } from '@/services/dashboard.service'
+
 import { useDashboardOverlay } from '@/composable/useDashboardOverlay'
 import { useRouter } from 'vue-router'
+import { useAuth } from '@/composable/useAuth'
+
 import DailyReminderBanner from '@/components/dashboard/DailyReminderBanner.vue'
 import BaseButton from '@/components/shared/button/BaseButton.vue'
 import ConfirmModal from '@/components/shared/modal/ConfirmModal.vue'
+
 const router = useRouter()
+const { logout } = useAuth() // <-- Add this
 
 const {
-  state,
+  user,
+  loading,
+  childRecords,
+  lembagaList,
   hasChildren,
+  activities,
+  courses,
+  selectedChildId,
   initialize,
   selectChild,
   addChild,
   updateChild,
+  deleteChild, // <-- Use the new delete function
   updateScreeningUIState,
+  getScreeningQuestions, // <-- Use from composable
+  submitScreening, // <-- Use from composable
 } = useDashboard()
+
 const overlay = useDashboardOverlay()
 
 const activeTab = ref<'dashboard' | 'course'>('dashboard')
@@ -49,19 +64,21 @@ async function handleSubmit(payload: AddChildPayload) {
 }
 
 function handleEdit(id: string) {
-  const record = state.value.childRecords.find((r) => r.id === id)
+  const record = childRecords.value.find((r: { id: string }) => r.id === id)
   if (!record) return
   overlay.openEditChild(id, {
     namaLengkap: record.name,
     tanggalLahir: record.tanggal ?? '',
     jenisTerapi: record.lembaga === 'Individu' ? 'individu' : 'lembaga_sekolah',
-    lembagaId: state.value.lembagaList.find((l) => l.name === record.lembaga)?.id,
+    lembagaId: lembagaList.value.find((l: { name: any }) => l.name === record.lembaga)?.id,
   })
 }
 
-function handleDelete(id: string) {
+async function handleDelete(id: string) {
   // wire to your delete API when ready
-  console.log('delete', id)
+  if (confirm('Apakah Anda yakin ingin menghapus data anak ini?')) {
+    await deleteChild(id)
+  }
 }
 
 async function handleScreeningAction(id: string, action: ScreeningUIState) {
@@ -78,7 +95,7 @@ async function handleScreeningAction(id: string, action: ScreeningUIState) {
   }
 
   overlay.loading.value = true
-  const questions = await dashboardService.getScreeningQuestions(action)
+  const questions = await getScreeningQuestions(action)
   overlay.loading.value = false
   overlay.openScreening(id, action, questions)
 }
@@ -86,7 +103,7 @@ async function handleScreeningAction(id: string, action: ScreeningUIState) {
 async function handleScreeningSubmit(payload: ScreeningPayload) {
   overlay.loading.value = true
   try {
-    await dashboardService.submitScreening(payload)
+    await submitScreening(payload)
     updateScreeningUIState(payload.childId, 'lihat_hasil')
     overlay.close()
   } finally {
@@ -101,13 +118,13 @@ function handleStatusAction(id: string, status: ChildStatus) {
     return
   }
   if (status === 'ditolak') {
-    const record = state.value.childRecords.find((r) => r.id === id)
+    const record = childRecords.value.find((r) => r.id === id)
     if (!record) return
     overlay.openEditChild(id, {
       namaLengkap: record.name,
       tanggalLahir: record.tanggal ?? '',
       jenisTerapi: record.lembaga === 'Individu' ? 'individu' : 'lembaga_sekolah',
-      lembagaId: state.value.lembagaList.find((l) => l.name === record.lembaga)?.id,
+      lembagaId: lembagaList.value.find((l) => l.name === record.lembaga)?.id,
     })
   }
 }
@@ -125,8 +142,8 @@ const formattedDate = computed(() => {
   })
 })
 
-function handleLogout() {
-  // TODO: clear auth store
+async function handleLogout() {
+  await logout()
   router.push('/login')
 }
 </script>
@@ -134,7 +151,7 @@ function handleLogout() {
 <template>
   <div class="dashboard">
     <DashboardNavbar
-      :user="state.user"
+      :user="user"
       :active-tab="activeTab"
       @tab-change="(tab) => (activeTab = tab)"
       @logout="showLogoutConfirm = true"
@@ -144,7 +161,7 @@ function handleLogout() {
       <Transition name="fade">
         <AddChildForm
           v-if="overlay.mode.value === 'add_child' || overlay.mode.value === 'edit_child'"
-          :lembaga-list="state.lembagaList"
+          :lembaga-list="lembagaList"
           :loading="overlay.loading.value"
           :initial-data="overlay.addChildData.value?.data"
           @submit="handleSubmit"
@@ -169,7 +186,9 @@ function handleLogout() {
           v-if="overlay.mode.value === 'result' && overlay.resultData.value"
           :child-id="overlay.resultData.value.childId"
           :child-name="
-            state.childRecords.find((r: { id: string }) => r.id === overlay.resultData.value!.childId)?.name
+            childRecords.find(
+              (r: { id: string }) => r.id === overlay.resultData.value!.childId,
+            )?.name
           "
           @back="overlay.close()"
           @save="overlay.close()"
@@ -180,11 +199,11 @@ function handleLogout() {
         <div v-if="overlay.mode.value === 'none'" class="dashboard__content">
           <div class="dashboard__header">
             <div>
-              <h1 class="dashboard__title">Selamat datang {{ state.user?.name ?? '...' }}</h1>
+              <h1 class="dashboard__title">Selamat datang {{ user?.name ?? '...' }}</h1>
               <p class="dashboard__subtitle">
                 {{
                   hasChildren
-                    ? `${state.childRecords.length} anak terdaftar`
+                    ? `${childRecords.length} anak terdaftar`
                     : 'Anda belum memiliki data Anak'
                 }}
               </p>
@@ -197,14 +216,14 @@ function handleLogout() {
           </div>
 
           <EmptyChildrenBanner
-            v-if="!hasChildren && !state.loading"
+            v-if="!hasChildren && !loading"
             @add-child="overlay.openAddChild()"
             @contact-support="() => {}"
           />
           <ChildrenTable
             v-else
-            :records="state.childRecords"
-            :loading="state.loading"
+            :records="childRecords"
+            :loading="loading"
             :show-actions="true"
             @edit="handleEdit"
             @delete="handleDelete"
@@ -212,19 +231,19 @@ function handleLogout() {
             @status-action="handleStatusAction"
           />
           <BaseButton
-            v-if="hasChildren && !state.loading"
+            v-if="hasChildren && !loading"
             class="dashboard__add-btn"
             @click="overlay.openAddChild()"
           >
             + Tambah Anak
           </BaseButton>
           <div class="dashboard__panels">
-            <ActivityPanel :activities="state.activities" :loading="state.loading" />
+            <ActivityPanel :activities="activities" :loading="loading" />
             <CourseProgressPanel
-              :children="state.childRecords"
-              :selected-child-id="state.selectedChildId"
-              :courses="state.courses"
-              :loading="state.loading"
+              :children="childRecords"
+              :selected-child-id="selectedChildId"
+              :courses="courses"
+              :loading="loading"
               @child-change="selectChild"
             />
           </div>

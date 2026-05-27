@@ -6,7 +6,7 @@ import BaseTextField from '@/components/shared/input/BaseTextField.vue'
 import BaseButton from '@/components/shared/button/BaseButton.vue'
 import { useProfile } from '@/composable/useProfile'
 import ConfirmModal from '@/components/shared/modal/ConfirmModal.vue'
-
+import { useAuth } from '@/composable/useAuth'
 const showLogoutConfirm = ref(false)
 
 const router = useRouter()
@@ -14,7 +14,7 @@ const { user, loading, error, fetchProfile, saveProfile, uploadAvatar } = usePro
 
 const isEditing = ref(false)
 const fileInput = ref<HTMLInputElement | null>(null)
-
+const { logout: authLogout } = useAuth()
 const form = reactive({
   namaLengkap: '',
   namapengguna: '',
@@ -66,8 +66,9 @@ async function onAvatarChange(e: Event) {
   await uploadAvatar(file)
 }
 
-function logout() {
+async function logout() {
   // TODO: clear auth store
+  await authLogout()
   router.push('/login')
 }
 </script>

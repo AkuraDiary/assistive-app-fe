@@ -2,12 +2,12 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAccessibility } from '@/composable/useAccessibility'
-import { dashboardService } from '@/services/dashboard.service'
-import type { ScreeningQuestion, ScreeningAnswer } from '@/types/dashboard.types'
 import QuestionTap from '@/components/quiz/question-types/QuestionTap.vue'
 import QuestionVoice from '@/components/quiz/question-types/QuestionVoice.vue'
 import QuestionUpload from '@/components/quiz/question-types/QuestionUpload.vue'
 import AccessibilityMenu from '@/components/shared/AccessibilityMenu.vue'
+import { screeningService } from '@/services/screening.service'
+import type { ScreeningQuestion, ScreeningAnswer } from '@/types/screening.types'
 
 const route = useRoute()
 const router = useRouter()
@@ -23,7 +23,7 @@ const loading = ref(true)
 const submitting = ref(false)
 
 onMounted(async () => {
-  questions.value = await dashboardService.getScreeningQuestions(screeningType)
+  questions.value = await screeningService.getScreeningQuestions(screeningType)
   loading.value = false
 })
 
@@ -50,7 +50,7 @@ function prev() {
 async function next() {
   if (isLast.value) {
     submitting.value = true
-    await dashboardService.submitScreening({
+    await screeningService.submitScreening({
       childId,
       screeningType,
       answers: Object.values(answers.value),
@@ -79,9 +79,13 @@ async function next() {
 
       <div class="sv__question-area">
         <component
-          :is="current.questionType === 'voice' ? QuestionVoice
-               : current.questionType === 'upload' ? QuestionUpload
-               : QuestionTap"
+          :is="
+            current.questionType === 'voice'
+              ? QuestionVoice
+              : current.questionType === 'upload'
+                ? QuestionUpload
+                : QuestionTap
+          "
           :question="current"
           @answer="handleAnswer"
         />
@@ -92,11 +96,7 @@ async function next() {
     <div class="sv__nav">
       <button class="sv__nav-btn" @click="prev">Kembali</button>
       <button class="sv__nav-btn sv__nav-btn--mid" @click="retry">Ulangi Lagi</button>
-      <button
-        class="sv__nav-btn sv__nav-btn--primary"
-        :disabled="submitting"
-        @click="next"
-      >
+      <button class="sv__nav-btn sv__nav-btn--primary" :disabled="submitting" @click="next">
         {{ isLast ? (submitting ? 'Menyimpan...' : 'Selesai') : 'Lanjut' }}
       </button>
     </div>
@@ -123,15 +123,24 @@ async function next() {
   margin: 0;
 }
 
-.sv__loading { display: flex; justify-content: center; padding: 4rem; }
+.sv__loading {
+  display: flex;
+  justify-content: center;
+  padding: 4rem;
+}
 .sv__spinner {
-  width: 28px; height: 28px;
+  width: 28px;
+  height: 28px;
   border: 2px solid #ede8fa;
   border-top-color: var(--color-primary);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 .sv__card {
   background: var(--color-surface);
@@ -146,14 +155,24 @@ async function next() {
   box-shadow: var(--shadow-sm);
 }
 
-.sv__card-header { display: flex; flex-direction: column; gap: 0.5rem; }
-.sv__section { font-size: 1.25em; font-weight: 700; color: var(--color-text-dark); margin: 0; }
+.sv__card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.sv__section {
+  font-size: 1.25em;
+  font-weight: 700;
+  color: var(--color-text-dark);
+  margin: 0;
+}
 
 .sv__step-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px; height: 28px;
+  width: 32px;
+  height: 28px;
   background: var(--color-primary-lighter);
   border-radius: var(--radius-sm);
   font-size: 13px;
@@ -185,11 +204,17 @@ async function next() {
   cursor: pointer;
   transition: all var(--transition-fast);
 }
-.sv__nav-btn--mid  { color: var(--color-primary); border-color: var(--color-primary-lighter); }
+.sv__nav-btn--mid {
+  color: var(--color-primary);
+  border-color: var(--color-primary-lighter);
+}
 .sv__nav-btn--primary {
   background: var(--color-primary);
   color: white;
   border-color: var(--color-primary);
 }
-.sv__nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.sv__nav-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 </style>
