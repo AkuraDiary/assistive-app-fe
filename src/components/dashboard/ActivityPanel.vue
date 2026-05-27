@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ActivityEntry } from '@/types/dashboard.types'
+import type { ActivityEntry } from '@/types/activity.types'
 
 defineProps<{
   activities: ActivityEntry[]
@@ -48,6 +48,7 @@ defineProps<{
   display: flex;
   flex-direction: column;
   min-height: 320px;
+  height: 600px;
   flex: 1;
 }
 
@@ -101,10 +102,25 @@ defineProps<{
   }
 }
 
+/* Custom Scrollbar Styling */
+.activity-panel__list::-webkit-scrollbar {
+  width: 6px;
+}
+.activity-panel__list::-webkit-scrollbar-track {
+  background: #faf0f4;
+  border-radius: 4px;
+}
+.activity-panel__list::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+}
 .activity-panel__list {
   list-style: none;
   margin: 0;
   padding: 0.5rem 0;
+  /* Add scrolling for multiple items */
+  height: 500px;
+  overflow-y: auto;
+  padding-right: 8px; /* Prevents text from hiding behind scrollbar */
 }
 
 .activity-panel__item {

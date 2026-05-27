@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import type { ChildRecord, Course } from '@/types/dashboard.types'
+import type { ChildRecord } from '@/types/child.types'
+import type { Course } from '@/types/course.types'
 
 const props = defineProps<{
   children: ChildRecord[]
@@ -93,11 +94,13 @@ function onChildChange(e: Event) {
 .course-panel {
   background: #eefaf4;
   border-radius: 16px;
+  overflow-x: auto;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
   min-height: 320px;
+  height: 600px;
   flex: 1;
 }
 
@@ -145,15 +148,27 @@ function onChildChange(e: Event) {
   border-color: #3caa78;
   box-shadow: 0 0 0 3px rgba(60, 170, 120, 0.15);
 }
-
 .course-panel__tabs {
   display: flex;
-  flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 12px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+.course-panel__tabs::-webkit-scrollbar {
+  height: 6px;
+}
+.course-panel__tabs::-webkit-scrollbar-track {
+  background: #eefaf4;
+  border-radius: 4px;
+}
+.course-panel__tabs::-webkit-scrollbar-thumb {
+  border-radius: 4px;
 }
 
 .course-panel__tab {
+  flex-shrink: 0;
   padding: 7px 16px;
   border-radius: 8px;
   border: 1.5px solid #c0d8cc;
