@@ -41,6 +41,22 @@ const MOCK_COURSES: Course[] = [
         totalSessions: 4,
         isCompleted: false,
       },
+      {
+        id: 'a',
+        title: 'Membaca',
+        progress: 75,
+        completedSessions: 3,
+        totalSessions: 4,
+        isCompleted: false,
+      },
+      {
+        id: 'a',
+        title: 'Membaca',
+        progress: 75,
+        completedSessions: 3,
+        totalSessions: 4,
+        isCompleted: false,
+      },
     ],
   },
   {

@@ -82,28 +82,24 @@ function onChildChange(e: Event) {
 
         <!-- Course detail card -->
         <Transition name="slide-fade">
-          <div class="course-panel__list" v-if="activeCourse?.exercises">
+          <div v-if="activeCourse?.exercises" class="course-panel__list">
             <div
               v-for="exercise in activeCourse.exercises"
               :key="exercise.id"
               class="course-panel__detail"
             >
-              <img src="@/assets/images/logo.png" class="h-18 w-auto object-contain" alt="" />
-
-              <span class="course-panel__detail-sessions">
-                <div class="course-panel__caption">
-                  <div class="course-panel__detail-name">{{ exercise.title }}</div>
-
-                  <div class="course-panel__progress-bar">
-                    <div
-                      class="course-panel__progress-fill"
-                      :style="{ width: `${exercise.progress}%` }"
-                    />
-                  </div>
+              <img src="@/assets/images/logo.png" class="course-panel__exercise-img" alt="" />
+              <div class="course-panel__detail-body">
+                <div class="course-panel__detail-name">{{ exercise.title }}</div>
+                <div class="course-panel__progress-bar">
+                  <div
+                    class="course-panel__progress-fill"
+                    :style="{ width: `${exercise.progress}%` }"
+                  />
                 </div>
-              </span>
+              </div>
               <span class="course-panel__progress-label"
-                ><b>{{ exercise.progress }}% </b></span
+                ><b>{{ exercise.progress }}%</b></span
               >
             </div>
           </div>
@@ -117,8 +113,8 @@ function onChildChange(e: Event) {
 .course-panel {
   background: #eefaf4;
   border-radius: 16px;
-  overflow-x: auto;
   overflow-y: hidden;
+  overflow: hidden;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
@@ -181,13 +177,7 @@ function onChildChange(e: Event) {
   padding-bottom: 8px;
 }
 .course-panel__tabs::-webkit-scrollbar {
-  height: 6px;
-}
-.course-panel__tabs::-webkit-scrollbar-track {
-  border-radius: 4px;
-}
-.course-panel__tabs::-webkit-scrollbar-thumb {
-  border-radius: 4px;
+  display: none;
 }
 
 .course-panel__tab {
@@ -207,12 +197,12 @@ function onChildChange(e: Event) {
 }
 .course-panel__list {
   list-style: none;
+  background-color: white;
+  border-radius: 10px;
   margin: 0;
-  padding: 0.5rem 0;
   min-height: 450px;
   height: 450px;
   overflow-y: auto;
-  padding-right: 8px; /* Prevents text from hiding behind scrollbar */
 }
 
 .course-panel__tab:hover {
@@ -226,33 +216,11 @@ function onChildChange(e: Event) {
   color: #1a6644;
 }
 
-.course-panel__detail {
-  background: #fff;
-  border-radius: 10px;
-  padding: 1rem;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  flex-direction: row;
-}
-
 .course-panel__detail-name {
   font-size: 15px;
   font-weight: 600;
 
   color: #1a3d2e;
-}
-
-.course-panel__detail-sessions {
-  font-size: 13px;
-  margin: 6px;
-  color: #5a8a72;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  flex: 1;
 }
 
 .course-panel__progress-bar {
@@ -269,9 +237,51 @@ function onChildChange(e: Event) {
   transition: width 0.5s ease;
 }
 
+.course-panel__list::-webkit-scrollbar {
+  display: none;
+}
+
+/* REPLACE .course-panel__detail */
+.course-panel__detail::first-of-type {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+.course-panel__detail::last-of-type {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.course-panel__detail {
+  background: #fff;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ADD */
+.course-panel__exercise-img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: #d0f0e2;
+  flex-shrink: 0;
+}
+
+.course-panel__detail-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* UPDATE */
 .course-panel__progress-label {
   font-size: 16px;
   color: #5a8a72;
+  white-space: nowrap;
+  align-self: flex-end;
 }
 
 .course-panel__state {
