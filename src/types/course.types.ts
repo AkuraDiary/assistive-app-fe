@@ -2,6 +2,9 @@ export interface CourseExercise {
   id: string
   title: string
   isCompleted: boolean
+  progress: number
+  completedSessions: number
+  totalSessions: number
 }
 
 export interface Course {
