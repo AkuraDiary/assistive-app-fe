@@ -33,7 +33,20 @@ function onChildChange(e: Event) {
   <div class="course-panel">
     <div class="course-panel__header">
       <div class="course-panel__title-row">
-        <span class="course-panel__icon">↑</span>
+        <span class="course-panel__icon">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <line x1="18" y1="20" x2="18" y2="10" />
+            <line x1="12" y1="20" x2="12" y2="4" />
+            <line x1="6" y1="20" x2="6" y2="14" />
+          </svg>
+        </span>
         <h2 class="course-panel__title">Progres Course</h2>
       </div>
       <select class="course-panel__select" :value="selectedChildId ?? ''" @change="onChildChange">
@@ -69,20 +82,30 @@ function onChildChange(e: Event) {
 
         <!-- Course detail card -->
         <Transition name="slide-fade">
-          <div v-if="activeCourse" class="course-panel__detail">
-            <div class="course-panel__detail-header">
-              <span class="course-panel__detail-name">{{ activeCourse.name }}</span>
+          <div class="course-panel__list" v-if="activeCourse?.exercises">
+            <div
+              v-for="exercise in activeCourse.exercises"
+              :key="exercise.id"
+              class="course-panel__detail"
+            >
+              <img src="@/assets/images/logo.png" class="h-18 w-auto object-contain" alt="" />
+
               <span class="course-panel__detail-sessions">
-                {{ activeCourse.completedSessions }} / {{ activeCourse.totalSessions }} sesi
+                <div class="course-panel__caption">
+                  <div class="course-panel__detail-name">{{ exercise.title }}</div>
+
+                  <div class="course-panel__progress-bar">
+                    <div
+                      class="course-panel__progress-fill"
+                      :style="{ width: `${exercise.progress}%` }"
+                    />
+                  </div>
+                </div>
               </span>
+              <span class="course-panel__progress-label"
+                ><b>{{ exercise.progress }}% </b></span
+              >
             </div>
-            <div class="course-panel__progress-bar">
-              <div
-                class="course-panel__progress-fill"
-                :style="{ width: `${activeCourse.progress}%` }"
-              />
-            </div>
-            <span class="course-panel__progress-label">{{ activeCourse.progress }}% selesai</span>
           </div>
         </Transition>
       </div>
@@ -95,6 +118,7 @@ function onChildChange(e: Event) {
   background: #eefaf4;
   border-radius: 16px;
   overflow-x: auto;
+  overflow-y: hidden;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
@@ -160,7 +184,6 @@ function onChildChange(e: Event) {
   height: 6px;
 }
 .course-panel__tabs::-webkit-scrollbar-track {
-  background: #eefaf4;
   border-radius: 4px;
 }
 .course-panel__tabs::-webkit-scrollbar-thumb {
@@ -179,6 +202,18 @@ function onChildChange(e: Event) {
   cursor: pointer;
   transition: all 0.2s;
 }
+.course-panel__list::-webkit-scrollbar {
+  display: none;
+}
+.course-panel__list {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 0;
+  min-height: 450px;
+  height: 450px;
+  overflow-y: auto;
+  padding-right: 8px; /* Prevents text from hiding behind scrollbar */
+}
 
 .course-panel__tab:hover {
   border-color: #3caa78;
@@ -194,27 +229,30 @@ function onChildChange(e: Event) {
 .course-panel__detail {
   background: #fff;
   border-radius: 10px;
-  padding: 1rem 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.course-panel__detail-header {
+  padding: 1rem;
+  margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
+  flex-direction: row;
 }
 
 .course-panel__detail-name {
   font-size: 15px;
   font-weight: 600;
+
   color: #1a3d2e;
 }
 
 .course-panel__detail-sessions {
   font-size: 13px;
+  margin: 6px;
   color: #5a8a72;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
 }
 
 .course-panel__progress-bar {
@@ -232,7 +270,7 @@ function onChildChange(e: Event) {
 }
 
 .course-panel__progress-label {
-  font-size: 12px;
+  font-size: 16px;
   color: #5a8a72;
 }
 
@@ -240,6 +278,7 @@ function onChildChange(e: Event) {
   flex: 1;
   background: white;
   min-height: 200px;
+  height: 200px;
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -248,7 +287,6 @@ function onChildChange(e: Event) {
 
 .course-panel__empty-text {
   font-size: 14px;
-
   color: #aaa;
   margin: 0;
 }
@@ -282,5 +320,16 @@ function onChildChange(e: Event) {
 .slide-fade-leave-to {
   opacity: 0;
   transform: translateY(-4px);
+}
+
+.course-panel__exercise-icon {
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  background: #d0f0e2;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
