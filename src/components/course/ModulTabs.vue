@@ -29,8 +29,9 @@ defineEmits<{
 .mt {
   display: flex;
   align-items: center;
-  background: var(--color-primary-muted);
-  border-radius: var(--radius-lg);
+
+  background: var(--color-secondary-muted);
+  border-radius: var(--radius-2xl);
   padding: 4px;
   gap: 2px;
 }
@@ -38,11 +39,12 @@ defineEmits<{
 .mt__tab {
   flex: 1;
   padding: 10px 0;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-xl);
+  color: var(--color-text-dark);
   border: none;
   background: transparent;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--color-text-light);
   cursor: pointer;
   transition: all 0.2s;

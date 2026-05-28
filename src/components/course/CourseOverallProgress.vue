@@ -71,7 +71,7 @@ defineProps<{
 
 .cop__fill {
   height: 100%;
-  background: var(--color-primary);
+  background: var(--color-secondary);
   border-radius: 999px;
   transition: width 0.5s ease;
 }

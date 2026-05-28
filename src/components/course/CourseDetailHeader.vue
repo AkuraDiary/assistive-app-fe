@@ -15,12 +15,8 @@ defineProps<{
       <p class="cdh__desc">{{ course.description ?? '-' }}</p>
 
       <div class="cdh__badges">
-        <span class="cdh__badge cdh__badge--primary">
-          {{ course.totalModul }} Modul
-        </span>
-        <span class="cdh__badge cdh__badge--outline">
-          {{ course.totalAssessment }} Assesment
-        </span>
+        <span class="cdh__badge cdh__badge--primary"> {{ course.totalModul }} Modul </span>
+        <span class="cdh__badge cdh__badge--outline"> {{ course.totalAssessment }} Assesment </span>
       </div>
     </div>
   </div>
@@ -78,8 +74,8 @@ defineProps<{
 }
 
 .cdh__badge--primary {
-  background: var(--color-primary-muted);
-  color: var(--color-primary);
+  background: var(--color-secondary-muted);
+  color: var(--color-text-dark);
 }
 
 .cdh__badge--outline {

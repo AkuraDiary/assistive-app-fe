@@ -45,6 +45,20 @@ onMounted(() => {
     <!-- Content -->
     <template v-else-if="courseDetail">
       <div class="cdv__body">
+        <button class="cdv__top-nav" @click="router.back()">
+          <svg
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+          Kembali
+        </button>
+
         <!-- Course header -->
         <CourseDetailHeader :course="courseDetail" />
 
@@ -67,14 +81,28 @@ onMounted(() => {
         <!-- Footer nav -->
         <div class="cdv__footer">
           <button class="cdv__nav-btn" @click="router.back()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
               <path d="M15 18l-6-6 6-6" />
             </svg>
             Kembali
           </button>
           <button class="cdv__nav-btn cdv__nav-btn--primary">
             Lanjut
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
               <path d="M9 18l6-6-6-6" />
             </svg>
           </button>
@@ -91,7 +119,7 @@ onMounted(() => {
 }
 
 .cdv__body {
-  max-width: 860px;
+  width: 75%;
   margin: 0 auto;
   padding: 2rem 1.5rem 3rem;
   display: flex;
@@ -114,7 +142,11 @@ onMounted(() => {
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 .cdv__error {
   font-size: 14px;
   color: #e05c5c;
@@ -133,7 +165,7 @@ onMounted(() => {
   align-items: center;
   gap: 6px;
   padding: 8px 20px;
-  border-radius: 10px;
+  border-radius: var(--radius-xl);
   border: 1.5px solid var(--color-border);
   background: transparent;
   font-size: 13px;
@@ -153,5 +185,22 @@ onMounted(() => {
 }
 .cdv__nav-btn--primary:hover {
   background: var(--color-primary-dark, #6a4db8);
+}
+
+.cdv__top-nav {
+  align-items: center;
+  gap: 6px;
+  display: flex;
+  align-items: center;
+
+  font-size: 18px;
+  max-width: fit-content;
+  font-weight: 500;
+  color: var(--color-text-dark);
+  cursor: pointer;
+}
+
+.cdv__top-nav:hover {
+  color: var(--color-primary);
 }
 </style>
