@@ -212,8 +212,8 @@ function onChildChange(e: Event) {
   background-color: white;
   border-radius: 10px;
   margin: 0;
-  min-height: 450px;
-  height: 455px;
+  min-height: 440px;
+  height: 440px;
   overflow-y: auto;
 }
 

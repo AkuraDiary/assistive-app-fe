@@ -9,6 +9,7 @@ import ResetPasswordView from '@/views/auth/ResetPasswordView.vue'
 import DashboardView from '@/views/dashboard/DashboardView.vue'
 import ScreeningView from '@/views/screening/ScreeningView.vue'
 import ProfileView from '@/views/profile/ProfileView.vue'
+import CourseListView from '@/views/course/CourseListView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -49,7 +50,12 @@ const router = createRouter({
       component: ResetPasswordView,
       meta: { requiresGuest: true },
     },
-
+    {
+      path: '/course',
+      name: 'course',
+      component: CourseListView,
+      meta: { requiresAuth: true },
+    },
     {
       path: '/screening/:childId/:type',
       name: 'screening',

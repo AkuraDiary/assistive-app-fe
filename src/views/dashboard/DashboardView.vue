@@ -1,6 +1,6 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import DashboardNavbar from '@/components/dashboard/DashboardNavbar.vue'
 import ChildrenTable from '@/components/dashboard/ChildrenTable.vue'
 import AddChildForm from '@/components/forms/AddChildForm.vue'
@@ -20,10 +20,15 @@ import { useAuth } from '@/composable/useAuth'
 import DailyReminderBanner from '@/components/dashboard/DailyReminderBanner.vue'
 import BaseButton from '@/components/shared/button/BaseButton.vue'
 import ConfirmModal from '@/components/shared/modal/ConfirmModal.vue'
+import CourseListView from '../course/CourseListView.vue'
 
 const router = useRouter()
-const { logout } = useAuth() // <-- Add this
+const { logout } = useAuth()
+const activeTab = ref<'dashboard' | 'course'>(
+  (sessionStorage.getItem('activeTab') as 'dashboard' | 'course') ?? 'dashboard',
+)
 
+watch(activeTab, (tab) => sessionStorage.setItem('activeTab', tab))
 const {
   user,
   loading,
@@ -58,7 +63,6 @@ async function handleChildAvatarChange(file: File) {
 const editingChild = computed(() =>
   childRecords.value.find((r) => r.id === overlay.addChildData.value?.id),
 )
-const activeTab = ref<'dashboard' | 'course'>('dashboard')
 const showLogoutConfirm = ref(false)
 
 onMounted(initialize)
@@ -170,7 +174,9 @@ async function handleLogout() {
       @tab-change="(tab) => (activeTab = tab)"
       @logout="showLogoutConfirm = true"
     />
-
+    <Transition name="fade">
+      <CourseListView v-if="activeTab === 'course'" @go-dashboard="activeTab = 'dashboard'" />
+    </Transition>
     <main class="dashboard__main">
       <Transition name="fade">
         <AddChildForm
@@ -214,7 +220,10 @@ async function handleLogout() {
       </Transition>
 
       <Transition name="fade">
-        <div v-if="overlay.mode.value === 'none'" class="dashboard__content">
+        <div
+          v-if="overlay.mode.value === 'none' && activeTab != 'course'"
+          class="dashboard__content"
+        >
           <div class="dashboard__header">
             <div>
               <h1 class="dashboard__title">Selamat datang {{ user?.name ?? '...' }}</h1>
@@ -285,6 +294,9 @@ async function handleLogout() {
 <style scoped>
 .dashboard {
   min-height: 100vh;
+  padding-left: 2rem;
+  padding-right: 2rem;
+
   background: var(--color-background);
   font-family: 'Inter', system-ui, sans-serif;
 }
@@ -306,7 +318,7 @@ async function handleLogout() {
 }
 
 .dashboard__main {
-  max-width: 1200px;
+  max-width: 90%;
   margin: 0 auto;
   padding: 2rem 2rem 3rem;
 }
