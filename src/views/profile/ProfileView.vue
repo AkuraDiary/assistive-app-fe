@@ -282,7 +282,7 @@ async function logout() {
   transition: background 0.15s;
 }
 .pv__upload-btn:hover {
-  background: var(--color-surface-blue);
+  background: var(--color-surface-primary);
 }
 
 .pv__file-input {

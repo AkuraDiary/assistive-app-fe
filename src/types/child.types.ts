@@ -4,11 +4,6 @@ export type ChildStatus = 'menunggu' | 'diterima' | 'ditolak'
 export type JenisKelamin = 'laki_laki' | 'perempuan'
 export type JenisTerapi = 'individu' | 'lembaga_sekolah'
 
-export interface Child {
-  id: string
-  name: string
-  avatar?: string
-}
 
 export interface ChildRecord {
   id: string

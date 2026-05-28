@@ -1,28 +1,27 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import type { AddChildPayload, JenisTerapi, Lembaga } from '@/types/dashboard.types'
-
+import type { AddChildPayload, JenisTerapi, Lembaga } from '@/types/child.types'
+import { Pencil } from 'lucide-vue-next'
 const props = defineProps<{
   lembagaList: Lembaga[]
   loading?: boolean
-  initialData?: Partial<AddChildPayload>  // ← add this
+  initialData?: Partial<AddChildPayload> // ← add this
+  showAvatarEdit?: boolean
+  childAvatarUrl?: string
 }>()
 
 const emit = defineEmits<{
   (e: 'submit', payload: AddChildPayload): void
   (e: 'cancel'): void
+  (e: 'avatar-change', file: File): void // ← new
 }>()
-const namaLengkap  = ref(props.initialData?.namaLengkap  ?? '')
+const namaLengkap = ref(props.initialData?.namaLengkap ?? '')
 const tanggalLahir = ref(props.initialData?.tanggalLahir ?? '')
-const alamat       = ref(props.initialData?.alamat        ?? '')
-const jenisKelamin = ref(props.initialData?.jenisKelamin  ?? ref<'laki_laki' | 'perempuan' | ''>(''))
-const jenisTerapi  = ref<JenisTerapi>(props.initialData?.jenisTerapi ?? 'individu')
-const lembagaId    = ref(props.initialData?.lembagaId    ?? '')
+const alamat = ref(props.initialData?.alamat ?? '')
+const jenisKelamin = ref(props.initialData?.jenisKelamin ?? ref<'laki_laki' | 'perempuan' | ''>(''))
+const jenisTerapi = ref<JenisTerapi>(props.initialData?.jenisTerapi ?? 'individu')
+const lembagaId = ref(props.initialData?.lembagaId ?? '')
 const showTooltip = ref(false)
-
-// const selectedLembaga = computed(
-//   () => props.lembagaList.find((l) => l.id === lembagaId.value) ?? null,
-// )
 
 const isLembaga = computed(() => jenisTerapi.value === 'lembaga_sekolah')
 
@@ -40,11 +39,52 @@ function handleSubmit() {
   }
   emit('submit', payload)
 }
+
+const fileInput = ref<HTMLInputElement | null>(null)
+
+function onAvatarChange(e: Event) {
+  const file = (e.target as HTMLInputElement).files?.[0]
+  if (!file) return
+  emit('avatar-change', file)
+}
 </script>
 
 <template>
   <div class="add-child-form">
-    <h2 class="add-child-form__title">{{ props.initialData == null? 'Masukkan' : 'Edit' }} Data Anak</h2>
+    <h2 class="add-child-form__title">
+      {{ props.initialData == null ? 'Masukkan' : 'Edit' }} Data Anak
+    </h2>
+
+    <div v-if="props.showAvatarEdit" class="add-child-form__avatar-section">
+      <div class="add-child-form__avatar">
+        <img
+          v-if="childAvatarUrl"
+          :src="childAvatarUrl"
+          alt="avatar"
+          class="add-child-form__avatar-img"
+        />
+        <svg v-else width="80" height="80" viewBox="0 0 80 80" fill="none">
+          <circle cx="40" cy="40" r="38" stroke="#8B73F6" stroke-width="2" />
+          <circle cx="40" cy="33" r="13" stroke="#8B73F6" stroke-width="2" />
+          <path
+            d="M15 68c4-10 12.5-15 25-15s21 5 25 15"
+            stroke="#8B73F6"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg>
+      </div>
+      <button class="add-child-form__upload-btn" @click="fileInput?.click()">
+        Unggah Foto <Pencil :size="14" />
+      </button>
+      <input
+        ref="fileInput"
+        type="file"
+        accept="image/*"
+        style="display: none"
+        @change="onAvatarChange"
+      />
+    </div>
 
     <!-- Nama Lengkap -->
     <div class="add-child-form__field">
@@ -510,5 +550,72 @@ function handleSubmit() {
 
 .add-child-form__popup-content p {
   margin: 0;
+}
+
+/* Avatar */
+.pv__avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.pv__avatar {
+  width: 80px;
+  height: 80px;
+}
+
+.pv__avatar-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.pv__upload-btn:hover {
+  background: var(--color-surface-blue);
+}
+
+.pv__file-input {
+  display: none;
+}
+
+/* Avatar section */
+.add-child-form__avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.add-child-form__avatar {
+  width: 80px;
+  height: 80px;
+}
+
+.add-child-form__avatar-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.add-child-form__upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  border: 1.5px solid #e0d9f5;
+  background-color: var(--color-white);
+  text-decoration-color: var(--color-white);
+
+  font-size: 13px;
+  color: #2d2d2d;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.add-child-form__upload-btn:hover {
+  background: var(--color-surface-primary);
 }
 </style>

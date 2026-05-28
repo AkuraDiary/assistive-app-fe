@@ -33,10 +33,12 @@ const {
   activities,
   courses,
   selectedChildId,
+
   initialize,
   selectChild,
   addChild,
   updateChild,
+  uploadChildAvatar,
   deleteChild, // <-- Use the new delete function
   updateScreeningUIState,
   getScreeningQuestions, // <-- Use from composable
@@ -44,7 +46,18 @@ const {
 } = useDashboard()
 
 const overlay = useDashboardOverlay()
-
+const editingChildAvatarUrl = computed(() => {
+  const id = overlay.addChildData.value?.id
+  return childRecords.value.find((r) => r.id === id)?.avatar ?? ''
+})
+async function handleChildAvatarChange(file: File) {
+  const id = overlay.addChildData.value?.id
+  if (!id) return
+  await uploadChildAvatar(id, file)
+}
+const editingChild = computed(() =>
+  childRecords.value.find((r) => r.id === overlay.addChildData.value?.id),
+)
 const activeTab = ref<'dashboard' | 'course'>('dashboard')
 const showLogoutConfirm = ref(false)
 
@@ -164,8 +177,11 @@ async function handleLogout() {
           :lembaga-list="lembagaList"
           :loading="overlay.loading.value"
           :initial-data="overlay.addChildData.value?.data"
+          :show-avatar-edit="overlay.mode.value === 'edit_child' && editingChild?.status === 'diterima'"
           @submit="handleSubmit"
           @cancel="overlay.close()"
+          :child-avatar-url="editingChildAvatarUrl"
+          @avatar-change="handleChildAvatarChange"
         />
       </Transition>
 
@@ -186,9 +202,8 @@ async function handleLogout() {
           v-if="overlay.mode.value === 'result' && overlay.resultData.value"
           :child-id="overlay.resultData.value.childId"
           :child-name="
-            childRecords.find(
-              (r: { id: string }) => r.id === overlay.resultData.value!.childId,
-            )?.name
+            childRecords.find((r: { id: string }) => r.id === overlay.resultData.value!.childId)
+              ?.name
           "
           @back="overlay.close()"
           @save="overlay.close()"

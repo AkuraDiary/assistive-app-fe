@@ -15,6 +15,7 @@ export const MOCK_CHILD_RECORDS: ChildRecord[] = [
     lembaga: 'SLB Mutiara',
     status: 'menunggu',
     screeningAction: 'disable',
+    avatar: '',
   },
   {
     id: 'c2',
@@ -23,6 +24,7 @@ export const MOCK_CHILD_RECORDS: ChildRecord[] = [
     lembaga: 'Individu',
     status: 'diterima',
     screeningAction: 'lihat_hasil',
+    avatar: '',
   },
   {
     id: 'c3',
@@ -31,6 +33,7 @@ export const MOCK_CHILD_RECORDS: ChildRecord[] = [
     lembaga: 'SLB Mutiara',
     status: 'ditolak',
     screeningAction: 'orang_tua',
+    avatar: '',
   },
 ]
 
@@ -59,6 +62,23 @@ export const childService = {
     return res.data!
   },
 
+  async uploadChildAvatar(id: string, file: File): Promise<string> {
+    if (USE_MOCK) {
+      const index = MOCK_CHILD_RECORDS.findIndex((r) => r.id === id)
+      if (index !== -1) {
+        const url = URL.createObjectURL(file) // temp preview URL
+        const existing = MOCK_CHILD_RECORDS[index]
+        if (existing) {
+          existing.avatar = url
+        }
+      }
+      return URL.createObjectURL(file)
+    }
+    const form = new FormData()
+    form.append('avatar', file)
+    const res = await authAPI.post<{ avatarUrl: string }>(`/children/records/${id}/avatar`, form)
+    return res.data!.avatarUrl
+  },
   async updateChildRecord(id: string, payload: AddChildPayload): Promise<ChildRecord> {
     if (USE_MOCK) {
       const index = MOCK_CHILD_RECORDS.findIndex((r) => r.id === id)
