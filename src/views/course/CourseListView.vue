@@ -10,7 +10,6 @@ defineEmits<{ (e: 'go-dashboard'): void }>()
 const router = useRouter()
 
 const {
-  user,
   loading,
   selectedChildId,
   paginatedCourses,

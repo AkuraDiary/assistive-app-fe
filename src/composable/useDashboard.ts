@@ -9,7 +9,11 @@ import { useActivity } from './useActivity'
 const user = ref<DashboardUser | null>(null)
 const loading = ref(false)
 const error = ref<string | null>(null)
-const selectedChildId = ref<string | null>(null)
+const selectedChildId = ref<string | null>(
+  (sessionStorage.getItem('selectedChildId') as 'string | null') ?? null,
+)
+
+watch(selectedChildId, (childId) => sessionStorage.setItem('selectedChildId', childId ?? ''))
 
 export function useDashboard() {
   const children = useChildren()
@@ -41,12 +45,16 @@ export function useDashboard() {
     }
   }
 
-  watch(selectedChildId, (id) => {
-    if (id) {
-      course.fetchCourses(id)
-      activity.fetchActivities(id)
-    }
-  }, { immediate: true })
+  watch(
+    selectedChildId,
+    (id) => {
+      if (id) {
+        course.fetchCourses(id)
+        activity.fetchActivities(id)
+      }
+    },
+    { immediate: true },
+  )
 
   return {
     // state
@@ -55,12 +63,12 @@ export function useDashboard() {
     error,
     selectedChildId,
     selectedChild,
-    
+
     ...children,
     ...screening,
     ...course,
     ...activity,
-    
+
     // actions
     initialize,
     selectChild,

@@ -29,6 +29,7 @@ const activeTab = ref<'dashboard' | 'course'>(
 )
 
 watch(activeTab, (tab) => sessionStorage.setItem('activeTab', tab))
+
 const {
   user,
   loading,
