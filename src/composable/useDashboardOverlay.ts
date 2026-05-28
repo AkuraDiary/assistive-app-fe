@@ -1,5 +1,6 @@
 import { ref } from 'vue'
-import type { AddChildPayload, ScreeningType, ScreeningQuestion } from '@/types/dashboard.types'
+import type {  ScreeningType, ScreeningQuestion } from '@/types/screening.types'
+import type { AddChildPayload } from '@/types/child.types'
 
 export type OverlayMode = 'none' | 'add_child' | 'edit_child' | 'screening' | 'result'
 

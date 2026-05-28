@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import type { ScreeningQuestion, ScreeningAnswer, ScreeningPayload } from '@/types/dashboard.types'
+import type { ScreeningQuestion, ScreeningAnswer, ScreeningPayload } from '@/types/screening.types'
 import BaseButton from '@/components/shared/button/BaseButton.vue'
 
 const props = defineProps<{
@@ -23,15 +23,11 @@ const progress = computed(() => {
 })
 
 const allRequiredAnswered = computed(() =>
-  props.questions
-    .filter((q) => q.required)
-    .every((q) => answers.value[q.id] !== undefined),
+  props.questions.filter((q) => q.required).every((q) => answers.value[q.id] !== undefined),
 )
 
 const title = computed(() =>
-  props.screeningType === 'orang_tua'
-    ? 'Pertanyaan Untuk Orang Tua Anak'
-    : 'Pertanyaan Untuk Anak',
+  props.screeningType === 'orang_tua' ? 'Pertanyaan Untuk Orang Tua Anak' : 'Pertanyaan Untuk Anak',
 )
 
 function handleSubmit() {
@@ -67,11 +63,7 @@ function handleSubmit() {
 
     <!-- Questions -->
     <div class="sf__questions">
-      <div
-        v-for="question in questions"
-        :key="question.id"
-        class="sf__question-card"
-      >
+      <div v-for="question in questions" :key="question.id" class="sf__question-card">
         <p class="sf__question-text">
           {{ question.order }}. {{ question.text }}
           <span v-if="question.required" class="sf__required">*</span>
@@ -100,14 +92,8 @@ function handleSubmit() {
 
     <!-- Actions -->
     <div class="sf__actions">
-      <BaseButton variant="outline" color="ternary" @click="emit('cancel')">
-        ← Kembali
-      </BaseButton>
-      <BaseButton
-        color="ternary"
-        :disabled="!allRequiredAnswered || loading"
-        @click="handleSubmit"
-      >
+      <BaseButton variant="outline" color="ternary" @click="emit('cancel')"> ← Kembali </BaseButton>
+      <BaseButton color="ternary" :disabled="!allRequiredAnswered || loading" @click="handleSubmit">
         {{ loading ? 'Menyimpan...' : 'Kirim' }}
       </BaseButton>
     </div>

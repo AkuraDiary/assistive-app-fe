@@ -1,4 +1,4 @@
-import type { ChildRecord, AddChildPayload, Lembaga } from '@/types/child.types'
+import type { ChildRecord, AddChildPayload, Lembaga, ChildStatus } from '@/types/child.types'
 import { authAPI, USE_MOCK } from './api'
 import type { ApiResponse } from './api'
 
@@ -90,7 +90,9 @@ export const childService = {
           tanggal: payload.tanggalLahir,
           lembaga: MOCK_LEMBAGA.find((l) => l.id === payload.lembagaId)?.name ?? 'Individu',
           avatar: existing?.avatar ?? '',
-          status: 'menunggu',
+          status: (payload.status === 'ditolak'
+            ? 'menunggu'
+            : (payload.status ?? 'menunggu')) as ChildStatus,
           screeningAction: existing?.screeningAction ?? 'orang_tua',
         }
         MOCK_CHILD_RECORDS[index] = updated

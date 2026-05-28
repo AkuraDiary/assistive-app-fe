@@ -1,9 +1,8 @@
-import type { ScreeningUIState } from "./screening.types"
+import type { ScreeningUIState } from './screening.types'
 
 export type ChildStatus = 'menunggu' | 'diterima' | 'ditolak'
 export type JenisKelamin = 'laki_laki' | 'perempuan'
 export type JenisTerapi = 'individu' | 'lembaga_sekolah'
-
 
 export interface ChildRecord {
   id: string
@@ -19,6 +18,7 @@ export interface AddChildPayload {
   namaLengkap: string
   tanggalLahir: string
   alamat?: string
+  status?: ChildStatus
   jenisKelamin?: JenisKelamin
   jenisTerapi: JenisTerapi
   lembagaId?: string

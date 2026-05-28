@@ -20,6 +20,7 @@ const tanggalLahir = ref(props.initialData?.tanggalLahir ?? '')
 const alamat = ref(props.initialData?.alamat ?? '')
 const jenisKelamin = ref(props.initialData?.jenisKelamin ?? ref<'laki_laki' | 'perempuan' | ''>(''))
 const jenisTerapi = ref<JenisTerapi>(props.initialData?.jenisTerapi ?? 'individu')
+const statusChild = ref(props.initialData?.status ?? 'menunggu')
 const lembagaId = ref(props.initialData?.lembagaId ?? '')
 const showTooltip = ref(false)
 
@@ -35,6 +36,7 @@ function handleSubmit() {
     alamat: alamat.value || undefined,
     jenisKelamin: jenisKelamin.value || undefined,
     jenisTerapi: jenisTerapi.value,
+    status: statusChild.value,
     lembagaId: isLembaga.value ? lembagaId.value : undefined,
   }
   emit('submit', payload)

@@ -83,6 +83,7 @@ function handleEdit(id: string) {
     namaLengkap: record.name,
     tanggalLahir: record.tanggal ?? '',
     jenisTerapi: record.lembaga === 'Individu' ? 'individu' : 'lembaga_sekolah',
+    status: record.status,
     lembagaId: lembagaList.value.find((l: { name: any }) => l.name === record.lembaga)?.id,
   })
 }
@@ -177,7 +178,9 @@ async function handleLogout() {
           :lembaga-list="lembagaList"
           :loading="overlay.loading.value"
           :initial-data="overlay.addChildData.value?.data"
-          :show-avatar-edit="overlay.mode.value === 'edit_child' && editingChild?.status === 'diterima'"
+          :show-avatar-edit="
+            overlay.mode.value === 'edit_child' && editingChild?.status === 'diterima'
+          "
           @submit="handleSubmit"
           @cancel="overlay.close()"
           :child-avatar-url="editingChildAvatarUrl"
