@@ -10,6 +10,7 @@ import DashboardView from '@/views/dashboard/DashboardView.vue'
 import ScreeningView from '@/views/screening/ScreeningView.vue'
 import ProfileView from '@/views/profile/ProfileView.vue'
 import CourseListView from '@/views/course/CourseListView.vue'
+import CourseDetailView from '@/views/course/CourseDetailView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -54,6 +55,12 @@ const router = createRouter({
       path: '/course',
       name: 'course',
       component: CourseListView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/course/:courseId',
+      name: 'course-detail',
+      component: CourseDetailView,
       meta: { requiresAuth: true },
     },
     {
