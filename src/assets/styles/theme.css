@@ -14,7 +14,7 @@
   /* Neutral Colors */
   --color-surface: #f5f5f5;
   --color-surface-blue: #eff8ff;
-  --color-surface-primary: #f8efff;
+  --color-surface-primary: --#f8efff;
   --color-surface-green: #effff7;
   --color-background: #ffffff;
   --color-border: #e5e7eb;

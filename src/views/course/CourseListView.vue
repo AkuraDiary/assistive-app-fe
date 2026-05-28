@@ -88,9 +88,10 @@ const filterOptions: { label: string; value: CourseStatus | 'semua' }[] = [
               :value="perPage"
               @change="setPerPage(Number(($event.target as HTMLSelectElement).value))"
             >
-              <option value="9">9</option>
-              <option value="18">18</option>
-              <option value="27">27</option>
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
             </select>
             <span class="cl__footer-label">data per halaman</span>
           </div>
@@ -115,13 +116,14 @@ const filterOptions: { label: string; value: CourseStatus | 'semua' }[] = [
 .cl__main {
   max-width: 95%;
   margin: 0 auto;
+
   padding: 2rem 2rem 3rem;
 }
 
 .cl__card {
-  background: var(--color-white);
+  background: var(--color-primary-muted);
   border-radius: var(--radius-xl);
-  padding: 1.5rem 2rem 1.5rem;
+
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
@@ -129,6 +131,7 @@ const filterOptions: { label: string; value: CourseStatus | 'semua' }[] = [
 
 /* Header */
 .cl__header {
+  padding: 1rem 1rem 0rem;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -175,10 +178,11 @@ const filterOptions: { label: string; value: CourseStatus | 'semua' }[] = [
 
 /* Footer */
 .cl__footer {
+  padding: 0rem 1rem 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 1rem;
+
   border-top: 1px solid var(--color-border);
 }
 

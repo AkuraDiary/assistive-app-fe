@@ -5,7 +5,7 @@ import { courseService } from '@/services/course.service'
 const courses = ref<Course[]>([])
 const filterStatus = ref<CourseStatus | 'semua'>('semua')
 const currentPage = ref(1)
-const perPage = ref(9)
+const perPage = ref(5)
 
 export function useCourse() {
   const filteredCourses = computed(() =>

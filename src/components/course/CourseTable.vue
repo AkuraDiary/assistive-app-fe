@@ -62,10 +62,7 @@ function formatDate(iso?: string) {
           <td class="ct__td">
             <div class="ct__progress-wrap">
               <div class="ct__progress-track">
-                <div
-                  class="ct__progress-fill"
-                  :style="{ width: `${course.progress}%` }"
-                />
+                <div class="ct__progress-fill" :style="{ width: `${course.progress}%` }" />
               </div>
               <span class="ct__progress-pct">{{ course.progress }}%</span>
             </div>
@@ -98,6 +95,8 @@ function formatDate(iso?: string) {
 <style scoped>
 .ct {
   width: 100%;
+  background-color: white;
+  border-radius: 10px;
 }
 
 /* States */
@@ -120,7 +119,11 @@ function formatDate(iso?: string) {
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 /* Table */
 .ct__table {
@@ -137,14 +140,20 @@ function formatDate(iso?: string) {
   text-align: left;
   border-bottom: 1.5px solid var(--color-border);
 }
-.ct__th--center { text-align: center; }
+.ct__th--center {
+  text-align: center;
+}
 
 .ct__row {
   border-bottom: 1px solid var(--color-border);
   transition: background 0.15s;
 }
-.ct__row:hover { background: var(--color-background); }
-.ct__row:last-child { border-bottom: none; }
+.ct__row:hover {
+  background: var(--color-background);
+}
+.ct__row:last-child {
+  border-bottom: none;
+}
 
 .ct__td {
   padding: 14px 16px;
@@ -152,8 +161,12 @@ function formatDate(iso?: string) {
   color: var(--color-text-dark);
   vertical-align: middle;
 }
-.ct__td--muted { color: var(--color-text-light); }
-.ct__td--center { text-align: center; }
+.ct__td--muted {
+  color: var(--color-text-light);
+}
+.ct__td--center {
+  text-align: center;
+}
 
 /* Course cell */
 .ct__course-cell {

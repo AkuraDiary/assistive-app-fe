@@ -66,7 +66,7 @@ function pages(): (number | '...')[] {
   padding: 6px 16px;
   border-radius: 8px;
   border: 1.5px solid var(--color-border);
-  background: transparent;
+  background: var(--color-white);
   font-size: 13px;
   font-weight: 500;
   color: var(--color-text-dark);
@@ -75,7 +75,8 @@ function pages(): (number | '...')[] {
 }
 .cp__btn:hover:not(:disabled) {
   border-color: var(--color-primary);
-  color: var(--color-primary);
+  color: var(--color-white);
+  background-color: var(--color-primary);
 }
 .cp__btn:disabled {
   opacity: 0.4;
@@ -93,7 +94,7 @@ function pages(): (number | '...')[] {
   height: 32px;
   border-radius: 8px;
   border: 1.5px solid transparent;
-  background: transparent;
+
   font-size: 13px;
   font-weight: 500;
   color: var(--color-text-dark);
