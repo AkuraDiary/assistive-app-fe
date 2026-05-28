@@ -122,8 +122,8 @@ const filterOptions: { label: string; value: CourseStatus | 'semua' }[] = [
 
 .cl__card {
   background: var(--color-primary-muted);
-  border-radius: var(--radius-xl);
-
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
