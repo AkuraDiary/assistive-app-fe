@@ -56,56 +56,58 @@ function onChildChange(e: Event) {
       </select>
     </div>
 
-    <div v-if="loading" class="course-panel__state">
-      <div class="course-panel__spinner" />
-    </div>
-
-    <template v-else>
-      <!-- Empty state -->
-      <div v-if="courses.length === 0" class="course-panel__state">
-        <p class="course-panel__empty-text">Belum ada course tersedia</p>
+    <div class="course-panel__content">
+      <div v-if="loading" class="course-panel__state">
+        <div class="course-panel__spinner" />
       </div>
 
-      <div v-else>
-        <!-- Course tab pills -->
-        <div class="course-panel__tabs">
-          <button
-            v-for="course in courses"
-            :key="course.id"
-            class="course-panel__tab"
-            :class="{ 'course-panel__tab--active': activeCourseId === course.id }"
-            @click="selectCourse(course.id)"
-          >
-            {{ course.name }}
-          </button>
+      <template v-else>
+        <!-- Empty state -->
+        <div v-if="courses.length === 0" class="course-panel__state">
+          <p class="course-panel__empty-text">Belum ada course tersedia</p>
         </div>
 
-        <!-- Course detail card -->
-        <Transition name="slide-fade">
-          <div v-if="activeCourse?.exercises" class="course-panel__list">
-            <div
-              v-for="exercise in activeCourse.exercises"
-              :key="exercise.id"
-              class="course-panel__detail"
+        <div v-else>
+          <!-- Course tab pills -->
+          <div class="course-panel__tabs">
+            <button
+              v-for="course in courses"
+              :key="course.id"
+              class="course-panel__tab"
+              :class="{ 'course-panel__tab--active': activeCourseId === course.id }"
+              @click="selectCourse(course.id)"
             >
-              <img src="@/assets/images/logo.png" class="course-panel__exercise-img" alt="" />
-              <div class="course-panel__detail-body">
-                <div class="course-panel__detail-name">{{ exercise.title }}</div>
-                <div class="course-panel__progress-bar">
-                  <div
-                    class="course-panel__progress-fill"
-                    :style="{ width: `${exercise.progress}%` }"
-                  />
-                </div>
-              </div>
-              <span class="course-panel__progress-label"
-                ><b>{{ exercise.progress }}%</b></span
-              >
-            </div>
+              {{ course.name }}
+            </button>
           </div>
-        </Transition>
-      </div>
-    </template>
+
+          <!-- Course detail card -->
+          <Transition name="slide-fade">
+            <div v-if="activeCourse?.exercises" class="course-panel__list">
+              <div
+                v-for="exercise in activeCourse.exercises"
+                :key="exercise.id"
+                class="course-panel__detail"
+              >
+                <img src="@/assets/images/logo.png" class="course-panel__exercise-img" alt="" />
+                <div class="course-panel__detail-body">
+                  <div class="course-panel__detail-name">{{ exercise.title }}</div>
+                  <div class="course-panel__progress-bar">
+                    <div
+                      class="course-panel__progress-fill"
+                      :style="{ width: `${exercise.progress}%` }"
+                    />
+                  </div>
+                </div>
+                <span class="course-panel__progress-label"
+                  ><b>{{ exercise.progress }}%</b></span
+                >
+              </div>
+            </div>
+          </Transition>
+        </div>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -115,7 +117,7 @@ function onChildChange(e: Event) {
   border-radius: 16px;
   overflow-y: hidden;
   overflow: hidden;
-  padding: 1.5rem;
+  padding: 0.5rem;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
@@ -124,8 +126,18 @@ function onChildChange(e: Event) {
   flex: 1;
 }
 
+.course-panel__content {
+  padding: 10px;
+  border-radius: 10px;
+  background: white;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
 .course-panel__header {
   display: flex;
+  margin: 1rem 1rem 0rem 1rem;
+
   align-items: center;
   justify-content: space-between;
   gap: 12px;
@@ -201,7 +213,7 @@ function onChildChange(e: Event) {
   border-radius: 10px;
   margin: 0;
   min-height: 450px;
-  height: 450px;
+  height: 455px;
   overflow-y: auto;
 }
 

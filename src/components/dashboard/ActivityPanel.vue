@@ -7,36 +7,47 @@ defineProps<{
 }>()
 
 const statusConfig: Record<ActivityStatus, { label: string; class: string }> = {
-  belum:      { label: 'Belum',      class: 'badge--belum' },
+  belum: { label: 'Belum', class: 'badge--belum' },
   dipelajari: { label: 'Dipelajari', class: 'badge--dipelajari' },
-  selesai:    { label: 'Selesai',    class: 'badge--selesai' },
+  selesai: { label: 'Selesai', class: 'badge--selesai' },
 }
 
 const actionLabel: Record<ActivityStatus, string> = {
-  belum:      'Mulai',
+  belum: 'Mulai',
   dipelajari: 'Lanjutkan Modul',
-  selesai:    'Lihat Modul',
+  selesai: 'Lihat Modul',
 }
 
 const datePrefix: Record<ActivityStatus, string> = {
-  belum:      'Selesai',
+  belum: 'Selesai',
   dipelajari: 'Mulai',
-  selesai:    'Selesai',
+  selesai: 'Selesai',
 }
 
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
+  return new Date(iso).toLocaleDateString('id-ID', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  })
 }
 </script>
 <template>
   <div class="activity-panel">
     <div class="activity-panel__header">
       <span class="activity-panel__icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-             stroke="#2d2d2d" stroke-width="2.5" stroke-linecap="round">
-          <line x1="3" y1="6" x2="21" y2="6"/>
-          <line x1="3" y1="12" x2="21" y2="12"/>
-          <line x1="3" y1="18" x2="21" y2="18"/>
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#2d2d2d"
+          stroke-width="2.5"
+          stroke-linecap="round"
+        >
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
         </svg>
       </span>
       <h2 class="activity-panel__title">Aktifitas Belajar</h2>
@@ -84,7 +95,7 @@ function formatDate(iso: string) {
 .activity-panel {
   background: #fff0f5;
   border-radius: 16px;
-  padding: 1.5rem;
+  padding: 0.5rem;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
@@ -97,6 +108,7 @@ function formatDate(iso: string) {
   display: flex;
   align-items: center;
   gap: 10px;
+  margin: 1rem 1rem 0rem 1rem;
 }
 
 .activity-panel__title {
@@ -107,19 +119,26 @@ function formatDate(iso: string) {
 }
 
 .activity-panel__list {
+  background-color: white;
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 10px;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   gap: 12px;
   overflow-y: auto;
   flex: 1;
 }
-.activity-panel__list::-webkit-scrollbar { display: none; }
+.activity-panel__list::-webkit-scrollbar {
+  display: none;
+}
 
 .activity-panel__item {
   background: #fff;
+  border: solid;
+  border-width: 0.5px;
+  border-color: var(--color-secondary-light);
   border-radius: 12px;
   padding: 14px 16px;
   display: flex;
@@ -136,9 +155,18 @@ function formatDate(iso: string) {
   font-weight: 500;
   align-self: flex-start;
 }
-.badge--belum      { background: #ede0ff; color: #7c3aed; }
-.badge--dipelajari { background: #dbeafe; color: #2563eb; }
-.badge--selesai    { background: #dcfce7; color: #16a34a; }
+.badge--belum {
+  background: #ede0ff;
+  color: #7c3aed;
+}
+.badge--dipelajari {
+  background: #dbeafe;
+  color: #2563eb;
+}
+.badge--selesai {
+  background: #dcfce7;
+  color: #16a34a;
+}
 
 .activity-panel__item-title {
   font-size: 15px;
@@ -164,9 +192,15 @@ function formatDate(iso: string) {
   border-radius: 999px;
   transition: width 0.5s ease;
 }
-.progress--belum      { background: #e88a9a; }
-.progress--dipelajari { background: #e88a9a; }
-.progress--selesai    { background: #22c55e; }
+.progress--belum {
+  background: #e88a9a;
+}
+.progress--dipelajari {
+  background: #e88a9a;
+}
+.progress--selesai {
+  background: #22c55e;
+}
 
 .activity-panel__progress-pct {
   font-size: 15px;
@@ -200,7 +234,9 @@ function formatDate(iso: string) {
   cursor: pointer;
   transition: background 0.2s;
 }
-.activity-panel__action:hover { background: #f5bcd8; }
+.activity-panel__action:hover {
+  background: #f5bcd8;
+}
 
 /* States */
 .activity-panel__state {
@@ -224,5 +260,9 @@ function formatDate(iso: string) {
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 </style>

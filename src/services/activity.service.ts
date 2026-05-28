@@ -77,7 +77,7 @@ const MOCK_ACTIVITIES: ActivityEntry[] = [
     date: '2026-05-22T08:00:00Z',
     durationMinutes: 15,
     topic: 'Menyusun Puzzle',
-    status: 'belum',
+    status: 'dipelajari',
     progress: 80,
     score: 80,
   },
