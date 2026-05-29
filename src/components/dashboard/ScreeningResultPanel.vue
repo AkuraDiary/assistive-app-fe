@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
-import type { ScreeningResult, CategoryScore } from '@/types/dashboard.types'
-import { dashboardService } from '@/services/dashboard.service'
+import type { ScreeningResult, CategoryScore } from '@/types/screening.types'
+import { screeningService } from '@/services/screening.service'
 import BaseButton from '@/components/shared/button/BaseButton.vue'
 
 const props = defineProps<{
@@ -19,7 +19,7 @@ const result = ref<ScreeningResult | null>(null)
 const isFetching = ref(true)
 
 onMounted(async () => {
-  const results = await dashboardService.getScreeningResult(props.childId)
+  const results = await screeningService.getScreeningResult(props.childId)
   result.value = results[0] ?? null
   isFetching.value = false
 })
