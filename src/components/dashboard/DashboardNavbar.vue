@@ -12,8 +12,6 @@ const props = defineProps<{
   activeTab: 'dashboard' | 'course'
 }>()
 
-
-
 function emmitProfile() {
   emit('profile')
   router.push('/profile')
@@ -93,11 +91,12 @@ const emit = defineEmits<{
 <style scoped>
 .navbar {
   justify-self: center;
+  justify-content: center;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0.75rem 2rem;
-  width: 90%;
+  width: 100%;
 }
 
 .navbar__logo {
