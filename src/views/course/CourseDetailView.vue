@@ -14,6 +14,8 @@ const router = useRouter()
 const { selectedChildId } = useDashboard()
 const {
   courseDetail,
+  nextCourse,
+  prevCourse,
   activeModul,
   activeModulId,
   loading,
@@ -28,6 +30,11 @@ onMounted(() => {
   if (!childId) return router.push('/dashboard')
   fetchCourseDetail(childId, courseId)
 })
+
+function navigate(courseId: string) {
+  router.push(`/course/${courseId}`)
+  fetchCourseDetail(selectedChildId.value!, courseId)
+}
 </script>
 
 <template>
@@ -80,7 +87,11 @@ onMounted(() => {
 
         <!-- Footer nav -->
         <div class="cdv__footer">
-          <button class="cdv__nav-btn" @click="router.back()">
+          <button
+            class="cdv__nav-btn"
+            :disabled="!prevCourse"
+            @click="prevCourse && navigate(prevCourse.id)"
+          >
             <svg
               width="16"
               height="16"
@@ -93,7 +104,11 @@ onMounted(() => {
             </svg>
             Kembali
           </button>
-          <button class="cdv__nav-btn cdv__nav-btn--primary">
+          <button
+            class="cdv__nav-btn cdv__nav-btn--primary"
+            :disabled="!nextCourse"
+            @click="nextCourse && navigate(nextCourse.id)"
+          >
             Lanjut
             <svg
               width="16"
@@ -202,5 +217,14 @@ onMounted(() => {
 
 .cdv__top-nav:hover {
   color: var(--color-primary);
+}
+
+.cdv__nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.cdv__nav-btn:disabled:hover {
+  border-color: var(--color-border);
+  color: var(--color-text-dark);
 }
 </style>
