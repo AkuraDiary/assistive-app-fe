@@ -11,6 +11,9 @@ const expandedId = ref<string | null>(null)
 function toggle(id: string) {
   expandedId.value = expandedId.value === id ? null : id
 }
+const emit = defineEmits<{
+  (e: 'open-materi', latihanId: string): void
+}>()
 
 function formatDate(iso?: string) {
   if (!iso) return '-'
@@ -27,9 +30,18 @@ function formatDate(iso?: string) {
     <!-- Section header -->
     <div class="ls__header">
       <div class="ls__title-row">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" />
-          <rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" />
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <rect x="3" y="3" width="7" height="7" />
+          <rect x="14" y="3" width="7" height="7" />
+          <rect x="3" y="14" width="7" height="7" />
+          <rect x="14" y="14" width="7" height="7" />
         </svg>
         <span class="ls__title">Latihan</span>
       </div>
@@ -52,8 +64,12 @@ function formatDate(iso?: string) {
             <svg
               class="ls__chevron"
               :class="{ 'ls__chevron--up': expandedId === item.id }"
-              width="16" height="16" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
             >
               <path d="M6 9l6 6 6-6" />
             </svg>
@@ -79,7 +95,9 @@ function formatDate(iso?: string) {
               </div>
 
               <div class="ls__expanded-actions">
-                <button class="ls__btn ls__btn--outline">Materi latihan</button>
+                <button class="ls__btn ls__btn--outline" @click="emit('open-materi', item.id)">
+                  Materi latihan
+                </button>
                 <button class="ls__btn ls__btn--primary">Latihan Mengerjakan</button>
               </div>
             </div>

@@ -135,6 +135,7 @@ const MOCK_COURSE_DETAIL: CourseDetail[] = [
     status: 'dipelajari',
     totalModul: 3,
     totalAssessment: 1,
+   
     exercises: [
       { id: 'ex1', title: 'Mengenal Huruf Vocal', progress: 70 },
       { id: 'ex2', title: 'Mengenal Huruf Konsonan', progress: 85 },
@@ -154,6 +155,73 @@ const MOCK_COURSE_DETAIL: CourseDetail[] = [
             progress: 70,
             tanggalDikerjakan: '2026-04-10',
             isLocked: false,
+            materi: [
+              {
+                id: 'mat1',
+                metodeBelajar: 'membaca',
+                title: 'Mimi Sang Kucing',
+                subtitle: 'Sentuh Untuk Mendengarkan saaranya dan perhatikan Suku kata',
+                mediaUrl: undefined,
+                words: [
+                  {
+                    id: 'w1',
+                    text: 'MIMI',
+                    syllables: [
+                      { text: 'MI', color: 'blue' },
+                      { text: 'MI', color: 'green' },
+                    ],
+                  },
+                  {
+                    id: 'w2',
+                    text: 'ADALAH',
+                    syllables: [
+                      { text: 'A', color: 'default' },
+                      { text: 'DA', color: 'blue' },
+                      { text: 'LAH', color: 'green' },
+                    ],
+                  },
+                  {
+                    id: 'w3',
+                    text: 'KUCING',
+                    syllables: [
+                      { text: 'KU', color: 'default' },
+                      { text: 'CI', color: 'blue' },
+                      { text: 'NG', color: 'green' },
+                    ],
+                  },
+                  {
+                    id: 'w4',
+                    text: 'LUCU',
+                    syllables: [
+                      { text: 'LU', color: 'default' },
+                      { text: 'CU', color: 'default' },
+                    ],
+                  },
+                ],
+                focusHuruf: 'M',
+                focusInstruction: 'Tekan huruf M untuk mendengarkan Bunyinya',
+                tips: 'Klik pada setiap kata yang berwarna biru dan hijau. Warna ini membantu kamu melihat pemisahan suku kata agar lebih mudah dibaca.',
+              },
+              {
+                id: 'mat2',
+                metodeBelajar: 'membaca',
+                title: 'Budi Sang Anjing',
+                subtitle: 'Sentuh Untuk Mendengarkan saara dan perhatikan Suku kata',
+                words: [
+                  {
+                    id: 'w5',
+                    text: 'BUDI',
+                    syllables: [
+                      { text: 'BU', color: 'blue' },
+                      { text: 'DI', color: 'green' },
+                    ],
+                  },
+                ],
+                focusHuruf: 'B',
+                focusInstruction: 'Tekan huruf B untuk mendengarkan Bunyinya',
+                tips: 'Perhatikan setiap suku kata dengan seksama.',
+              },
+            ],
           },
           {
             id: 'l2',
@@ -242,6 +310,73 @@ const MOCK_COURSE_DETAIL: CourseDetail[] = [
             progress: 70,
             tanggalDikerjakan: '2026-04-10',
             isLocked: false,
+            materi: [
+              {
+                id: 'mat1',
+                metodeBelajar: 'membaca',
+                title: 'Mimi Sang Kucing',
+                subtitle: 'Sentuh Untuk Mendengarkan saaranya dan perhatikan Suku kata',
+                mediaUrl: undefined,
+                words: [
+                  {
+                    id: 'w1',
+                    text: 'MIMI',
+                    syllables: [
+                      { text: 'MI', color: 'blue' },
+                      { text: 'MI', color: 'green' },
+                    ],
+                  },
+                  {
+                    id: 'w2',
+                    text: 'ADALAH',
+                    syllables: [
+                      { text: 'A', color: 'default' },
+                      { text: 'DA', color: 'blue' },
+                      { text: 'LAH', color: 'green' },
+                    ],
+                  },
+                  {
+                    id: 'w3',
+                    text: 'KUCING',
+                    syllables: [
+                      { text: 'KU', color: 'default' },
+                      { text: 'CI', color: 'blue' },
+                      { text: 'NG', color: 'green' },
+                    ],
+                  },
+                  {
+                    id: 'w4',
+                    text: 'LUCU',
+                    syllables: [
+                      { text: 'LU', color: 'default' },
+                      { text: 'CU', color: 'default' },
+                    ],
+                  },
+                ],
+                focusHuruf: 'M',
+                focusInstruction: 'Tekan huruf M untuk mendengarkan Bunyinya',
+                tips: 'Klik pada setiap kata yang berwarna biru dan hijau. Warna ini membantu kamu melihat pemisahan suku kata agar lebih mudah dibaca.',
+              },
+              {
+                id: 'mat2',
+                metodeBelajar: 'membaca',
+                title: 'Budi Sang Anjing',
+                subtitle: 'Sentuh Untuk Mendengarkan saara dan perhatikan Suku kata',
+                words: [
+                  {
+                    id: 'w5',
+                    text: 'BUDI',
+                    syllables: [
+                      { text: 'BU', color: 'blue' },
+                      { text: 'DI', color: 'green' },
+                    ],
+                  },
+                ],
+                focusHuruf: 'B',
+                focusInstruction: 'Tekan huruf B untuk mendengarkan Bunyinya',
+                tips: 'Perhatikan setiap suku kata dengan seksama.',
+              },
+            ],
           },
           {
             id: 'l2',

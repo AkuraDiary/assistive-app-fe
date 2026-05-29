@@ -1,4 +1,5 @@
 export type CourseStatus = 'dipelajari' | 'selesai' | 'belum'
+export type MetodeBelajar = 'membaca' | 'mendengar' | 'menulis'
 
 // Used by dashboard panel (lightweight)
 export interface CourseExercise {
@@ -27,6 +28,7 @@ export interface LatihanItem {
   progress: number
   tanggalDikerjakan?: string
   isLocked: boolean
+  materi?: MateriContent[] 
 }
 
 export interface Modul {
@@ -52,4 +54,28 @@ export interface CourseDetail extends Course {
   totalAssessment: number
   moduls: Modul[]
   assessments: AssessmentItem[]
+}
+
+
+export interface MateriSyllable {
+  text: string
+  color?: 'blue' | 'green' | 'default'
+}
+
+export interface MateriWord {
+  id: string
+  text: string
+  syllables: MateriSyllable[]
+}
+
+export interface MateriContent {
+  id: string
+  metodeBelajar: MetodeBelajar
+  title: string
+  subtitle?: string
+  mediaUrl?: string
+  words: MateriWord[]
+  focusHuruf?: string
+  focusInstruction?: string
+  tips?: string
 }

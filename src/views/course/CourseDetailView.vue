@@ -80,7 +80,14 @@ function navigate(courseId: string) {
         />
 
         <!-- Latihan section -->
-        <LatihanSection v-if="activeModul" :modul="activeModul" />
+        <LatihanSection
+          v-if="activeModul"
+          :modul="activeModul"
+          @open-materi="
+            (latihanId) =>
+              router.push(`/course/${route.params.courseId}/latihan/${latihanId}/materi`)
+          "
+        />
 
         <!-- Assessment section -->
         <AssessmentSection :assessments="courseDetail.assessments" />

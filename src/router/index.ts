@@ -11,6 +11,7 @@ import ScreeningView from '@/views/screening/ScreeningView.vue'
 import ProfileView from '@/views/profile/ProfileView.vue'
 import CourseListView from '@/views/course/CourseListView.vue'
 import CourseDetailView from '@/views/course/CourseDetailView.vue'
+import MateriView from '@/views/course/MateriView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -58,6 +59,12 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
+      path: '/course/:courseId/latihan/:latihanId/materi',
+      name: 'materi',
+      component: MateriView,
+      meta: { requiresAuth: true },
+    },
+    {
       path: '/course/:courseId',
       name: 'course-detail',
       component: CourseDetailView,
@@ -67,7 +74,7 @@ const router = createRouter({
       path: '/screening/:childId/:type',
       name: 'screening',
       component: ScreeningView,
-      // meta: { requiresAuth: true },
+      meta: { requiresAuth: true },
     },
     {
       path: '/profile',
