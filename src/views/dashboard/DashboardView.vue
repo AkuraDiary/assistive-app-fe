@@ -94,10 +94,7 @@ function handleEdit(id: string) {
 }
 
 async function handleDelete(id: string) {
-  // wire to your delete API when ready
-  if (confirm('Apakah Anda yakin ingin menghapus data anak ini?')) {
-    await deleteChild(id)
-  }
+  await deleteChild(id)
 }
 
 async function handleScreeningAction(id: string, action: ScreeningUIState) {

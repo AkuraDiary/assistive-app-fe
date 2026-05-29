@@ -124,7 +124,7 @@ const MOCK_COURSES: Course[] = [
 
 const MOCK_COURSE_DETAIL: CourseDetail = {
   id: 'cr1',
-  name: 'Course 1',
+  name: 'Course 1 bebek',
   description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do ei',
   level: 'Level : 2 (Dua)',
   progress: 76,
@@ -142,12 +142,14 @@ const MOCK_COURSE_DETAIL: CourseDetail = {
     {
       id: 'm1',
       label: 'Modul 1',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et',
       latihan: [
         {
           id: 'l1',
           title: 'Latihan Mengenal huruf Vocal (A, I, U, E, O)',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et (Deskripsi)',
+          description:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et (Deskripsi)',
           progress: 70,
           tanggalDikerjakan: '2026-04-10',
           isLocked: false,

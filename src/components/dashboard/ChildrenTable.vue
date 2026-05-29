@@ -3,7 +3,9 @@ import { ref } from 'vue'
 import type { ScreeningUIState } from '@/types/screening.types'
 import type { ChildStatus, ChildRecord } from '@/types/child.types'
 import ChildStatusPopup from './ChildStatusPopup.vue'
+import ConfirmModal from '../shared/modal/ConfirmModal.vue'
 const popupRecord = ref<{ id: string; status: ChildStatus } | null>(null)
+const showDeleteConfirm = ref(false)
 defineProps<{
   records: ChildRecord[]
   loading?: boolean
@@ -30,6 +32,7 @@ function handleEdit(id: string) {
 }
 function handleDelete(id: string) {
   openActionMenu.value = null
+  showDeleteConfirm.value = false
   emit('delete', id)
 }
 
@@ -67,6 +70,13 @@ const statusLabel: Record<string, string> = {
   menunggu: 'Menunggu',
   diterima: 'Diterima',
   ditolak: 'Ditolak',
+}
+
+function hideAllPopUp() {
+  showDeleteConfirm.value = false
+  openActionMenu.value = null
+  openDropdown.value = null
+  popupRecord.value = null
 }
 </script>
 
@@ -154,7 +164,7 @@ const statusLabel: Record<string, string> = {
                 <button class="ct__dropdown-item" @click="handleEdit(record.id)">Edit</button>
                 <button
                   class="ct__dropdown-item ct__dropdown-item--danger"
-                  @click="handleDelete(record.id)"
+                  @click="showDeleteConfirm = true"
                 >
                   Hapus
                 </button>
@@ -169,7 +179,18 @@ const statusLabel: Record<string, string> = {
         v-if="popupRecord"
         :status="popupRecord.status"
         @action="handleStatusPopUp"
-        @back="popupRecord = null"
+        @back="hideAllPopUp"
+      />
+    </Transition>
+
+    <Transition name="fade">
+      <ConfirmModal
+        v-if="showDeleteConfirm"
+        message="Apakah Anda Yakin Menghapus Data Anak?"
+        confirm-label="IYA"
+        cancel-label="TIDAK"
+        @confirm="handleDelete(openActionMenu ?? '')"
+        @cancel="hideAllPopUp"
       />
     </Transition>
   </div>
