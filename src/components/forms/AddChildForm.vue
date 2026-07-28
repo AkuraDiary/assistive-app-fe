@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import type { AddChildPayload, JenisTerapi, Lembaga } from '@/types/child.types'
+import type { AddChildPayload, JenisKelamin, JenisTerapi, Lembaga } from '@/types/child.types'
 import { Pencil } from 'lucide-vue-next'
 const props = defineProps<{
   lembagaList: Lembaga[]
@@ -15,29 +15,29 @@ const emit = defineEmits<{
   (e: 'cancel'): void
   (e: 'avatar-change', file: File): void // ← new
 }>()
-const namaLengkap = ref(props.initialData?.namaLengkap ?? '')
-const tanggalLahir = ref(props.initialData?.tanggalLahir ?? '')
-const alamat = ref(props.initialData?.alamat ?? '')
-const jenisKelamin = ref(props.initialData?.jenisKelamin ?? ref<'laki_laki' | 'perempuan' | ''>(''))
-const jenisTerapi = ref<JenisTerapi>(props.initialData?.jenisTerapi ?? 'individu')
-const statusChild = ref(props.initialData?.status ?? 'menunggu')
-const lembagaId = ref(props.initialData?.lembagaId ?? '')
+const fullName = ref(props.initialData?.fullName ?? '')
+const dateOfBirth = ref(props.initialData?.dateOfBirth ?? '')
+const address = ref(props.initialData?.address ?? '')
+const gender = ref<JenisKelamin | undefined>(props.initialData?.gender)
+const therapyType = ref<JenisTerapi>(props.initialData?.therapyType ?? 'individu')
+const applicationStatus = ref(props.initialData?.applicationStatus ?? 'menunggu')
+const institutionId = ref(props.initialData?.institutionId ?? '')
 const showTooltip = ref(false)
 
-const isLembaga = computed(() => jenisTerapi.value === 'lembaga_sekolah')
+const isLembaga = computed(() => therapyType.value === 'lembaga_sekolah')
 
 function handleSubmit() {
-  if (!namaLengkap.value || !tanggalLahir.value) return
-  if (isLembaga.value && !lembagaId.value) return
+  if (!fullName.value || !dateOfBirth.value) return
+  if (isLembaga.value && !institutionId.value) return
 
   const payload: AddChildPayload = {
-    namaLengkap: namaLengkap.value,
-    tanggalLahir: tanggalLahir.value,
-    alamat: alamat.value || undefined,
-    jenisKelamin: jenisKelamin.value || undefined,
-    jenisTerapi: jenisTerapi.value,
-    status: statusChild.value,
-    lembagaId: isLembaga.value ? lembagaId.value : undefined,
+    fullName: fullName.value,
+    dateOfBirth: dateOfBirth.value,
+    address: address.value || undefined,
+    gender: gender.value || undefined,
+    therapyType: therapyType.value,
+    applicationStatus: applicationStatus.value,
+    institutionId: isLembaga.value ? institutionId.value : undefined,
   }
   emit('submit', payload)
 }
@@ -93,7 +93,7 @@ function onAvatarChange(e: Event) {
       <label class="add-child-form__label">
         Nama Lengkap <span class="add-child-form__required">*</span>
       </label>
-      <input v-model="namaLengkap" class="add-child-form__input" placeholder="Contoh: Syahril" />
+      <input v-model="fullName" class="add-child-form__input" placeholder="Contoh: Syahril" />
     </div>
 
     <!-- Tanggal Lahir -->
@@ -116,7 +116,7 @@ function onAvatarChange(e: Event) {
           <line x1="3" y1="10" x2="21" y2="10" />
         </svg>
         <input
-          v-model="tanggalLahir"
+          v-model="dateOfBirth"
           type="date"
           class="add-child-form__date-input"
           placeholder="Hari/Bulan/Tahun"
@@ -128,7 +128,7 @@ function onAvatarChange(e: Event) {
     <div v-if="!isLembaga" class="add-child-form__field">
       <label class="add-child-form__label">Alamat</label>
       <input
-        v-model="alamat"
+        v-model="address"
         class="add-child-form__input"
         placeholder="Contoh: Jl.Melaril No.10"
       />
@@ -137,8 +137,8 @@ function onAvatarChange(e: Event) {
     <!-- Jenis Kelamin -->
     <div class="add-child-form__field">
       <label class="add-child-form__label">Jenis kelamin</label>
-      <select v-model="jenisKelamin" class="add-child-form__select">
-        <option value="">Pilih</option>
+      <select v-model="gender" class="add-child-form__select">
+        <option :value="undefined">Pilih</option>
         <option value="laki_laki">Laki-laki</option>
         <option value="perempuan">Perempuan</option>
       </select>
@@ -194,23 +194,23 @@ function onAvatarChange(e: Event) {
       <div class="add-child-form__radio-group">
         <button
           class="add-child-form__radio"
-          :class="{ 'add-child-form__radio--active': jenisTerapi === 'individu' }"
-          @click="jenisTerapi = 'individu'"
+          :class="{ 'add-child-form__radio--active': therapyType === 'individu' }"
+          @click="therapyType = 'individu'"
         >
           <span
             class="add-child-form__radio-dot"
-            :class="{ 'add-child-form__radio-dot--active': jenisTerapi === 'individu' }"
+            :class="{ 'add-child-form__radio-dot--active': therapyType === 'individu' }"
           />
           Individu
         </button>
         <button
           class="add-child-form__radio"
-          :class="{ 'add-child-form__radio--active': jenisTerapi === 'lembaga_sekolah' }"
-          @click="jenisTerapi = 'lembaga_sekolah'"
+          :class="{ 'add-child-form__radio--active': therapyType === 'lembaga_sekolah' }"
+          @click="therapyType = 'lembaga_sekolah'"
         >
           <span
             class="add-child-form__radio-dot"
-            :class="{ 'add-child-form__radio-dot--active': jenisTerapi === 'lembaga_sekolah' }"
+            :class="{ 'add-child-form__radio-dot--active': therapyType === 'lembaga_sekolah' }"
           />
           Lembaga Sekolah
         </button>
@@ -223,12 +223,12 @@ function onAvatarChange(e: Event) {
         <label class="add-child-form__label">
           Pilih Lembaga <span class="add-child-form__required">*</span>
         </label>
-        <select v-model="lembagaId" class="add-child-form__select">
+        <select v-model="institutionId" class="add-child-form__select">
           <option value="">Pilih Lembaga</option>
           <option
             v-for="l in lembagaList"
-            :key="l.id"
-            :value="l.id"
+            :key="l._id"
+            :value="l._id"
             class="add-child-form__lembaga-card"
           >
             {{ l.name }} - {{ l.description }}

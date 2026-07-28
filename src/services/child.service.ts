@@ -3,35 +3,38 @@ import { authAPI, USE_MOCK } from './api'
 import type { ApiResponse } from './api'
 
 const MOCK_LEMBAGA: Lembaga[] = [
-  { id: 'l1', name: 'SLB Mutiara', description: 'Lorem ipsum odor amet,' },
-  { id: 'l2', name: 'SLB Harapan', description: 'Lorem ipsum odor amet,' },
+  { _id: 'l1', name: 'SLB Mutiara', description: 'Lorem ipsum odor amet,' },
+  { _id: 'l2', name: 'SLB Harapan', description: 'Lorem ipsum odor amet,' },
 ]
 
 export const MOCK_CHILD_RECORDS: ChildRecord[] = [
   {
-    id: 'c1',
-    name: 'Fatur Rahman',
-    tanggal: '2026-05-02',
-    lembaga: 'SLB Mutiara',
-    status: 'menunggu',
-    screeningAction: 'disable',
-    avatar: '',
-  },
-  {
-    id: 'c2',
-    name: 'Widarini Wijaya',
-    tanggal: '2026-05-02',
-    lembaga: 'Individu',
-    status: 'diterima',
+    _id: 'c1',
+    fullName: 'Fatur Rahman',
+    dateOfBirth: '2026-05-02',
+    gender: 'laki_laki',
+    therapyType: 'individu',
+    applicationStatus: 'diterima',
     screeningAction: 'lihat_hasil',
-    avatar: '',
+    institutionId: undefined,
   },
   {
-    id: 'c3',
-    name: 'Azzi Wildan',
-    tanggal: '2026-05-02',
-    lembaga: 'SLB Mutiara',
-    status: 'ditolak',
+    _id: 'c2',
+    fullName: 'Budi Santoso',
+    dateOfBirth: '2016-03-12',
+    gender: 'laki_laki',
+    therapyType: 'lembaga_sekolah',
+    applicationStatus: 'menunggu',
+    screeningAction: 'disable',
+    institutionId: 'l1',
+  },
+  {
+    _id: 'c3',
+    fullName: 'Citra Kirana',
+    dateOfBirth: '2015-11-20',
+    gender: 'perempuan',
+    therapyType: 'lembaga_sekolah',
+    applicationStatus: 'diterima',
     screeningAction: 'orang_tua',
     avatar: '',
   },
@@ -46,14 +49,13 @@ export const childService = {
 
   async addChildRecord(payload: AddChildPayload): Promise<ChildRecord> {
     if (USE_MOCK) {
-      const lembaga = MOCK_LEMBAGA.find((l) => l.id === payload.lembagaId)
+      const lembaga = MOCK_LEMBAGA.find((l) => l._id === payload.institutionId)
       const record: ChildRecord = {
-        id: `c${Date.now()}`,
-        name: payload.namaLengkap,
-        tanggal: new Date().toISOString().split('T')[0],
-        lembaga: lembaga?.name ?? 'Individu',
-        status: 'menunggu',
-        screeningAction: payload.jenisTerapi === 'lembaga_sekolah' ? 'disable' : 'orang_tua',
+        _id: `c${Date.now()}`,
+        ...payload,
+        institutionId: payload.institutionId ?? null,
+        applicationStatus: 'menunggu',
+        screeningAction: payload.therapyType === 'individu' ? 'disable' : 'orang_tua',
       }
       MOCK_CHILD_RECORDS.push(record)
       return record
@@ -64,7 +66,7 @@ export const childService = {
 
   async uploadChildAvatar(id: string, file: File): Promise<string> {
     if (USE_MOCK) {
-      const index = MOCK_CHILD_RECORDS.findIndex((r) => r.id === id)
+      const index = MOCK_CHILD_RECORDS.findIndex((r) => r._id === id)
       if (index !== -1) {
         const url = URL.createObjectURL(file) // temp preview URL
         const existing = MOCK_CHILD_RECORDS[index]
@@ -81,19 +83,16 @@ export const childService = {
   },
   async updateChildRecord(id: string, payload: AddChildPayload): Promise<ChildRecord> {
     if (USE_MOCK) {
-      const index = MOCK_CHILD_RECORDS.findIndex((r) => r.id === id)
+      const index = MOCK_CHILD_RECORDS.findIndex((r) => r._id === id)
       if (index !== -1) {
         const existing = MOCK_CHILD_RECORDS[index]
         const updated: ChildRecord = {
-          id: existing?.id ?? '',
-          name: payload.namaLengkap,
-          tanggal: payload.tanggalLahir,
-          lembaga: MOCK_LEMBAGA.find((l) => l.id === payload.lembagaId)?.name ?? 'Individu',
+          _id: existing?._id ?? '',
+          ...payload,
+          institutionId: payload.institutionId ?? null,
           avatar: existing?.avatar ?? '',
-          status: (payload.status === 'ditolak'
-            ? 'menunggu'
-            : (payload.status ?? 'menunggu')) as ChildStatus,
-          screeningAction: existing?.screeningAction ?? 'orang_tua',
+          applicationStatus: payload.applicationStatus ?? 'menunggu',
+          screeningAction: payload.applicationStatus === 'diterima' ? 'orang_tua' : 'disable',
         }
         MOCK_CHILD_RECORDS[index] = updated
         return updated
@@ -106,7 +105,7 @@ export const childService = {
 
   async deleteChildRecord(id: string): Promise<void> {
     if (USE_MOCK) {
-      const index = MOCK_CHILD_RECORDS.findIndex((r) => r.id === id)
+      const index = MOCK_CHILD_RECORDS.findIndex((r) => r._id === id)
       if (index !== -1) MOCK_CHILD_RECORDS.splice(index, 1)
       return
     }

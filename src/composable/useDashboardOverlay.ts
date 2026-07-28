@@ -7,7 +7,7 @@ export type OverlayMode = 'none' | 'add_child' | 'edit_child' | 'screening' | 'r
 export function useDashboardOverlay() {
   const mode = ref<OverlayMode>('none')
 
-  const addChildData = ref<{ id?: string; data?: Partial<AddChildPayload> } | null>(null)
+  const addChildData = ref<{ _id?: string; data?: Partial<AddChildPayload> } | null>(null)
 
   const screeningData = ref<{
     childId: string
@@ -24,8 +24,8 @@ export function useDashboardOverlay() {
     mode.value = 'add_child'
   }
 
-  function openEditChild(id: string, data: Partial<AddChildPayload>) {
-    addChildData.value = { id, data }
+  function openEditChild(_id: string, data: Partial<AddChildPayload>) {
+    addChildData.value = { _id, data }
     mode.value = 'edit_child'
   }
 

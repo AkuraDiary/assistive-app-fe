@@ -1,7 +1,7 @@
 import type { DashboardUser } from '@/types/dashboard.types'
 import { authAPI, USE_MOCK } from './api'
 
-const MOCK_USER: DashboardUser = { id: 'u1', name: 'Budi Santoso' }
+const MOCK_USER: DashboardUser = { _id: 'u1', name: 'Budi Santoso' }
 
 export const dashboardService = {
   async getUser(): Promise<DashboardUser> {

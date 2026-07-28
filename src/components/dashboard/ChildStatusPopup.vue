@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import type { ChildStatus } from '@/types/dashboard.types'
+import type { ChildStatus } from '@/types/child.types';
+
+
 
 defineProps<{
   status: ChildStatus

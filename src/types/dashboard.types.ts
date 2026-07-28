@@ -4,7 +4,7 @@ import type { ActivityEntry } from './activity.types'
 
 // dashboards
 export interface DashboardUser {
-  id: string
+  _id: string
   name: string
   avatar?: string
 }

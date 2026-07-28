@@ -1,3 +1,4 @@
+<!-- eslint-disable @typescript-eslint/no-unused-vars -->
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -29,7 +30,7 @@ onMounted(async () => {
 
 const current = computed(() => questions.value[currentIndex.value])
 const isLast = computed(() => currentIndex.value === questions.value.length - 1)
-const hasAnswer = computed(() => !!answers.value[current.value?.id])
+const hasAnswer = computed(() => !!answers.value[current.value?.id ?? ''])
 
 function handleAnswer(value: string) {
   if (!current.value) return

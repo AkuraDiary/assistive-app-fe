@@ -16,12 +16,12 @@ const isEditing = ref(false)
 const fileInput = ref<HTMLInputElement | null>(null)
 const { logout: authLogout } = useAuth()
 const form = reactive({
-  namaLengkap: '',
-  namapengguna: '',
+  name: '',
+  username: '',
   email: '',
-  kataSandi: '',
-  alamat: '',
-  noTelepon: '',
+  password: '',
+  address: '',
+  phone: '',
 })
 
 let snapshot = { ...form }
@@ -29,12 +29,12 @@ let snapshot = { ...form }
 // seed form once user loads
 watch(user, (u) => {
   if (!u) return
-  form.namaLengkap = u.namaLengkap
-  form.namapengguna = u.namapengguna
+  form.name = u.name
+  form.username = u.username
   form.email = u.email
-  form.alamat = u.alamat
-  form.noTelepon = u.noTelepon
-  form.kataSandi = ''
+  form.address = u.address
+  form.phone = u.phone
+  form.password = ''
 })
 
 onMounted(fetchProfile)
@@ -51,11 +51,11 @@ function cancel() {
 
 async function save() {
   const ok = await saveProfile({
-    namaLengkap: form.namaLengkap,
-    namapengguna: form.namapengguna,
-    alamat: form.alamat,
-    noTelepon: form.noTelepon,
-    ...(form.kataSandi ? { kataSandi: form.kataSandi } : {}),
+    name: form.name,
+    username: form.username,
+    address: form.address,
+    phone: form.phone,
+    ...(form.password ? { password: form.password } : {}),
   })
   if (ok) isEditing.value = false
 }
@@ -110,8 +110,8 @@ async function logout() {
 
       <!-- Name / username / email summary -->
       <div class="pv__identity">
-        <p class="pv__name">{{ form.namaLengkap }}</p>
-        <p class="pv__meta">{{ form.namapengguna }}</p>
+        <p class="pv__name">{{ form.name }}</p>
+        <p class="pv__meta">{{ form.username }}</p>
         <p class="pv__meta">{{ form.email }}</p>
       </div>
 
@@ -121,14 +121,14 @@ async function logout() {
 
         <div class="pv__grid">
           <BaseTextField
-            v-model="form.namaLengkap"
+            v-model="form.name"
             label="Nama Lengkap"
             border="border border-primary"
             placeholder="Nama lengkap"
             :disabled="!isEditing"
           />
           <BaseTextField
-            v-model="form.namapengguna"
+            v-model="form.username"
             label="Nama Pengguna"
             border="border border-primary"
             placeholder="Nama pengguna"
@@ -151,7 +151,7 @@ async function logout() {
           </div>
 
           <BaseTextField
-            v-model="form.kataSandi"
+            v-model="form.password"
             label="Kata Sandi"
             type="password"
             border="border border-primary"
@@ -160,14 +160,14 @@ async function logout() {
           />
 
           <BaseTextField
-            v-model="form.alamat"
+            v-model="form.address"
             label="Alamat"
             border="border border-primary"
             placeholder="Alamat"
             :disabled="!isEditing"
           />
           <BaseTextField
-            v-model="form.noTelepon"
+            v-model="form.phone"
             label="No. Telepon"
             border="border border-primary"
             placeholder="+62"

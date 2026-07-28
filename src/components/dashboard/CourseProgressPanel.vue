@@ -50,8 +50,8 @@ function onChildChange(e: Event) {
         <h2 class="course-panel__title">Progres Course</h2>
       </div>
       <select class="course-panel__select" :value="selectedChildId ?? ''" @change="onChildChange">
-        <option v-for="child in children" :key="child.id" :value="child.id">
-          {{ child.name }}
+        <option v-for="child in children" :key="child._id" :value="child._id">
+          {{ child.fullName }}
         </option>
       </select>
     </div>
@@ -254,13 +254,14 @@ function onChildChange(e: Event) {
 }
 
 /* REPLACE .course-panel__detail */
-.course-panel__detail::first-of-type {
+.course-panel__detail:first-of-type {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
-.course-panel__detail::last-of-type {
+.course-panel__detail:last-of-type {
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
+  border-bottom: none;
 }
 .course-panel__detail {
   background: #fff;

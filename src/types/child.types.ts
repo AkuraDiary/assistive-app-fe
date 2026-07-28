@@ -5,27 +5,30 @@ export type JenisKelamin = 'laki_laki' | 'perempuan'
 export type JenisTerapi = 'individu' | 'lembaga_sekolah'
 
 export interface ChildRecord {
-  id: string
-  name: string
+  _id: string
+  fullName: string
   avatar?: string
-  tanggal?: string
-  lembaga: string
-  status: ChildStatus
+  dateOfBirth?: string
+  gender?: JenisKelamin
+  therapyType?: JenisTerapi
+  institutionId?: string | null
+  applicationStatus: ChildStatus
   screeningAction: ScreeningUIState
+  deletedAt?: string | null
 }
 
 export interface AddChildPayload {
-  namaLengkap: string
-  tanggalLahir: string
-  alamat?: string
-  status?: ChildStatus
-  jenisKelamin?: JenisKelamin
-  jenisTerapi: JenisTerapi
-  lembagaId?: string
+  fullName: string
+  dateOfBirth: string
+  address?: string
+  applicationStatus?: ChildStatus
+  gender?: JenisKelamin
+  therapyType: JenisTerapi
+  institutionId?: string | null
 }
 
 export interface Lembaga {
-  id: string
+  _id: string
   name: string
   description?: string
 }

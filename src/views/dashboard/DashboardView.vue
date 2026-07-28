@@ -53,16 +53,16 @@ const {
 
 const overlay = useDashboardOverlay()
 const editingChildAvatarUrl = computed(() => {
-  const id = overlay.addChildData.value?.id
-  return childRecords.value.find((r) => r.id === id)?.avatar ?? ''
+  const id = overlay.addChildData.value?._id
+  return childRecords.value.find((r) => r._id === id)?.avatar ?? ''
 })
 async function handleChildAvatarChange(file: File) {
-  const id = overlay.addChildData.value?.id
+  const id = overlay.addChildData.value?._id
   if (!id) return
   await uploadChildAvatar(id, file)
 }
 const editingChild = computed(() =>
-  childRecords.value.find((r) => r.id === overlay.addChildData.value?.id),
+  childRecords.value.find((r) => r._id === overlay.addChildData.value?._id),
 )
 const showLogoutConfirm = ref(false)
 
@@ -70,8 +70,8 @@ onMounted(initialize)
 async function handleSubmit(payload: AddChildPayload) {
   overlay.loading.value = true
   try {
-    if (overlay.addChildData.value?.id) {
-      await updateChild(overlay.addChildData.value.id, payload)
+    if (overlay.addChildData.value?._id) {
+      await updateChild(overlay.addChildData.value._id, payload)
     } else {
       await addChild(payload)
     }
@@ -82,14 +82,14 @@ async function handleSubmit(payload: AddChildPayload) {
 }
 
 function handleEdit(id: string) {
-  const record = childRecords.value.find((r: { id: string }) => r.id === id)
+  const record = childRecords.value.find((r: { _id: string }) => r._id === id)
   if (!record) return
   overlay.openEditChild(id, {
-    namaLengkap: record.name,
-    tanggalLahir: record.tanggal ?? '',
-    jenisTerapi: record.lembaga === 'Individu' ? 'individu' : 'lembaga_sekolah',
-    status: record.status,
-    lembagaId: lembagaList.value.find((l: { name: any }) => l.name === record.lembaga)?.id,
+    fullName: record.fullName,
+    dateOfBirth: record.dateOfBirth ?? '',
+    therapyType: record.institutionId ? 'lembaga_sekolah' : 'individu',
+    applicationStatus: record.applicationStatus,
+    institutionId: record.institutionId,
   })
 }
 
@@ -134,13 +134,13 @@ function handleStatusAction(id: string, status: ChildStatus) {
     return
   }
   if (status === 'ditolak') {
-    const record = childRecords.value.find((r) => r.id === id)
+    const record = childRecords.value.find((r) => r._id === id)
     if (!record) return
     overlay.openEditChild(id, {
-      namaLengkap: record.name,
-      tanggalLahir: record.tanggal ?? '',
-      jenisTerapi: record.lembaga === 'Individu' ? 'individu' : 'lembaga_sekolah',
-      lembagaId: lembagaList.value.find((l) => l.name === record.lembaga)?.id,
+      fullName: record.fullName,
+      dateOfBirth: record.dateOfBirth ?? '',
+      therapyType: record.institutionId ? 'lembaga_sekolah' : 'individu',
+      institutionId: record.institutionId,
     })
   }
 }
@@ -183,7 +183,7 @@ async function handleLogout() {
           :loading="overlay.loading.value"
           :initial-data="overlay.addChildData.value?.data"
           :show-avatar-edit="
-            overlay.mode.value === 'edit_child' && editingChild?.status === 'diterima'
+            overlay.mode.value === 'edit_child' && editingChild?.applicationStatus === 'diterima'
           "
           @submit="handleSubmit"
           @cancel="overlay.close()"
@@ -209,8 +209,8 @@ async function handleLogout() {
           v-if="overlay.mode.value === 'result' && overlay.resultData.value"
           :child-id="overlay.resultData.value.childId"
           :child-name="
-            childRecords.find((r: { id: string }) => r.id === overlay.resultData.value!.childId)
-              ?.name
+            childRecords.find((r: { _id: string }) => r._id === overlay.resultData.value!.childId)
+              ?.fullName
           "
           @back="overlay.close()"
           @save="overlay.close()"

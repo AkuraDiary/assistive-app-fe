@@ -22,7 +22,7 @@ export function useDashboard() {
   const activity = useActivity()
 
   const selectedChild = computed(
-    () => children.childRecords.value.find((c) => c.id === selectedChildId.value) ?? null,
+    () => children.childRecords.value.find((c) => c._id === selectedChildId.value) ?? null,
   )
 
   async function selectChild(id: string) {

@@ -1,17 +1,17 @@
 export interface ProfileUser {
-    id: string
-    namaLengkap: string
-    namapengguna: string
-    email: string
-    alamat: string
-    noTelepon: string
-    avatarUrl?: string
-  }
-  
-  export interface UpdateProfilePayload {
-    namaLengkap: string
-    namapengguna: string
-    alamat: string
-    noTelepon: string
-    kataSandi?: string // only sent if changed
-  }
+  _id: string
+  name: string
+  username: string
+  email: string
+  address: string
+  phone: string
+  avatarUrl?: string
+}
+
+export interface UpdateProfilePayload {
+  name: string
+  username: string
+  address: string
+  phone: string
+  password?: string // only sent if changed
+}

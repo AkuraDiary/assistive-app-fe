@@ -4,7 +4,7 @@ import type { ScreeningUIState } from '@/types/screening.types'
 import type { ChildStatus, ChildRecord } from '@/types/child.types'
 import ChildStatusPopup from './ChildStatusPopup.vue'
 import ConfirmModal from '../shared/modal/ConfirmModal.vue'
-const popupRecord = ref<{ id: string; status: ChildStatus } | null>(null)
+const popupRecord = ref<{ _id: string; applicationStatus: ChildStatus } | null>(null)
 const showDeleteConfirm = ref(false)
 defineProps<{
   records: ChildRecord[]
@@ -40,19 +40,19 @@ function toggleDropdown(id: string) {
   openDropdown.value = openDropdown.value === id ? null : id
 }
 
-function handleStatusTap(record: { id: string; status: ChildStatus }) {
-  if (record.status === 'menunggu') {
+function handleStatusTap(record: { _id: string; applicationStatus: ChildStatus }) {
+  if (record.applicationStatus === 'menunggu') {
     return
   }
-  popupRecord.value = { id: record.id, status: record.status }
+  popupRecord.value = { _id: record._id, applicationStatus: record.applicationStatus }
 }
 
 function handleStatusPopUp() {
-  if (popupRecord!.value!.status === 'menunggu') {
+  if (popupRecord!.value!.applicationStatus === 'menunggu') {
     return
   }
 
-  emit('status-action', popupRecord!.value!.id, popupRecord!.value!.status)
+  emit('status-action', popupRecord!.value!._id, popupRecord!.value!.applicationStatus)
   popupRecord.value = null
 }
 
@@ -62,6 +62,7 @@ function selectScreening(id: string, action: ScreeningUIState) {
 }
 
 function formatDate(iso: string) {
+  if (!iso) return ''
   const [y, m, d] = iso.split('-')
   return `${d}/${m}/${y}`
 }
@@ -98,10 +99,10 @@ function hideAllPopUp() {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="record in records" :key="record.id" class="ct__row">
+        <tr v-for="record in records" :key="record._id" class="ct__row">
           <td class="ct__td ct__td--name">
             <div class="ct__avatar">
-              <img v-if="record.avatar" :src="record.avatar" :alt="record.name" />
+              <img v-if="record.avatar" :src="record.avatar" :alt="record.fullName" />
               <svg v-else width="28" height="28" viewBox="0 0 32 32" fill="none">
                 <circle cx="16" cy="16" r="15" stroke="#c4b5e8" stroke-width="1.5" />
                 <circle cx="16" cy="13" r="5" stroke="#c4b5e8" stroke-width="1.5" />
@@ -113,13 +114,13 @@ function hideAllPopUp() {
                 />
               </svg>
             </div>
-            {{ record.name }}
+            {{ record.fullName }}
           </td>
-          <td class="ct__td">{{ formatDate(record.tanggal ?? '') }}</td>
-          <td class="ct__td">{{ record.lembaga }}</td>
+          <td class="ct__td">{{ formatDate(record.dateOfBirth ?? '') }}</td>
+          <td class="ct__td">{{ record.institutionId }}</td>
           <td class="ct__td" style="cursor: pointer" @click="handleStatusTap(record)">
-            <span class="ct__status" :class="`ct__status--${record.status}`">
-              {{ statusLabel[record.status] }}
+            <span class="ct__status" :class="`ct__status--${record.applicationStatus}`">
+              {{ record.applicationStatus ? statusLabel[record.applicationStatus] : 'Ditolak' }}
             </span>
           </td>
           <td class="ct__td ct__td-screening">
@@ -136,22 +137,22 @@ function hideAllPopUp() {
             <button
               v-else-if="record.screeningAction === 'lihat_hasil'"
               class="ct__btn ct__btn--filled"
-              @click="selectScreening(record.id, 'lihat_hasil')"
+              @click="selectScreening(record._id, 'lihat_hasil')"
             >
               Lihat Hasil
             </button>
 
             <!-- Dropdown: Orang Tua / Anak -->
             <div v-else class="ct__dropdown-wrap">
-              <button class="ct__btn ct__btn--filled" @click="toggleDropdown(record.id)">
+              <button class="ct__btn ct__btn--filled" @click="toggleDropdown(record._id)">
                 {{ record.screeningAction === 'orang_tua' ? 'Orang Tua' : 'Anak' }}
                 <span class="ct__chevron">▾</span>
               </button>
-              <div v-if="openDropdown === record.id" class="ct__dropdown">
-                <button class="ct__dropdown-item" @click="selectScreening(record.id, 'orang_tua')">
+              <div v-if="openDropdown === record._id" class="ct__dropdown">
+                <button class="ct__dropdown-item" @click="selectScreening(record._id, 'orang_tua')">
                   Orang Tua
                 </button>
-                <button class="ct__dropdown-item" @click="selectScreening(record.id, 'anak')">
+                <button class="ct__dropdown-item" @click="selectScreening(record._id, 'anak')">
                   Anak
                 </button>
               </div>
@@ -159,9 +160,9 @@ function hideAllPopUp() {
           </td>
           <td v-if="showActions" class="ct__td ct__td--actions">
             <div class="ct__action-wrap">
-              <button class="ct__dots-btn" @click="toggleActionMenu(record.id)">···</button>
-              <div v-if="openActionMenu === record.id" class="ct__dropdown ct__dropdown--right">
-                <button class="ct__dropdown-item" @click="handleEdit(record.id)">Edit</button>
+              <button class="ct__dots-btn" @click="toggleActionMenu(record._id)">···</button>
+              <div v-if="openActionMenu === record._id" class="ct__dropdown ct__dropdown--right">
+                <button class="ct__dropdown-item" @click="handleEdit(record._id)">Edit</button>
                 <button
                   class="ct__dropdown-item ct__dropdown-item--danger"
                   @click="showDeleteConfirm = true"
@@ -177,7 +178,7 @@ function hideAllPopUp() {
     <Transition name="fade">
       <ChildStatusPopup
         v-if="popupRecord"
-        :status="popupRecord.status"
+        :status="popupRecord.applicationStatus"
         @action="handleStatusPopUp"
         @back="hideAllPopUp"
       />

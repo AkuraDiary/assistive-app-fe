@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import type { ScreeningQuestion } from '@/types/screening.types';
 import { ref } from 'vue'
-import type { ScreeningQuestion } from '@/types/dashboard.types'
+
 
 defineProps<{ question: ScreeningQuestion }>()
 const emit = defineEmits<{ (e: 'answer', value: string): void }>()

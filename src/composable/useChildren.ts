@@ -24,20 +24,20 @@ export function useChildren() {
   }
   async function uploadChildAvatar(id: string, file: File) {
     const avatarUrl = await childService.uploadChildAvatar(id, file)
-    const index = childRecords.value.findIndex((r) => r.id === id)
+    const index = childRecords.value.findIndex((r) => r._id === id)
     if (index !== -1 && childRecords.value[index]) {
       childRecords.value[index].avatar = avatarUrl
     }
   }
   async function updateChild(id: string, payload: AddChildPayload) {
     const record = await childService.updateChildRecord(id, payload)
-    const index = childRecords.value.findIndex((r) => r.id === id)
+    const index = childRecords.value.findIndex((r) => r._id === id)
     if (index !== -1) childRecords.value[index] = record
   }
 
   async function deleteChild(id: string) {
     await childService.deleteChildRecord(id)
-    childRecords.value = childRecords.value.filter((r) => r.id !== id)
+    childRecords.value = childRecords.value.filter((r) => r._id !== id)
   }
 
   return {

@@ -9,7 +9,7 @@ export function useScreening(childRecords: ReturnType<typeof ref<ChildRecord[]>>
   const screeningError = ref<string | null>(null)
 
   function updateScreeningUIState(id: string, action: ScreeningUIState) {
-    const record = childRecords.value?.find((r) => r.id === id)
+    const record = childRecords.value?.find((r) => r._id === id)
     if (record) record.screeningAction = action
   }
 

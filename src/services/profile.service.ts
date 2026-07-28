@@ -3,12 +3,12 @@ import type { ProfileUser, UpdateProfilePayload } from '@/types/profile.types'
 const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? ''
 const USE_MOCK = !BASE_URL
 let MOCK_PROFILE: ProfileUser = {
-  id: '1',
-  namaLengkap: 'Debby',
-  namapengguna: 'debby.kt',
+  _id: '1',
+  name: 'Debby',
+  username: 'debby.kt',
   email: 'debby123@gmail.com',
-  alamat: 'Jl. Pegangsaan Timur',
-  noTelepon: '+62 8123456',
+  address: 'Jl. Pegangsaan Timur',
+  phone: '+62 8123456',
   avatarUrl: undefined,
 }
 
