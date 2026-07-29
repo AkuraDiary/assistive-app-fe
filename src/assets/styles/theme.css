@@ -1,16 +1,16 @@
 /* Theme Colors - CSS Variables */
 :root {
   /* Primary Colors */
-  --color-primary: #8b73f6;
-  --color-primary-light: #8b73f6d9;
-  --color-primary-lighter: #8b73f6af;
-  --color-primary-muted: #c7b7ff74;
+  --color-primary: #ff3c8a;
+  --color-primary-light: #ff70a9;
+  --color-primary-lighter: #ffb3d1;
+  --color-primary-muted: #ffc0d9df;
 
   /* Secondary Colors */
-  --color-secondary: #ff3c8a;
-  --color-secondary-light: #ff70a9;
-  --color-secondary-lighter: #ffb3d1;
-  --color-secondary-muted: #ffc0d9df;
+  --color-secondary: #8b73f6;
+  --color-secondary-light: #8b73f6d9;
+  --color-secondary-lighter: #8b73f6af;
+  --color-secondary-muted: #c7b7ff74;
 
   /* Neutral Colors */
   --color-surface: #f5f5f5;
@@ -126,8 +126,18 @@ html {
   font-style: normal;
 }
 
-.a11y--font-sm  { font-size: 14px; }
-.a11y--font-md  { font-size: 16px; }
-.a11y--font-lg  { font-size: 20px; }
-.a11y--dyslexia { font-family: 'OpenDyslexic', sans-serif !important; }
-.a11y--dyslexia * { font-family: 'OpenDyslexic', sans-serif !important; }
+.a11y--font-sm {
+  font-size: 14px;
+}
+.a11y--font-md {
+  font-size: 16px;
+}
+.a11y--font-lg {
+  font-size: 20px;
+}
+.a11y--dyslexia {
+  font-family: 'OpenDyslexic', sans-serif !important;
+}
+.a11y--dyslexia * {
+  font-family: 'OpenDyslexic', sans-serif !important;
+}

@@ -1,18 +1,30 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+interface Props {
+  title?: string
+  subtitle?: string
+}
+
+withDefaults(defineProps<Props>(), {
+  title: 'Belajar Seru, Lebih Mudah',
+  subtitle:
+    'Menemani perjalanan belajar yang menyenangkan, adaptif, dan ramah disleksia. Karena setiap anak punya cara uniknya sendiri untuk memahami dunia.',
+})
+</script>
 
 <template>
-  <div class="max-w-xl text-center">
-    <h1 class="text-5xl font-bold text-black">Add the Title Text Here</h1>
+  <div class="max-w-xl mx-auto flex flex-col items-center justify-center text-center">
+    <h1 class="text-[40px] font-bold text-gray-900 leading-tight">{{ title }}</h1>
 
-    <p class="mt-6 text-lg leading-9 text-neutral-700">
-      Use this space to promote the business, its products, or its services. Help people become
-      familiar with the business and its offerings, creating a sense of connection and trust.
+    <p class="mt-4 text-lg leading-relaxed text-gray-500 px-4">
+      {{ subtitle }}
     </p>
 
+    <!-- Placeholder Illustration -->
     <div
-      class="relative mt-16 h-[520px] w-full overflow-hidden rounded-[42px] bg-gradient-to-br from-[#ECEAFB] via-[#E9EAF2] to-[#EFEFDF]"
+      class="relative mt-12 mx-auto h-[480px] w-full max-w-[480px] overflow-hidden rounded-[32px] bg-gradient-to-br from-[#F0F2F9] to-[#F1F6EC]"
     >
-      <div class="absolute -bottom-40 -left-24 h-[700px] w-[700px] rounded-full bg-white/40" />
+      <!-- Decorative light swoop -->
+      <div class="absolute -bottom-10 -left-10 h-[600px] w-[600px] rounded-[100%] bg-white/40 shadow-[inset_0_0_50px_rgba(255,255,255,0.5)]" />
     </div>
   </div>
 </template>

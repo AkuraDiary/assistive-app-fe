@@ -140,7 +140,7 @@ const handleRegister = async () => {
       <div class="flex h-full flex-col justify-between p-6">
         <AppLogo class="absolute top-2 left-4 z-10 m-4" />
         <div class="mx-auto w-full max-w-[350px] flex-1 flex flex-col justify-center">
-          <h1 class="mb-10 text-center text-4xl font-bold text-primary">Selamat Datang!</h1>
+          <h1 class="mb-10 text-center text-[32px] font-bold text-gray-900">Daftar Sekarang!</h1>
 
           <AuthTabs active="register" />
 
@@ -156,7 +156,7 @@ const handleRegister = async () => {
               label="Nama Lengkap"
               placeholder="Contoh: Syahril"
               color="primary"
-              border="border border-primary"
+              border="border border-gray-200"
               :error="errors.fullName"
               @blur="validateForm"
             />
@@ -167,7 +167,7 @@ const handleRegister = async () => {
               label="Nama Pengguna"
               placeholder="Contoh: syahrilllll"
               color="primary"
-              border="border border-primary"
+              border="border border-gray-200"
               :error="errors.username"
               @blur="validateForm"
             />
@@ -178,7 +178,7 @@ const handleRegister = async () => {
               label="Email"
               placeholder="Masukkan Email Anda"
               color="primary"
-              border="border border-primary"
+              border="border border-gray-200"
               :error="errors.email"
               @blur="validateForm"
             >
@@ -193,6 +193,7 @@ const handleRegister = async () => {
               label="No. Telepon"
               placeholder="Contoh: 0812345678"
               color="primary"
+              border="border border-gray-200"
               :error="errors.phone"
               @blur="validateForm"
             >
@@ -208,6 +209,7 @@ const handleRegister = async () => {
               type="password"
               placeholder="Masukkan Sandi Anda"
               color="primary"
+              border="border border-gray-200"
               :error="errors.password"
               @blur="validateForm"
             >
@@ -222,10 +224,10 @@ const handleRegister = async () => {
                 type="submit"
                 color="primary"
                 size="lg"
+                class="w-[160px] h-[48px] rounded-[16px] text-base font-bold shadow-sm"
                 :disabled="!isFormValid || isLoading"
               >
-                {{ isLoading ? 'Memproses...' : 'DAFTAR' }}
-
+                {{ isLoading ? 'Memproses...' : 'Daftar' }}
                 <template #trailing>
                   <ArrowRight class="h-5 w-5" />
                 </template>
@@ -236,7 +238,10 @@ const handleRegister = async () => {
       </div>
     </template>
     <template #right>
-      <AuthHero />
+      <AuthHero
+        title="Buka Potensi Terbaik Mereka"
+        subtitle="Bersama LeksiGo, mari ciptakan lingkungan belajar yang ramah dan memahami keunikan cara pandang setiap anak. Langkah awal Anda di sini berdampak besar bagi masa depan mereka."
+      />
     </template>
   </AuthLayout>
 </template>

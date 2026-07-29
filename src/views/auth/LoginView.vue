@@ -91,7 +91,7 @@ const handleForgotPassword = () => {
       <div class="flex h-full flex-col justify-between p-6">
         <AppLogo class="absolute top-2 left-4 z-10 m-4" />
         <div class="mx-auto w-full max-w-[350px] flex-1 flex flex-col justify-center">
-          <h1 class="mb-12 text-center text-4xl font-bold text-primary">Selamat Datang!</h1>
+          <h1 class="mb-12 text-center text-[32px] font-bold text-gray-900">Selamat Datang!</h1>
 
           <AuthTabs active="login" />
 
@@ -107,7 +107,7 @@ const handleForgotPassword = () => {
               label="Email"
               placeholder="Masukkan Email Anda"
               color="primary"
-              border="border border-primary"
+              border="border border-gray-200"
               :error="errors.email"
               @blur="validateForm"
             >
@@ -123,7 +123,7 @@ const handleForgotPassword = () => {
               type="password"
               placeholder="Masukkan Sandi Anda"
               color="primary"
-              border="border border-primary"
+              border="border border-gray-200"
               :error="errors.password"
               @blur="validateForm"
             >
@@ -133,13 +133,13 @@ const handleForgotPassword = () => {
             </BaseTextField>
 
             <!-- Forgot Password Link -->
-            <div class="text-right">
+            <div class="text-center">
               <button
                 type="button"
-                class="text-sm text-[#FF70A9] transition-colors hover:text-primary"
+                class="text-[13px] font-semibold text-gray-700 transition-colors hover:text-primary"
                 @click="handleForgotPassword"
               >
-                Lupa sandi?
+                Lupa kata sandi?
               </button>
             </div>
 
@@ -149,10 +149,10 @@ const handleForgotPassword = () => {
                 type="submit"
                 color="primary"
                 size="lg"
+                class="w-[160px] h-[48px] rounded-[16px] text-base font-bold shadow-sm"
                 :disabled="!isFormValid || isLoading"
               >
-                {{ isLoading ? 'Memproses...' : 'MASUK' }}
-
+                {{ isLoading ? 'Memproses...' : 'Masuk' }}
                 <template #trailing>
                   <ArrowRight class="h-5 w-5" />
                 </template>
@@ -160,19 +160,19 @@ const handleForgotPassword = () => {
             </div>
 
             <!-- Divider -->
-            <div class="flex items-center gap-3 py-4">
-              <div class="h-px flex-1 bg-black" />
-              <span class="text-sm text-black">atau lanjutkan dengan</span>
-              <div class="h-px flex-1 bg-black" />
+            <div class="flex items-center gap-4 py-4">
+              <div class="h-[1px] flex-1 bg-gray-300" />
+              <span class="text-[13px] text-gray-500">atau lanjutkan dengan</span>
+              <div class="h-[1px] flex-1 bg-gray-300" />
             </div>
 
             <!-- Google Login Button -->
             <button
               type="button"
-              class="flex h-12 w-full items-center justify-center gap-3 rounded-[16px] border border-primary bg-white font-semibold text-primary transition-colors hover:bg-white"
+              class="flex h-12 w-full items-center justify-center gap-3 rounded-[16px] border border-primary/30 bg-white font-semibold text-primary transition-colors hover:bg-primary/5"
               @click="handleGoogleLogin"
             >
-              <span class="text-2xl">G</span>
+              <span class="text-2xl font-bold">G</span>
               Google
             </button>
           </form>
@@ -180,7 +180,10 @@ const handleForgotPassword = () => {
       </div>
     </template>
     <template #right>
-      <AuthHero />
+      <AuthHero
+        title="Belajar Seru, Lebih Mudah"
+        subtitle="Menemani perjalanan belajar yang menyenangkan, adaptif, dan ramah disleksia. Karena setiap anak punya cara uniknya sendiri untuk memahami dunia."
+      />
     </template>
   </AuthLayout>
 </template>
