@@ -12,6 +12,7 @@ import ProfileView from '@/views/profile/ProfileView.vue'
 import CourseListView from '@/views/course/CourseListView.vue'
 import CourseDetailView from '@/views/course/CourseDetailView.vue'
 import MateriView from '@/views/course/MateriView.vue'
+import DashboardLayout from '@/layouts/DashboardLayout.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -53,40 +54,50 @@ const router = createRouter({
       meta: { requiresGuest: true },
     },
     {
-      path: '/course',
-      name: 'course',
-      component: CourseListView,
-      meta: { requiresAuth: true },
-    },
-    {
-      path: '/course/:courseId/latihan/:latihanId/materi',
-      name: 'materi',
-      component: MateriView,
-      meta: { requiresAuth: true },
-    },
-    {
-      path: '/course/:courseId',
-      name: 'course-detail',
-      component: CourseDetailView,
-      meta: { requiresAuth: true },
-    },
-    {
       path: '/screening/:childId/:type',
       name: 'screening',
       component: ScreeningView,
       meta: { requiresAuth: true },
     },
     {
-      path: '/profile',
-      name: 'profile',
-      component: ProfileView,
+      path: '/app',
+      component: DashboardLayout,
       meta: { requiresAuth: true },
-    },
-    {
-      path: '/dashboard',
-      name: 'dashboard',
-      component: DashboardView,
-    },
+      children: [
+        {
+          path: '/dashboard',
+          name: 'dashboard',
+          component: DashboardView,
+        },
+        {
+          path: '/course',
+          name: 'course',
+          component: CourseListView,
+        },
+        {
+          path: '/profile',
+          name: 'profile',
+          component: ProfileView,
+        },
+        // Placeholder routes for other roles
+        { path: '/pendaftaran', name: 'pendaftaran', component: () => import('@/views/dashboard/roles/PlaceholderView.vue') },
+        { path: '/siswa', name: 'siswa', component: () => import('@/views/dashboard/roles/PlaceholderView.vue') },
+        { path: '/guru', name: 'guru', component: () => import('@/views/dashboard/roles/PlaceholderView.vue') },
+        { path: '/lembaga', name: 'lembaga', component: () => import('@/views/dashboard/roles/PlaceholderView.vue') },
+        { path: '/paket-penjualan', name: 'paket-penjualan', component: () => import('@/views/dashboard/roles/PlaceholderView.vue') },
+        { path: '/manajemen-pengguna', name: 'manajemen-pengguna', component: () => import('@/views/dashboard/roles/PlaceholderView.vue') },
+        {
+          path: '/course/:courseId/latihan/:latihanId/materi',
+          name: 'materi',
+          component: MateriView,
+        },
+        {
+          path: '/course/:courseId',
+          name: 'course-detail',
+          component: CourseDetailView,
+        },
+      ]
+    }
   ],
 })
 

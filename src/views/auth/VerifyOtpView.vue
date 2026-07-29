@@ -65,10 +65,10 @@ async function handleResend() {
     <div class="flex flex-1 flex-col items-center justify-center px-4 pb-20">
       <div class="w-full max-w-[640px] text-center">
         <!-- Title -->
-        <h1 class="text-4xl font-bold text-neutral-800">2-Tahap Verifikasi</h1>
-        <p class="mt-4 text-base text-neutral-500 leading-relaxed">
+        <h1 class="text-[32px] font-bold text-gray-900">2-Tahap Verifikasi</h1>
+        <p class="mt-4 text-base text-gray-500 leading-relaxed">
           Kami telah mengirimkan kode verifikasi ke
-          <span class="font-semibold text-blue-500">{{ maskedEmail }}</span
+          <span class="font-bold text-gray-900">{{ maskedEmail }}</span
           >, <br />masukkan kode tersebut di kolom di bawah ini.
         </p>
 
@@ -105,19 +105,19 @@ async function handleResend() {
           <BaseButton
             color="primary"
             size="lg"
-            class="w-full max-w-[560px]"
+            class="w-full max-w-[560px] h-[48px] rounded-[16px] text-base font-bold shadow-sm"
             :disabled="!isComplete || isLoading"
             @click="handleVerify"
           >
-            {{ isLoading ? 'Memverifikasi...' : 'Verifikasi & Login' }}
+            {{ isLoading ? 'Memverifikasi...' : 'Verifikasi Kode' }}
           </BaseButton>
         </div>
 
         <!-- Resend -->
-        <p class="mt-6 text-sm text-neutral-600">
+        <p class="mt-6 text-sm text-gray-500">
           Belum menerima kode?
           <button
-            class="font-semibold text-blue-500 hover:underline disabled:opacity-50"
+            class="font-bold text-primary hover:opacity-80 disabled:opacity-50 transition-opacity"
             :disabled="isLoading"
             @click="handleResend"
           >

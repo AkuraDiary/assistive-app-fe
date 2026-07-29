@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 // API Configuration
+import { getMockUser } from '@/mocks/users.mock'
 
 // to this
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? ''
@@ -73,7 +74,13 @@ class ApiService {
         headers,
       })
 
-      const data = await response.json()
+      const text = await response.text()
+      let data: any = {}
+      try {
+        data = text ? JSON.parse(text) : {}
+      } catch (e) {
+        data = { message: text || 'Invalid JSON response' }
+      }
 
       if (!response.ok) {
         throw {
@@ -90,7 +97,19 @@ class ApiService {
   }
 
   // Auth endpoints
-  login(payload: LoginPayload): Promise<ApiResponse<LoginResponse>> {
+  async login(payload: LoginPayload): Promise<ApiResponse<LoginResponse>> {
+    // Check for dummy test accounts
+    const mockUser = getMockUser(payload.email)
+
+    if (mockUser) {
+      // Simulate network delay
+      await new Promise((resolve) => setTimeout(resolve, 500))
+      return {
+        success: true,
+        data: mockUser,
+      }
+    }
+
     return this.request('/auth/login', {
       method: 'POST',
       body: JSON.stringify(payload),

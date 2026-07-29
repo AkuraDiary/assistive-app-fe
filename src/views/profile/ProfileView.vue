@@ -79,24 +79,24 @@ async function logout() {
       <div v-if="loading" class="pv__loading">Memuat...</div>
       <p v-if="error" class="pv__error">{{ error }}</p>
       <!-- Title -->
-      <h1 class="pv__title">Profil</h1>
+      <h1 class="pv__title text-center self-center text-[32px] font-bold text-gray-900 mb-2">Perbarui Data Pengguna</h1>
 
       <!-- Avatar -->
-      <div class="pv__avatar-section">
-        <div class="pv__avatar">
+      <div class="pv__avatar-section mb-6">
+        <div class="pv__avatar border-[3px] border-primary rounded-full p-1 flex items-center justify-center">
           <img v-if="user?.avatarUrl" :src="user.avatarUrl" alt="avatar" class="pv__avatar-img" />
-          <svg v-else width="80" height="80" viewBox="0 0 80 80" fill="none">
-            <circle cx="40" cy="40" r="38" stroke="#8B73F6" stroke-width="2" />
-            <circle cx="40" cy="33" r="13" stroke="#8B73F6" stroke-width="2" />
+          <svg v-else width="72" height="72" viewBox="0 0 80 80" fill="none">
+            <circle cx="40" cy="40" r="38" stroke="var(--color-primary)" stroke-width="2" />
+            <circle cx="40" cy="33" r="13" stroke="var(--color-primary)" stroke-width="2" />
             <path
               d="M15 68c4-10 12.5-15 25-15s21 5 25 15"
-              stroke="#8B73F6"
+              stroke="var(--color-primary)"
               stroke-width="2"
               stroke-linecap="round"
             />
           </svg>
         </div>
-        <button class="pv__upload-btn" @click="fileInput?.click()">
+        <button class="pv__upload-btn bg-primary text-white border-none shadow-sm hover:opacity-90" @click="fileInput?.click()">
           Unggah Foto <Pencil :size="14" />
         </button>
         <input
@@ -108,98 +108,69 @@ async function logout() {
         />
       </div>
 
-      <!-- Name / username / email summary -->
-      <div class="pv__identity">
-        <p class="pv__name">{{ form.name }}</p>
-        <p class="pv__meta">{{ form.username }}</p>
-        <p class="pv__meta">{{ form.email }}</p>
-      </div>
-
       <!-- Form card -->
       <div class="pv__form-card">
-        <p class="pv__form-title">Informasi Pribadi Orang Tua</p>
 
         <div class="pv__grid">
-          <BaseTextField
-            v-model="form.name"
-            label="Nama Lengkap"
-            border="border border-primary"
-            placeholder="Nama lengkap"
-            :disabled="!isEditing"
-          />
-          <BaseTextField
-            v-model="form.username"
-            label="Nama Pengguna"
-            border="border border-primary"
-            placeholder="Nama pengguna"
-            :disabled="!isEditing"
-          />
-
-          <!-- Email with Verified badge -->
-          <div class="pv__field-wrap">
-            <div class="pv__label-row">
-              <span class="pv__label">Email</span>
-              <span class="pv__verified">● Verified</span>
-            </div>
+          <!-- LEFT COLUMN -->
+          <div class="flex flex-col gap-6">
+            <BaseTextField
+              v-model="form.name"
+              label="Nama Lengkap *"
+              border="border border-gray-200"
+              placeholder="Contoh: Debby"
+            />
             <BaseTextField
               v-model="form.email"
-              border="border border-primary"
+              label="Email"
+              border="border border-gray-200 bg-gray-50"
               type="email"
-              placeholder="Email"
+              placeholder="Contoh: debby123@gmail.com"
               disabled
+            />
+            <BaseTextField
+              v-model="form.password"
+              label="Kata Sandi"
+              type="password"
+              border="border border-gray-200"
+              placeholder="Masukkan password baru jika ingin mengubahnya"
             />
           </div>
 
-          <BaseTextField
-            v-model="form.password"
-            label="Kata Sandi"
-            type="password"
-            border="border border-primary"
-            placeholder="Kata sandi"
-            :disabled="!isEditing"
-          />
-
-          <BaseTextField
-            v-model="form.address"
-            label="Alamat"
-            border="border border-primary"
-            placeholder="Alamat"
-            :disabled="!isEditing"
-          />
-          <BaseTextField
-            v-model="form.phone"
-            label="No. Telepon"
-            border="border border-primary"
-            placeholder="+62"
-            :disabled="!isEditing"
-          />
+          <!-- RIGHT COLUMN -->
+          <div class="flex flex-col gap-6">
+            <BaseTextField
+              v-model="form.address"
+              label="Alamat *"
+              border="border border-gray-200"
+              placeholder="Contoh: Jl. Pegangsaan Timur"
+            />
+            <BaseTextField
+              v-model="form.username"
+              label="Nama Pengguna *"
+              border="border border-gray-200"
+              placeholder="Contoh: debby.kt"
+            />
+            <BaseTextField
+              v-model="form.phone"
+              label="Nomor Telepon *"
+              border="border border-gray-200"
+              placeholder="Contoh: +62 8123456"
+            />
+          </div>
         </div>
 
         <!-- Actions -->
-        <div class="pv__actions">
-          <!-- View mode -->
-          <template v-if="!isEditing">
-            <BaseButton color="primary" @click="startEdit">
-              <template #leading><Pencil :size="14" /></template>
-              Ubah data
-            </BaseButton>
-            <button class="pv__back-link" @click="router.back()">
-              <ArrowLeft :size="14" /> Kembali
-            </button>
-          </template>
-
-          <!-- Edit mode -->
-          <template v-else>
-            <BaseButton color="primary" @click="save">Simpan</BaseButton>
-            <button class="pv__back-link" @click="cancel"><ArrowLeft :size="14" /> Batal</button>
-          </template>
+        <div class="flex justify-center gap-4 mt-8">
+          <BaseButton variant="outline" color="primary" class="w-[140px] rounded-full font-bold shadow-sm" @click="router.back()">Kembali</BaseButton>
+          <BaseButton color="primary" class="w-[140px] rounded-full font-bold shadow-sm" @click="save">Simpan</BaseButton>
         </div>
       </div>
 
       <!-- Logout -->
-      <BaseButton variant="outline" color="primary" @click="showLogoutConfirm = true">
-        <template #leading><LogOut :size="16" /></template>
-        KELUAR
+      <BaseButton variant="outline" color="primary" class="mt-4 rounded-full font-bold shadow-sm self-center px-8" @click="showLogoutConfirm = true">
+        <template #leading><LogOut :size="16" class="rotate-180" /></template>
+        Keluar
       </BaseButton>
     </div>
   </div>

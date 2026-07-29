@@ -1,38 +1,54 @@
 <script setup lang="ts">
-import type { DashboardUser } from '@/types/dashboard.types'
 import AppLogo from '../shared/AppLogo.vue'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import ProfilePopup from './ProfilePopup.vue'
 import { useRouter } from 'vue-router'
+import { useAuth } from '@/composable/useAuth'
+
 const router = useRouter()
+const { user, logout } = useAuth()
 const showProfile = ref(false)
 
-const props = defineProps<{
-  user: DashboardUser | null
-  activeTab: 'dashboard' | 'course'
-}>()
+const tabs = computed(() => {
+  const role = user.value?.role || 'parent'
+  
+  if (role === 'admin') {
+    return [
+      { name: 'Dashboard', path: '/dashboard' },
+      { name: 'Lembaga', path: '/lembaga' },
+      { name: 'Paket Penjualan', path: '/paket-penjualan' },
+      { name: 'Manajemen Pengguna', path: '/manajemen-pengguna' },
+    ]
+  } else if (role === 'institution') {
+    return [
+      { name: 'Dashboard', path: '/dashboard' },
+      { name: 'Pendaftaran', path: '/pendaftaran' },
+      { name: 'Siswa', path: '/siswa' },
+      { name: 'Guru', path: '/guru' },
+    ]
+  } else {
+    // parent & teacher
+    return [
+      { name: 'Dashboard', path: '/dashboard' },
+      { name: 'Course', path: '/course' },
+    ]
+  }
+})
 
 function emmitProfile() {
-  emit('profile')
   router.push('/profile')
   showProfile.value = false
 }
 
 function emmitSettings() {
-  emit('settings')
   showProfile.value = false
 }
 
-function emmitLogout() {
-  emit('logout')
+async function emmitLogout() {
+  await logout()
+  router.push('/login')
   showProfile.value = false
 }
-const emit = defineEmits<{
-  (e: 'tab-change', tab: 'dashboard' | 'course'): void
-  (e: 'logout'): void // NEW
-  (e: 'profile'): void // NEW
-  (e: 'settings'): void // NEW
-}>()
 </script>
 
 <template>
@@ -44,31 +60,26 @@ const emit = defineEmits<{
     </div>
 
     <div class="navbar__tabs">
-      <button
+      <RouterLink
+        v-for="tab in tabs"
+        :key="tab.path"
+        :to="tab.path"
         class="navbar__tab"
-        :class="{ 'navbar__tab--active': props.activeTab === 'dashboard' }"
-        @click="emit('tab-change', 'dashboard')"
+        active-class="navbar__tab--active"
       >
-        Dashboard
-      </button>
-      <button
-        class="navbar__tab"
-        :class="{ 'navbar__tab--active': props.activeTab === 'course' }"
-        @click="emit('tab-change', 'course')"
-      >
-        Course
-      </button>
+        {{ tab.name }}
+      </RouterLink>
     </div>
 
     <div class="navbar__user">
       <div class="navbar__avatar-wrap">
         <button class="navbar__avatar" @click="showProfile = !showProfile">
           <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-            <circle cx="16" cy="16" r="15" stroke="#8B73F6D9" stroke-width="2" />
-            <circle cx="16" cy="13" r="5" stroke="#8B73F6D9" stroke-width="2" />
+            <circle cx="16" cy="16" r="15" stroke="var(--color-primary)" stroke-width="2" />
+            <circle cx="16" cy="13" r="5" stroke="var(--color-primary)" stroke-width="2" />
             <path
               d="M6 27c1.5-4 5-6 10-6s8.5 2 10 6"
-              stroke="#8B73F6D9"
+              stroke="var(--color-primary)"
               stroke-width="2"
               stroke-linecap="round"
             />
@@ -114,28 +125,33 @@ const emit = defineEmits<{
 
 .navbar__tabs {
   display: flex;
-  background: #ede8fa;
-  border-radius: 999px;
-  padding: 4px;
-  gap: 4px;
+  gap: 12px;
 }
 
 .navbar__tab {
-  padding: 8px 28px;
+  padding: 8px 24px;
   border-radius: 999px;
-  border: none;
+  border: 1px solid var(--color-primary);
   background: transparent;
   font-size: 14px;
-  font-weight: 500;
-  color: #9b8ec4;
+  font-weight: 600;
+  color: var(--color-primary);
   cursor: pointer;
   transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.navbar__tab:hover {
+  background: var(--color-primary-light);
+  color: white;
+  border-color: var(--color-primary-light);
 }
 
 .navbar__tab--active {
-  background: #7c5ccc;
+  background: var(--color-primary);
   color: #fff;
-  box-shadow: 0 2px 8px rgba(124, 92, 204, 0.3);
+  border-color: var(--color-primary);
+  box-shadow: 0 2px 8px rgba(255, 64, 129, 0.3); /* Adjust to match primary color shadow if needed */
 }
 
 .navbar__avatar {

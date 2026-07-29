@@ -23,7 +23,13 @@ async function request<T>(
   if (token) headers['Authorization'] = `Bearer ${token}`
 
   const response = await fetch(url, { ...options, headers })
-  const data = await response.json()
+  const text = await response.text()
+  let data: any = {}
+  try {
+    data = text ? JSON.parse(text) : {}
+  } catch (e) {
+    data = { message: text || 'Invalid JSON response' }
+  }
 
   if (!response.ok) throw { status: response.status, data }
 

@@ -63,9 +63,8 @@ const handleLogin = async () => {
     })
 
     if (result.success) {
-      // TODO: Navigate to dashboard
       console.log('Login successful:', result.user)
-      // router.push('/dashboard')
+      router.push('/dashboard')
     } else {
       errors.value.email = result.error
     }
@@ -82,6 +81,11 @@ const handleGoogleLogin = () => {
 const handleForgotPassword = () => {
   // TODO: Navigate to forgot password page
   router.push('/reset-password')
+}
+
+const fillDummy = (role: string) => {
+  form.value.email = `${role}@test.com`
+  form.value.password = 'password123'
 }
 </script>
 
@@ -175,6 +179,17 @@ const handleForgotPassword = () => {
               <span class="text-2xl font-bold">G</span>
               Google
             </button>
+            
+            <!-- Quick Login Helpers for Testing -->
+            <div class="mt-6 pt-4 border-t border-gray-200">
+              <p class="text-xs text-gray-500 mb-2 text-center">Test Accounts (Auto-fill)</p>
+              <div class="flex flex-wrap justify-center gap-2">
+                <button type="button" @click="fillDummy('parent')" class="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600 hover:bg-gray-200">Parent</button>
+                <button type="button" @click="fillDummy('teacher')" class="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600 hover:bg-gray-200">Teacher</button>
+                <button type="button" @click="fillDummy('institution')" class="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600 hover:bg-gray-200">Institution</button>
+                <button type="button" @click="fillDummy('admin')" class="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600 hover:bg-gray-200">Admin</button>
+              </div>
+            </div>
           </form>
         </div>
       </div>

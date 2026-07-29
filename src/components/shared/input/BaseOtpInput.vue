@@ -121,7 +121,7 @@ defineExpose({ reset })
       :disabled="disabled"
       :aria-label="`Digit ${index + 1}`"
       class="
-        h-[72px] w-[72px] rounded-2xl border-2 bg-white text-center text-2xl font-bold
+        h-[72px] w-[72px] rounded-xl border-2 bg-white text-center text-2xl font-bold
         text-neutral-800 outline-none transition-all duration-150
         focus:border-primary focus:shadow-[0_0_0_3px_rgba(139,115,246,0.15)]
         disabled:cursor-not-allowed disabled:opacity-50
@@ -130,8 +130,8 @@ defineExpose({ reset })
         hasError
           ? 'border-red-400'
           : digit
-            ? 'border-primary bg-purple-50'
-            : 'border-neutral-300',
+            ? 'border-primary bg-white'
+            : 'border-gray-200',
       ]"
       @input="onInput(index, $event)"
       @keydown="onKeydown(index, $event)"

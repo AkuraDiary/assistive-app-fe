@@ -6,7 +6,7 @@ import CoursePagination from '@/components/shared/pagination/CoursePagination.vu
 import { useDashboard } from '@/composable/useDashboard'
 import { useRouter } from 'vue-router'
 import type { CourseStatus } from '@/types/course.types'
-defineEmits<{ (e: 'go-dashboard'): void }>()
+
 const router = useRouter()
 
 const {
@@ -66,7 +66,7 @@ const filterOptions: { label: string; value: CourseStatus | 'semua' }[] = [
           <p class="cl__empty-text">
             Pilih anak terlebih dahulu di Dashboard untuk melihat course.
           </p>
-          <button class="cl__back-btn" @click="$emit('go-dashboard')">
+          <button class="cl__back-btn" @click="router.push('/dashboard')">
             ← Kembali ke Dashboard
           </button>
         </div>
