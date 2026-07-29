@@ -40,7 +40,7 @@ async function loadData() {
         selectedStudentId.value = students.value[0]._id
       }
     }
-    
+
     if (actRes.success) {
       activities.value = actRes.data || []
     }
@@ -67,7 +67,8 @@ function handleStudentChange(id: string) {
     <div class="inst-dashboard__header">
       <h1 class="inst-dashboard__title">Selamat datang {{ user?.fullName || 'Riya Wijaya' }}</h1>
       <p class="inst-dashboard__subtitle">
-        Anda belum memiliki data Anak, Yuk segera tambahkan data anak <span class="font-bold text-gray-800">disini</span> untuk memulai pembelajaran!
+        Anda belum memiliki data Anak, Yuk segera tambahkan data anak
+        <span class="font-bold text-gray-800">disini</span> untuk memulai pembelajaran!
       </p>
     </div>
 
@@ -87,7 +88,7 @@ function handleStudentChange(id: string) {
         <SharedActivityPanel :activities="activities" :loading="loading" />
       </div>
       <div class="inst-dashboard__course-col">
-        <SharedCourseProgressPanel 
+        <SharedCourseProgressPanel
           :students="students"
           :selected-student-id="selectedStudentId"
           :courses="courses"
@@ -101,7 +102,15 @@ function handleStudentChange(id: string) {
     <div class="inst-dashboard__table-section">
       <div class="inst-dashboard__table-header">
         <div class="flex items-center gap-2">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff4d8d" stroke-width="2.5" stroke-linecap="round">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#ff4d8d"
+            stroke-width="2.5"
+            stroke-linecap="round"
+          >
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
             <line x1="16" y1="2" x2="16" y2="6"></line>
             <line x1="8" y1="2" x2="8" y2="6"></line>
@@ -171,11 +180,13 @@ function handleStudentChange(id: string) {
 }
 
 .inst-dashboard__stats-col {
+  display: grid;
+  gap: 2rem;
   flex: 1;
 }
 
 .inst-dashboard__recent-col {
-  width: 400px;
+  width: 60%;
   flex-shrink: 0;
 }
 
@@ -219,7 +230,7 @@ function handleStudentChange(id: string) {
   background: #fff;
   border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
   border: 1px solid #f0f0f0;
 }
 

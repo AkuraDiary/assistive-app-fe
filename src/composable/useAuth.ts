@@ -17,9 +17,12 @@ interface AuthState {
   error: string | null
 }
 
+const storedUser = localStorage.getItem('auth_user')
+const initialUser = storedUser ? JSON.parse(storedUser) : null
+
 // Singleton store
 const state = ref<AuthState>({
-  user: null,
+  user: initialUser,
   token: localStorage.getItem('auth_token'),
   isAuthenticated: !!localStorage.getItem('auth_token'),
   isLoading: false,
@@ -40,8 +43,9 @@ export function useAuth() {
 
       const { token, user } = response.data
 
-      // Store token
+      // Store token and user
       localStorage.setItem('auth_token', token)
+      localStorage.setItem('auth_user', JSON.stringify(user))
 
       // Update state
       state.value = {
@@ -80,9 +84,10 @@ export function useAuth() {
 
       const { user, token } = response.data
 
-      // Store token if provided
+      // Store token and user if provided
       if (token) {
         localStorage.setItem('auth_token', token)
+        localStorage.setItem('auth_user', JSON.stringify(user))
         state.value.token = token
       }
 
@@ -120,6 +125,7 @@ export function useAuth() {
     } finally {
       // Clear state regardless of API response
       localStorage.removeItem('auth_token')
+      localStorage.removeItem('auth_user')
       state.value = {
         user: null,
         token: null,
