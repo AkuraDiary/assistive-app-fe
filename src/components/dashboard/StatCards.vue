@@ -11,44 +11,40 @@ const props = defineProps<{
 }>()
 
 const items = [
-  { 
-    label: 'Total Siswa', 
-    value: props.stats.totalSiswa, 
-    color: '#ff4d8d', 
-    bgColor: '#fce8f0', 
-    icon: User 
+  {
+    label: 'Total Siswa',
+    value: props.stats.totalSiswa,
+    color: '#ff4d8d',
+    bgColor: '#fce8f0',
+    icon: User,
   },
-  { 
-    label: 'Modul', 
-    value: props.stats.modul, 
-    color: '#3b82f6', 
-    bgColor: '#e0f2fe', 
-    icon: Book 
+  {
+    label: 'Modul',
+    value: props.stats.modul,
+    color: '#3b82f6',
+    bgColor: '#e0f2fe',
+    icon: Book,
   },
-  { 
-    label: 'Dikerjakan', 
-    value: props.stats.dikerjakan, 
-    color: '#10b981', 
-    bgColor: '#d1fae5', 
-    icon: Edit3 
+  {
+    label: 'Dikerjakan',
+    value: props.stats.dikerjakan,
+    color: '#10b981',
+    bgColor: '#d1fae5',
+    icon: Edit3,
   },
-  { 
-    label: 'Selesai', 
-    value: props.stats.selesai, 
-    color: '#8b5cf6', 
-    bgColor: '#ede9fe', 
-    icon: CheckSquare 
+  {
+    label: 'Selesai',
+    value: props.stats.selesai,
+    color: '#8b5cf6',
+    bgColor: '#ede9fe',
+    icon: CheckSquare,
   },
 ]
 </script>
 
 <template>
   <div class="stat-cards">
-    <div 
-      v-for="item in items" 
-      :key="item.label" 
-      class="stat-card"
-    >
+    <div v-for="item in items" :key="item.label" class="stat-card">
       <div class="stat-card__header">
         <component :is="item.icon" class="w-5 h-5" :style="{ color: item.color }" />
         <span class="stat-card__label" :style="{ color: item.color }">{{ item.label }}</span>
@@ -78,12 +74,14 @@ const items = [
   background: #fff;
   border-radius: 12px;
   border: 1px solid #f0f0f0;
-  padding: 24px 20px;
+  padding: 16px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  align-content: center;
+  justify-content: center;
   gap: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
 }
 
 .stat-card__header {

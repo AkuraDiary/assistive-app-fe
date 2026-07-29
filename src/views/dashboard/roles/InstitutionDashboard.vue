@@ -78,7 +78,55 @@ function handleStudentChange(id: string) {
         <StatCards v-if="stats" :stats="stats" />
       </div>
       <div class="inst-dashboard__recent-col">
-        <SharedRecentActivity :activities="recentActivities" />
+        <!-- Application Table -->
+        <div class="inst-dashboard__table-section">
+          <div class="inst-dashboard__table-header">
+            <div class="flex items-center gap-2">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#ff4d8d"
+                stroke-width="2.5"
+                stroke-linecap="round"
+              >
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              <h2 class="inst-dashboard__table-title">Daftar Pengajuan</h2>
+            </div>
+            <button class="inst-dashboard__table-link">Lihat Lebih Banyak</button>
+          </div>
+
+          <div class="inst-dashboard__table-container">
+            <table class="inst-dashboard__table">
+              <thead>
+                <tr>
+                  <th>Nama</th>
+                  <th>Jenis Kelamin</th>
+                  <th>Tanggal Lahir</th>
+                  <th class="text-right">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="app in applications" :key="app.id">
+                  <td class="font-semibold">{{ app.name }}</td>
+                  <td>{{ app.gender }}</td>
+                  <td>{{ app.dob }}</td>
+                  <td class="text-right">
+                    <div class="flex items-center justify-end gap-3">
+                      <button class="inst-dashboard__btn-outline">Detail</button>
+                      <button class="inst-dashboard__btn-primary">Terima Pengajuan</button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -98,55 +146,7 @@ function handleStudentChange(id: string) {
       </div>
     </div>
 
-    <!-- Bottom Row: Application Table -->
-    <div class="inst-dashboard__table-section">
-      <div class="inst-dashboard__table-header">
-        <div class="flex items-center gap-2">
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#ff4d8d"
-            stroke-width="2.5"
-            stroke-linecap="round"
-          >
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-            <line x1="16" y1="2" x2="16" y2="6"></line>
-            <line x1="8" y1="2" x2="8" y2="6"></line>
-            <line x1="3" y1="10" x2="21" y2="10"></line>
-          </svg>
-          <h2 class="inst-dashboard__table-title">Daftar Pengajuan</h2>
-        </div>
-        <button class="inst-dashboard__table-link">Lihat Lebih Banyak</button>
-      </div>
-
-      <div class="inst-dashboard__table-container">
-        <table class="inst-dashboard__table">
-          <thead>
-            <tr>
-              <th>Nama</th>
-              <th>Jenis Kelamin</th>
-              <th>Tanggal Lahir</th>
-              <th class="text-right">Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="app in applications" :key="app.id">
-              <td class="font-semibold">{{ app.name }}</td>
-              <td>{{ app.gender }}</td>
-              <td>{{ app.dob }}</td>
-              <td class="text-right">
-                <div class="flex items-center justify-end gap-3">
-                  <button class="inst-dashboard__btn-outline">Detail</button>
-                  <button class="inst-dashboard__btn-primary">Terima Pengajuan</button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <SharedRecentActivity :activities="recentActivities" />
   </div>
 </template>
 
