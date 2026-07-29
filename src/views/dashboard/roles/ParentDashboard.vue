@@ -3,8 +3,8 @@
 import { ref, onMounted, computed } from 'vue'
 import ChildrenTable from '@/components/dashboard/ChildrenTable.vue'
 import AddChildForm from '@/components/forms/AddChildForm.vue'
-import ActivityPanel from '@/components/dashboard/ActivityPanel.vue'
-import CourseProgressPanel from '@/components/dashboard/CourseProgressPanel.vue'
+import ParentActivityPanel from '@/components/dashboard/ParentActivityPanel.vue'
+import ParentCourseProgressPanel from '@/components/dashboard/ParentCourseProgressPanel.vue'
 import ScreeningResultPanel from '@/components/dashboard/ScreeningResultPanel.vue'
 import { useDashboard } from '@/composable/useDashboard'
 import type { AddChildPayload, ChildStatus } from '@/types/child.types'
@@ -240,14 +240,14 @@ const formattedDate = computed(() => {
             + Tambah Anak
           </BaseButton>
           <div class="dashboard__panels">
-            <ActivityPanel :activities="activities" :loading="loading" />
-            <CourseProgressPanel
+            <ParentCourseProgressPanel
               :children="childRecords"
               :selected-child-id="selectedChildId"
               :courses="courses"
               :loading="loading"
               @child-change="selectChild"
             />
+            <ParentActivityPanel :activities="activities" :loading="loading" />
           </div>
         </div>
       </Transition>
