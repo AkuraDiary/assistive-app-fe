@@ -1,5 +1,5 @@
 import { ref, computed } from 'vue'
-import { authService, type LoginPayload, type RegisterPayload, type LoginResponse } from '@/services/AuthService'
+import { authService, type LoginPayload, type RegisterPayload, type LoginResponse } from '@/services/auth.service'
 import router from '@/router'
 
 interface User {

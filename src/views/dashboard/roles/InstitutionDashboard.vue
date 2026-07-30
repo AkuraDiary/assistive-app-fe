@@ -6,7 +6,7 @@ import SharedRecentActivity from '@/components/dashboard/SharedRecentActivity.vu
 import SharedActivityPanel from '@/components/dashboard/SharedActivityPanel.vue'
 import SharedCourseProgressPanel from '@/components/dashboard/SharedCourseProgressPanel.vue'
 import ApplicationDetailModal from '@/components/dashboard/ApplicationDetailModal.vue'
-import { dashboardService } from '@/services/DashboardService'
+import { dashboardService } from '@/services/dashboard.service'
 
 const { user } = useAuth()
 
@@ -27,16 +27,16 @@ function openDetailModal(app: any) {
   showApplicationModal.value = true
 }
 
-function handleAcceptApplication(id: string) {
-  const idx = applications.value.findIndex((a) => a.id === id)
-  if (idx !== -1) applications.value[idx].status = 'diterima'
+async function handleAcceptApplication(id: string) {
   showApplicationModal.value = false
+  await dashboardService.updateApplicationStatus(id, 'diterima')
+  await loadData()
 }
 
-function handleRejectApplication(id: string) {
-  const idx = applications.value.findIndex((a) => a.id === id)
-  if (idx !== -1) applications.value[idx].status = 'ditolak'
+async function handleRejectApplication(id: string) {
   showApplicationModal.value = false
+  await dashboardService.updateApplicationStatus(id, 'ditolak')
+  await loadData()
 }
 
 async function loadData() {
@@ -132,7 +132,8 @@ function handleStudentChange(id: string) {
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="app in applications.slice(0, 3)" :key="app.id">
+                <!-- Show only pending applications -->
+                <tr v-for="app in applications.filter(a => a.status === 'menunggu').slice(0, 3)" :key="app.id">
                   <td class="font-semibold">{{ app.name }}</td>
                   <td>{{ app.gender }}</td>
                   <td>{{ app.dob }}</td>

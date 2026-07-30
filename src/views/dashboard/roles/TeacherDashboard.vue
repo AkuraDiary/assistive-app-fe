@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useAuth } from '@/composable/useAuth'
 import SharedActivityPanel from '@/components/dashboard/SharedActivityPanel.vue'
 import SharedCourseProgressPanel from '@/components/dashboard/SharedCourseProgressPanel.vue'
-import { dashboardService } from '@/services/DashboardService'
+import { dashboardService } from '@/services/dashboard.service'
 import type { ActivityEntry } from '@/types/activity.types'
 import type { Course } from '@/types/course.types'
 

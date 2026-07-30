@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useAuth } from '@/composable/useAuth'
 import SharedRecentActivity from '@/components/dashboard/SharedRecentActivity.vue'
 import AdminStatsChart from '@/components/dashboard/AdminStatsChart.vue'
-import { dashboardService } from '@/services/DashboardService'
+import { dashboardService } from '@/services/dashboard.service'
 
 const { user } = useAuth()
 
