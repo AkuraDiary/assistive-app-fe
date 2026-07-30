@@ -15,7 +15,13 @@ export class DashboardService {
   }
 
   async getUser(): Promise<DashboardUser> {
-    if (USE_MOCK) return { _id: 'u1', name: 'Budi Santoso' }
+    if (USE_MOCK) {
+      const stored = localStorage.getItem('auth_user')
+      if (stored) {
+        return JSON.parse(stored) as DashboardUser
+      }
+      return { _id: 'u1', name: 'Budi Santoso', role: 'parent' }
+    }
     const res = await apiService.get<DashboardUser>('/me')
     return res.data!
   }

@@ -72,7 +72,7 @@ function handleYearChange(e: Event) {
         <div class="admin-dashboard__filters">
           <select class="admin-dashboard__select" :value="selectedInstitutionId" @change="handleInstitutionChange">
             <option value="all">Semua Lembaga</option>
-            <option v-for="inst in institutions" :key="inst.id" :value="inst.id">{{ inst.name }}</option>
+            <option v-for="inst in institutions" :key="inst._id" :value="inst._id">{{ inst.name }}</option>
           </select>
 
           <select class="admin-dashboard__select" :value="selectedYear" @change="handleYearChange">

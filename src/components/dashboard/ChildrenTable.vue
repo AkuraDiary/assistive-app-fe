@@ -6,78 +6,36 @@ import ChildStatusPopup from './ChildStatusPopup.vue'
 import ConfirmModal from '../shared/modal/ConfirmModal.vue'
 const popupRecord = ref<{ _id: string; applicationStatus: ChildStatus } | null>(null)
 const showDeleteConfirm = ref(false)
+import type { Lembaga } from '@/types/child.types'
+
 defineProps<{
   records: ChildRecord[]
+  institutions: Lembaga[]
   loading?: boolean
-  showActions?: boolean // NEW
 }>()
 
 const emit = defineEmits<{
-  (e: 'screening-action', id: string, action: ScreeningUIState): void
-  (e: 'status-action', id: string, status: ChildStatus): void
+  (e: 'lihat-course', id: string): void
+  (e: 'lihat-pengajuan', id: string): void
   (e: 'edit', id: string): void
-  (e: 'delete', id: string): void
 }>()
 
-const openDropdown = ref<string | null>(null)
-const openActionMenu = ref<string | null>(null)
-
-function toggleActionMenu(id: string) {
-  openActionMenu.value = openActionMenu.value === id ? null : id
-  openDropdown.value = null
-}
-function handleEdit(id: string) {
-  openActionMenu.value = null
-  emit('edit', id)
-}
-function handleDelete(id: string) {
-  openActionMenu.value = null
-  showDeleteConfirm.value = false
-  emit('delete', id)
-}
-
-function toggleDropdown(id: string) {
-  openDropdown.value = openDropdown.value === id ? null : id
-}
-
-function handleStatusTap(record: { _id: string; applicationStatus: ChildStatus }) {
-  if (record.applicationStatus === 'menunggu') {
-    return
-  }
-  popupRecord.value = { _id: record._id, applicationStatus: record.applicationStatus }
-}
-
-function handleStatusPopUp() {
-  if (popupRecord!.value!.applicationStatus === 'menunggu') {
-    return
-  }
-
-  emit('status-action', popupRecord!.value!._id, popupRecord!.value!.applicationStatus)
-  popupRecord.value = null
-}
-
-function selectScreening(id: string, action: ScreeningUIState) {
-  openDropdown.value = null
-  emit('screening-action', id, action)
-}
-
 function formatDate(iso: string) {
-  if (!iso) return ''
+  if (!iso) return '-'
   const [y, m, d] = iso.split('-')
   return `${d}/${m}/${y}`
 }
 
-const statusLabel: Record<string, string> = {
-  menunggu: 'Menunggu',
-  diterima: 'Diterima',
-  ditolak: 'Ditolak',
+function getInstitutionName(institutions: Lembaga[], institutionId: string | null | undefined) {
+  if (!institutionId) return '-'
+  const inst = institutions.find((i) => i._id === institutionId)
+  return inst ? inst.name : '-'
 }
 
-function hideAllPopUp() {
-  showDeleteConfirm.value = false
-  openActionMenu.value = null
-  openDropdown.value = null
-  popupRecord.value = null
+function getGenderLabel(gender: string | undefined) {
+  if (gender === 'laki_laki') return 'Laki-laki'
+  if (gender === 'perempuan') return 'Perempuan'
+  return '-'
 }
 </script>
 
@@ -91,109 +49,45 @@ function hideAllPopUp() {
       <thead>
         <tr class="ct__head-row">
           <th class="ct__th ct__th--name">Nama</th>
-          <th class="ct__th">Tanggal</th>
-          <th class="ct__th">Lembaga</th>
-          <th class="ct__th">Status</th>
-          <th class="ct__th">Screening ↓</th>
-          <th v-if="showActions" class="ct__th ct__th--actions" />
+          <th class="ct__th">Jenis Kelamin</th>
+          <th class="ct__th">Tanggal lahir</th>
+          <th class="ct__th">Jenis Terapi</th>
+          <th class="ct__th">Nama Lembaga Terapi</th>
+          <th class="ct__th text-center">Aksi</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="record in records" :key="record._id" class="ct__row">
           <td class="ct__td ct__td--name">
-            <div class="ct__avatar">
-              <img v-if="record.avatar" :src="record.avatar" :alt="record.fullName" />
-              <svg v-else width="28" height="28" viewBox="0 0 32 32" fill="none">
-                <circle cx="16" cy="16" r="15" stroke="#c4b5e8" stroke-width="1.5" />
-                <circle cx="16" cy="13" r="5" stroke="#c4b5e8" stroke-width="1.5" />
-                <path
-                  d="M6 27c1.5-4 5-6 10-6s8.5 2 10 6"
-                  stroke="#c4b5e8"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                />
-              </svg>
-            </div>
-            {{ record.fullName }}
+            <span class="font-semibold">{{ record.fullName }}</span>
           </td>
+          <td class="ct__td">{{ getGenderLabel(record.gender) }}</td>
           <td class="ct__td">{{ formatDate(record.dateOfBirth ?? '') }}</td>
-          <td class="ct__td">{{ record.institutionId }}</td>
-          <td class="ct__td" style="cursor: pointer" @click="handleStatusTap(record)">
-            <span class="ct__status" :class="`ct__status--${record.applicationStatus}`">
-              {{ record.applicationStatus ? statusLabel[record.applicationStatus] : 'Ditolak' }}
-            </span>
+          <td class="ct__td">
+            <span v-if="record.therapyType === 'lembaga_sekolah'" class="badge badge-lembaga"
+              >Lembaga</span
+            >
+            <span v-else class="badge badge-individu">Individu</span>
           </td>
-          <td class="ct__td ct__td-screening">
-            <!-- Disabled -->
-            <button
-              v-if="record.screeningAction === 'disable'"
-              class="ct__btn ct__btn--disable"
-              disabled
-            >
-              Disabled
-            </button>
-
-            <!-- Lihat Hasil (done) -->
-            <button
-              v-else-if="record.screeningAction === 'lihat_hasil'"
-              class="ct__btn ct__btn--filled"
-              @click="selectScreening(record._id, 'lihat_hasil')"
-            >
-              Lihat Hasil
-            </button>
-
-            <!-- Dropdown: Orang Tua / Anak -->
-            <div v-else class="ct__dropdown-wrap">
-              <button class="ct__btn ct__btn--filled" @click="toggleDropdown(record._id)">
-                {{ record.screeningAction === 'orang_tua' ? 'Orang Tua' : 'Anak' }}
-                <span class="ct__chevron">▾</span>
+          <td class="ct__td">{{ getInstitutionName(institutions, record.institutionId) }}</td>
+          <td class="ct__td">
+            <div class="ct__actions">
+              <button
+                v-if="record.applicationStatus === 'diterima'"
+                class="ct__action-btn"
+                @click="emit('lihat-course', record._id)"
+              >
+                Lihat Course
               </button>
-              <div v-if="openDropdown === record._id" class="ct__dropdown">
-                <button class="ct__dropdown-item" @click="selectScreening(record._id, 'orang_tua')">
-                  Orang Tua
-                </button>
-                <button class="ct__dropdown-item" @click="selectScreening(record._id, 'anak')">
-                  Anak
-                </button>
-              </div>
-            </div>
-          </td>
-          <td v-if="showActions" class="ct__td ct__td--actions">
-            <div class="ct__action-wrap">
-              <button class="ct__dots-btn" @click="toggleActionMenu(record._id)">···</button>
-              <div v-if="openActionMenu === record._id" class="ct__dropdown ct__dropdown--right">
-                <button class="ct__dropdown-item" @click="handleEdit(record._id)">Edit</button>
-                <button
-                  class="ct__dropdown-item ct__dropdown-item--danger"
-                  @click="showDeleteConfirm = true"
-                >
-                  Hapus
-                </button>
-              </div>
+              <button v-else class="ct__action-btn" @click="emit('lihat-pengajuan', record._id)">
+                Lihat Pengajuan
+              </button>
+              <button class="ct__action-btn" @click="emit('edit', record._id)">Edit</button>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
-    <Transition name="fade">
-      <ChildStatusPopup
-        v-if="popupRecord"
-        :status="popupRecord.applicationStatus"
-        @action="handleStatusPopUp"
-        @back="hideAllPopUp"
-      />
-    </Transition>
-
-    <Transition name="fade">
-      <ConfirmModal
-        v-if="showDeleteConfirm"
-        message="Apakah Anda Yakin Menghapus Data Anak?"
-        confirm-label="IYA"
-        cancel-label="TIDAK"
-        @confirm="handleDelete(openActionMenu ?? '')"
-        @cancel="hideAllPopUp"
-      />
-    </Transition>
   </div>
 </template>
 
@@ -213,25 +107,16 @@ function hideAllPopUp() {
 
 /* Head */
 .ct__head-row {
-  background: var(--color-info-light);
-  border-radius: var(--radius-lg);
-}
-/* 2. Round the top-left cell */
-thead tr:first-child th:first-child {
-  border-top-left-radius: 10px;
-}
-
-/* 3. Round the top-right cell */
-thead tr:first-child th:last-child {
-  border-top-right-radius: 10px;
+  background: transparent;
+  border-bottom: 1px solid #eaeaea;
 }
 
 .ct__th {
   padding: 16px 20px;
   text-align: left;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 14px;
-  color: var(--color-text-dark);
+  color: #333;
   overflow: hidden;
 }
 
@@ -267,177 +152,57 @@ thead tr:first-child th:last-child {
   padding-left: 24px;
 }
 
-.ct__avatar {
-  width: 32px;
-  height: 32px;
-  flex-shrink: 0;
-}
-
-.ct__avatar img {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
 .ct__td-screening {
   width: 14%;
 }
 
-/* Status badges */
-.ct__status {
+.ct__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.ct__action-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid #ff4d8d;
+  color: #ff4d8d;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.ct__action-btn:hover {
+  background: #fce8f0;
+}
+
+.badge {
   display: inline-block;
-  padding: 4px 14px;
+  padding: 4px 12px;
   border-radius: 999px;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
-.ct__status--menunggu {
-  background: var(--color-info-light);
-  color: var(--color-info);
-}
-.ct__status--diterima {
-  background: var(--color-success-light);
-  color: var(--color-success);
-}
-.ct__status--ditolak {
-  color: var(--color-error);
-  background: var(--color-error-light);
+.badge-lembaga {
+  background-color: #dbeafe;
+  color: #1e40af;
 }
 
-/* Buttons */
-.ct__btn {
-  padding: 6px 16px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.15s;
-  border-color: var(--color-border);
-  border: 1.5px solid;
-  color: var(--color-text-light);
-  border-color: var(--color-border);
-  background: transparent;
+.badge-individu {
+  background-color: #d1fae5;
+  color: #065f46;
 }
 
-.ct__btn--disable {
-  color: var(--color-text-light);
-  border-color: var(--color-border);
-  cursor: not-allowed;
+.font-semibold {
+  font-weight: 600;
 }
 
-.ct__btn--filled {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  color: #fff;
-
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.ct__btn--filled:hover {
-  background: var(--color-primary-light);
-  border-color: var(--color-primary-light);
-}
-
-.ct__chevron {
-  font-size: 10px;
-}
-
-/* Dropdown */
-.ct__dropdown-wrap {
-  position: relative;
-  display: inline-block;
-}
-
-.ct__dropdown {
-  position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  background: var(--color-white);
-  border-color: var(--color-primary);
-  box-shadow: var(--shadow-md);
-  border: 1.5px solid;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  z-index: 10;
-  min-width: 120px;
-  overflow: hidden;
-}
-
-.ct__dropdown-item {
-  display: block;
-  width: 100%;
-  padding: 9px 14px;
-  text-align: left;
-  background: transparent;
-  border: none;
-  font-size: 13px;
-  color: var(--color-text-dark);
-  cursor: pointer;
-  transition: background 0.15s;
-}
-
-.ct__dropdown-item:hover {
-  color: var(--color-primary);
-  background: #f0ebff;
-}
-
-/* Loading */
-.ct__loading {
-  display: flex;
-  justify-content: center;
-  padding: 3rem;
-}
-
-.ct__spinner {
-  width: 24px;
-  height: 24px;
-  border-top-color: var(--color-primary);
-  border-color: #ede8fa;
-  border: 2px solid;
-
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-}
-
-.ct__th--actions,
-.ct__td--actions {
-  width: 48px;
+.text-center {
   text-align: center;
-}
-.ct__action-wrap {
-  position: relative;
-  display: inline-block;
-}
-.ct__dropdown--right {
-  left: auto;
-  right: 0;
-  border-color: var(--color-border);
-  min-width: 130px;
-}
-.ct__dropdown-item--danger {
-  color: var(--color-error);
-}
-.ct__dropdown-item--danger:hover {
-  background: var(--color-error-light);
-  color: var(--color-error);
-}
-.ct__dots-btn {
-  background: none;
-  border: none;
-  font-size: 18px;
-  letter-spacing: 2px;
-  color: var(--color-text-light);
-  cursor: pointer;
-  padding: 4px 6px;
-  border-radius: 6px;
-  transition: background 0.15s;
-}
-.ct__dots-btn:hover {
-  background: var(--color-surface-blue);
-  color: var(--color-text-dark);
 }
 </style>

@@ -181,7 +181,39 @@ export const mockAdminChartData = {
 }
 
 export const mockInstitutions = [
-  { id: 'inst1', name: 'Klinik Tumbuh Kembang Anak', status: 'active' },
-  { id: 'inst2', name: 'Yayasan Disleksia', status: 'active' },
-  { id: 'inst3', name: 'Yayasan Peduli Anak Spesial', status: 'pending' },
+  {
+    _id: 'inst1',
+    name: 'Klinik Tumbuh Kembang Anak',
+    description: 'Fokus pada autisme dan speech delay',
+    address: 'Jakarta Selatan',
+    phone: '021-1234567'
+  },
+  {
+    _id: 'inst2',
+    name: 'Pusat Terapi Disleksia',
+    description: 'Terapi membaca dan menulis',
+    address: 'Bandung',
+    phone: '022-7654321'
+  },
+  {
+    _id: 'inst3',
+    name: 'Yayasan Peduli Anak Spesial',
+    description: 'Dukungan komprehensif ABK',
+    address: 'Surabaya',
+    phone: '031-5556667'
+  },
+  {
+    _id: 'inst4',
+    name: 'Klinik Psikologi Anak',
+    description: 'Konseling dan terapi perilaku',
+    address: 'Yogyakarta',
+    phone: '0274-888999'
+  },
+  {
+    _id: 'inst5',
+    name: 'Sentra Terapi Bermain',
+    description: 'Pendekatan melalui bermain terarah',
+    address: 'Medan',
+    phone: '061-222333'
+  },
 ]

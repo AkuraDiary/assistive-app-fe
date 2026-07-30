@@ -7,6 +7,7 @@ export interface DashboardUser {
   _id: string
   name: string
   avatar?: string
+  role?: string
 }
 
 export interface DashboardState {

@@ -25,7 +25,7 @@ export function useDashboard() {
     () => children.childRecords.value.find((c) => c._id === selectedChildId.value) ?? null,
   )
 
-  async function selectChild(id: string) {
+  async function selectChild(id: string | null) {
     selectedChildId.value = id
   }
 

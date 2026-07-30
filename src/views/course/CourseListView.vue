@@ -4,8 +4,10 @@ import { onMounted, computed } from 'vue'
 import CourseTable from '@/components/course/CourseTable.vue'
 import CoursePagination from '@/components/shared/pagination/CoursePagination.vue'
 import { useDashboard } from '@/composable/useDashboard'
+import { useAuth } from '@/composable/useAuth'
 import { useRouter } from 'vue-router'
 import type { CourseStatus } from '@/types/course.types'
+import ParentCourseSelection from '@/components/dashboard/ParentCourseSelection.vue'
 
 const router = useRouter()
 
@@ -22,6 +24,8 @@ const {
   setFilter,
   setPage,
   setPerPage,
+  user,
+  selectChild,
 } = useDashboard()
 
 onMounted(initialize)
@@ -39,70 +43,85 @@ const filterOptions: { label: string; value: CourseStatus | 'semua' }[] = [
 <template>
   <div class="cl">
     <main class="cl__main">
-      <div class="cl__card">
-        <!-- Header -->
-        <div class="cl__header">
-          <div>
-            <h1 class="cl__title">Course List</h1>
-            <p class="cl__subtitle">Total Course : {{ totalCount }}</p>
-          </div>
+      <template v-if="user?.role === 'parent' && !selectedChildId">
+        <ParentCourseSelection />
+      </template>
+      <template v-else>
+        <button
+          v-if="user?.role === 'parent' && selectedChildId"
+          class="cl__back-btn"
+          style="padding: 4px 12px; margin: 0"
+          @click="selectChild(null)"
+        >
+          ← Kembali
+        </button>
+        <div class="cl__card mt-4">
+          <!-- Header -->
+          <div class="cl__header">
+            <div>
+              <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 8px">
+                <h1 class="cl__title" style="margin: 0">Course List</h1>
+              </div>
+              <p class="cl__subtitle">Total Course : {{ totalCount }}</p>
+            </div>
 
-          <!-- Filter dropdown -->
-          <div class="cl__filter-wrap">
-            <select
-              class="cl__filter"
-              :value="filterStatus"
-              @change="
-                setFilter(($event.target as HTMLSelectElement).value as CourseStatus | 'semua')
-              "
-            >
-              <option v-for="opt in filterOptions" :key="opt.value" :value="opt.value">
-                {{ opt.label }}
-              </option>
-            </select>
+            <!-- Filter dropdown -->
+            <div class="cl__filter-wrap">
+              <select
+                class="cl__filter"
+                :value="filterStatus"
+                @change="
+                  setFilter(($event.target as HTMLSelectElement).value as CourseStatus | 'semua')
+                "
+              >
+                <option v-for="opt in filterOptions" :key="opt.value" :value="opt.value">
+                  {{ opt.label }}
+                </option>
+              </select>
+            </div>
           </div>
-        </div>
-        <div v-if="!selectedChildId" class="cl__empty-state">
-          <p class="cl__empty-text">
-            Pilih anak terlebih dahulu di Dashboard untuk melihat course.
-          </p>
-          <button class="cl__back-btn" @click="router.push('/dashboard')">
-            ← Kembali ke Dashboard
-          </button>
-        </div>
-        <!-- Table -->
-        <CourseTable
-          v-else
-          :courses="paginatedCourses"
-          :loading="loading"
-          @detail="(id) => router.push(`/course/${id}`)"
-          @action="(id) => console.log('action', id)"
-        />
-
-        <!-- Footer -->
-        <div class="cl__footer">
-          <div class="cl__per-page">
-            <span class="cl__footer-label">Tampil</span>
-            <select
-              class="cl__per-page-select"
-              :value="perPage"
-              @change="setPerPage(Number(($event.target as HTMLSelectElement).value))"
-            >
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="15">15</option>
-              <option value="20">20</option>
-            </select>
-            <span class="cl__footer-label">data per halaman</span>
+          <div v-if="!selectedChildId" class="cl__empty-state">
+            <p class="cl__empty-text">
+              Pilih anak terlebih dahulu di Dashboard untuk melihat course.
+            </p>
+            <button class="cl__back-btn" @click="router.push('/dashboard')">
+              ← Kembali ke Dashboard
+            </button>
           </div>
-
-          <CoursePagination
-            :current-page="currentPage"
-            :total-pages="totalPages"
-            @page-change="setPage"
+          <!-- Table -->
+          <CourseTable
+            v-else
+            :courses="paginatedCourses"
+            :loading="loading"
+            @detail="(id) => router.push(`/course/${id}`)"
+            @action="(id) => console.log('action', id)"
           />
+
+          <!-- Footer -->
+          <div class="cl__footer">
+            <div class="cl__per-page">
+              <span class="cl__footer-label">Tampil</span>
+              <select
+                class="cl__per-page-select"
+                :value="perPage"
+                @change="setPerPage(Number(($event.target as HTMLSelectElement).value))"
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+              </select>
+              <span class="cl__footer-label">data per halaman</span>
+            </div>
+
+            <CoursePagination
+              :current-page="currentPage"
+              :total-pages="totalPages"
+              @page-change="setPage"
+            />
+          </div>
         </div>
-      </div>
+      </template>
     </main>
   </div>
 </template>

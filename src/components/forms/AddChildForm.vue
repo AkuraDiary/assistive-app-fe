@@ -21,6 +21,7 @@ const address = ref(props.initialData?.address ?? '')
 const gender = ref<JenisKelamin | undefined>(props.initialData?.gender)
 const therapyType = ref<JenisTerapi>(props.initialData?.therapyType ?? 'individu')
 const applicationStatus = ref(props.initialData?.applicationStatus ?? 'menunggu')
+const hasDiagnosis = ref<boolean | undefined>(props.initialData?.hasDiagnosis)
 const institutionId = ref(props.initialData?.institutionId ?? '')
 const showTooltip = ref(false)
 
@@ -29,6 +30,7 @@ const isLembaga = computed(() => therapyType.value === 'lembaga_sekolah')
 function handleSubmit() {
   if (!fullName.value || !dateOfBirth.value) return
   if (isLembaga.value && !institutionId.value) return
+  if (hasDiagnosis.value === undefined) return
 
   const payload: AddChildPayload = {
     fullName: fullName.value,
@@ -36,11 +38,19 @@ function handleSubmit() {
     address: address.value || undefined,
     gender: gender.value || undefined,
     therapyType: therapyType.value,
+    hasDiagnosis: hasDiagnosis.value,
     applicationStatus: applicationStatus.value,
     institutionId: isLembaga.value ? institutionId.value : undefined,
   }
   emit('submit', payload)
 }
+
+const searchInstitution = ref('')
+const filteredLembaga = computed(() => {
+  if (!searchInstitution.value.trim()) return props.lembagaList
+  const q = searchInstitution.value.toLowerCase()
+  return props.lembagaList.filter(l => l.name.toLowerCase().includes(q))
+})
 
 const fileInput = ref<HTMLInputElement | null>(null)
 
@@ -49,65 +59,79 @@ function onAvatarChange(e: Event) {
   if (!file) return
   emit('avatar-change', file)
 }
+
+const step = ref(1)
+
+function handleNextStep() {
+  if (!fullName.value || !dateOfBirth.value) return
+  if (hasDiagnosis.value === undefined) return
+  step.value = 2
+}
 </script>
 
 <template>
   <div class="add-child-form">
     <h2 class="add-child-form__title">
-      {{ props.initialData == null ? 'Masukkan' : 'Edit' }} Data Anak
+      {{ props.initialData == null ? 'Tambah' : 'Edit' }} Data Anak
     </h2>
 
-    <div v-if="props.showAvatarEdit" class="add-child-form__avatar-section">
-      <div class="add-child-form__avatar">
-        <img
-          v-if="childAvatarUrl"
-          :src="childAvatarUrl"
-          alt="avatar"
-          class="add-child-form__avatar-img"
-        />
-        <svg v-else width="80" height="80" viewBox="0 0 80 80" fill="none">
-          <circle cx="40" cy="40" r="38" stroke="#8B73F6" stroke-width="2" />
-          <circle cx="40" cy="33" r="13" stroke="#8B73F6" stroke-width="2" />
-          <path
-            d="M15 68c4-10 12.5-15 25-15s21 5 25 15"
-            stroke="#8B73F6"
-            stroke-width="2"
-            stroke-linecap="round"
-          />
-        </svg>
+    <div v-show="step === 1" class="add-child-form__step-content">
+      <div class="add-child-form__section">
+        <span class="add-child-form__section-icon bg-pink"></span>
+        Biodata Anak
       </div>
-      <button class="add-child-form__upload-btn" @click="fileInput?.click()">
-        Unggah Foto <Pencil :size="14" />
-      </button>
-      <input
-        ref="fileInput"
-        type="file"
-        accept="image/*"
-        style="display: none"
-        @change="onAvatarChange"
-      />
-    </div>
 
-    <!-- Nama Lengkap -->
-    <div class="add-child-form__field">
-      <label class="add-child-form__label">
-        Nama Lengkap <span class="add-child-form__required">*</span>
-      </label>
-      <input v-model="fullName" class="add-child-form__input" placeholder="Contoh: Syahril" />
-    </div>
+      <div v-if="props.showAvatarEdit" class="add-child-form__avatar-section">
+        <div class="add-child-form__avatar">
+          <img
+            v-if="childAvatarUrl"
+            :src="childAvatarUrl"
+            alt="avatar"
+            class="add-child-form__avatar-img"
+          />
+          <svg v-else width="80" height="80" viewBox="0 0 80 80" fill="none">
+            <circle cx="40" cy="40" r="38" stroke="#8B73F6" stroke-width="2" />
+            <circle cx="40" cy="33" r="13" stroke="#8B73F6" stroke-width="2" />
+            <path
+              d="M15 68c4-10 12.5-15 25-15s21 5 25 15"
+              stroke="#8B73F6"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+        </div>
+        <button class="add-child-form__upload-btn" @click="fileInput?.click()">
+          Unggah Foto <Pencil :size="14" />
+        </button>
+        <input
+          ref="fileInput"
+          type="file"
+          accept="image/*"
+          style="display: none"
+          @change="onAvatarChange"
+        />
+      </div>
 
-    <!-- Tanggal Lahir -->
-    <div class="add-child-form__field">
-      <label class="add-child-form__label">
-        Tanggal Lahir <span class="add-child-form__required">*</span>
-      </label>
-      <div class="add-child-form__input add-child-form__input--date">
+      <!-- Nama Lengkap -->
+      <div class="add-child-form__field">
+        <label class="add-child-form__label">
+          Nama Lengkap <span class="add-child-form__required">*</span>
+        </label>
+        <input v-model="fullName" class="add-child-form__input" placeholder="Contoh: Syahril" />
+      </div>
+
+      <!-- Tanggal Lahir -->
+      <div class="add-child-form__field">
+        <label class="add-child-form__label">
+          Tanggal Lahir <span class="add-child-form__required">*</span>
+        </label>
+        <div class="add-child-form__input add-child-form__input--date">
         <svg
           width="16"
           height="16"
           viewBox="0 0 24 24"
           fill="none"
-          stroke="#9b8ec4"
+          stroke="#ff4d8d"
           stroke-width="2"
         >
           <rect x="3" y="4" width="18" height="18" rx="2" />
@@ -124,14 +148,37 @@ function onAvatarChange(e: Event) {
       </div>
     </div>
 
-    <!-- Alamat (hidden when Lembaga selected — per design image 1 shows it, image 2 doesn't) -->
-    <div v-if="!isLembaga" class="add-child-form__field">
-      <label class="add-child-form__label">Alamat</label>
-      <input
-        v-model="address"
-        class="add-child-form__input"
-        placeholder="Contoh: Jl.Melaril No.10"
-      />
+
+
+    <!-- Sudah pernah menjalani diagnosa? -->
+    <div class="add-child-form__field">
+      <label class="add-child-form__label">
+        Sudah pernah menjalani diagnosa? <span class="add-child-form__required">*</span>
+      </label>
+      <div class="add-child-form__radio-group">
+        <button
+          class="add-child-form__radio"
+          :class="{ 'add-child-form__radio--active': hasDiagnosis === true }"
+          @click="hasDiagnosis = true"
+        >
+          <span
+            class="add-child-form__radio-dot"
+            :class="{ 'add-child-form__radio-dot--active': hasDiagnosis === true }"
+          />
+          Sudah
+        </button>
+        <button
+          class="add-child-form__radio"
+          :class="{ 'add-child-form__radio--active': hasDiagnosis === false }"
+          @click="hasDiagnosis = false"
+        >
+          <span
+            class="add-child-form__radio-dot"
+            :class="{ 'add-child-form__radio-dot--active': hasDiagnosis === false }"
+          />
+          Belum
+        </button>
+      </div>
     </div>
 
     <!-- Jenis Kelamin -->
@@ -216,33 +263,91 @@ function onAvatarChange(e: Event) {
         </button>
       </div>
     </div>
+    </div> <!-- END STEP 1 -->
 
-    <!-- Pilih Lembaga (only when lembaga_sekolah) -->
-    <Transition name="slide">
-      <div v-if="isLembaga" class="add-child-form__field">
-        <label class="add-child-form__label">
-          Pilih Lembaga <span class="add-child-form__required">*</span>
-        </label>
-        <select v-model="institutionId" class="add-child-form__select">
-          <option value="">Pilih Lembaga</option>
-          <option
-            v-for="l in lembagaList"
-            :key="l._id"
-            :value="l._id"
-            class="add-child-form__lembaga-card"
-          >
-            {{ l.name }} - {{ l.description }}
-          </option>
-        </select>
+    <!-- STEP 2: Pilih Lembaga (only when lembaga_sekolah) -->
+    <Transition name="fade">
+      <div v-if="step === 2 && isLembaga" class="add-child-form__step-content">
+        <div class="add-child-form__section">
+          <span class="add-child-form__section-icon bg-pink"></span>
+          Data Lembaga
+        </div>
+        
+        <div class="add-child-form__search-container">
+          <input
+            v-model="searchInstitution"
+            type="text"
+            class="add-child-form__input add-child-form__search-input"
+            placeholder="Cari Nama Lembaga"
+          />
+        </div>
+
+        <div class="add-child-form__lembaga-table-wrapper">
+          <table class="add-child-form__lembaga-table">
+            <thead>
+              <tr>
+                <th>Nama Lembaga</th>
+                <th>Alamat</th>
+                <th>Nomor Telepon</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="l in filteredLembaga" :key="l._id">
+                <td class="font-semibold">{{ l.name }}</td>
+                <td>{{ l.address || '-' }}</td>
+                <td>{{ l.phone || '-' }}</td>
+                <td>
+                  <button 
+                    v-if="institutionId === l._id"
+                    class="add-child-form__btn-ajukan add-child-form__btn-ajukan--active"
+                  >
+                    Diajukan
+                  </button>
+                  <button 
+                    v-else
+                    class="add-child-form__btn-ajukan"
+                    @click="institutionId = l._id"
+                  >
+                    Ajukan
+                  </button>
+                </td>
+              </tr>
+              <tr v-if="filteredLembaga.length === 0">
+                <td colspan="4" class="text-center py-4 text-gray-500">Lembaga tidak ditemukan</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </Transition>
 
     <!-- Actions -->
     <div class="add-child-form__actions">
-      <button class="add-child-form__btn add-child-form__btn--cancel" @click="emit('cancel')">
-        Batal
+      <button 
+        v-if="step === 1" 
+        class="add-child-form__btn add-child-form__btn--cancel" 
+        @click="emit('cancel')"
+      >
+        Kembali
+      </button>
+      <button 
+        v-if="step === 2" 
+        class="add-child-form__btn add-child-form__btn--cancel" 
+        @click="step = 1"
+      >
+        Kembali
+      </button>
+
+      <button
+        v-if="step === 1 && isLembaga"
+        class="add-child-form__btn add-child-form__btn--submit"
+        @click="handleNextStep"
+      >
+        Selanjutnya
       </button>
       <button
+        v-else
         class="add-child-form__btn add-child-form__btn--submit"
         :disabled="loading"
         @click="handleSubmit"
@@ -263,11 +368,36 @@ function onAvatarChange(e: Event) {
 }
 
 .add-child-form__title {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 700;
   color: #1a1a1a;
-  text-align: center;
-  margin: 0 0 0.5rem;
+  margin: 0 0 1rem;
+}
+
+.add-child-form__section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.add-child-form__section-icon {
+  width: 16px;
+  height: 6px;
+  border-radius: 4px;
+}
+
+.bg-pink {
+  background-color: #ff4d8d;
+}
+
+.add-child-form__step-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
 .add-child-form__field {
@@ -288,8 +418,8 @@ function onAvatarChange(e: Event) {
 
 .add-child-form__input {
   padding: 10px 14px;
-  border: 1.5px solid #e0d9f5;
-  border-radius: 10px;
+  border: 1.5px solid #eaeaea;
+  border-radius: 6px;
   font-size: 14px;
   color: #2d2d2d;
   background: #fff;
@@ -298,7 +428,7 @@ function onAvatarChange(e: Event) {
 }
 
 .add-child-form__input:focus {
-  border-color: #7c5ccc;
+  border-color: #ff4d8d;
 }
 
 .add-child-form__input--date {
@@ -319,14 +449,14 @@ function onAvatarChange(e: Event) {
 
 .add-child-form__select {
   padding: 10px 14px;
-  border: 1.5px solid #e0d9f5;
-  border-radius: 10px;
+  border: 1.5px solid #eaeaea;
+  border-radius: 6px;
   font-size: 14px;
   color: #2d2d2d;
   background: #fff;
   outline: none;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239b8ec4' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23ff4d8d' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 14px center;
   cursor: pointer;
@@ -344,8 +474,8 @@ function onAvatarChange(e: Event) {
   align-items: center;
   gap: 10px;
   padding: 10px 14px;
-  border: 1.5px solid #e0d9f5;
-  border-radius: 10px;
+  border: 1.5px solid #eaeaea;
+  border-radius: 6px;
   background: #fff;
   font-size: 14px;
   color: #2d2d2d;
@@ -354,22 +484,22 @@ function onAvatarChange(e: Event) {
 }
 
 .add-child-form__radio--active {
-  border-color: #7c5ccc;
-  background: #ede8fa;
+  border-color: #ff4d8d;
+  background: #fce8f0;
 }
 
 .add-child-form__radio-dot {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  border: 2px solid #c4b5e8;
+  border: 2px solid #eaeaea;
   flex-shrink: 0;
   transition: all 0.2s;
 }
 
 .add-child-form__radio-dot--active {
-  border-color: #7c5ccc;
-  background: #7c5ccc;
+  border-color: #ff4d8d;
+  background: #ff4d8d;
 }
 
 /* Lembaga info cards */
@@ -408,22 +538,22 @@ function onAvatarChange(e: Event) {
 
 .add-child-form__btn--cancel {
   background: #fff;
-  border: 1.5px solid #c4b5e8;
-  color: #7c5ccc;
+  border: 1px solid #ff4d8d;
+  color: #ff4d8d;
 }
 
 .add-child-form__btn--cancel:hover {
-  background: #f5f0ff;
+  background: #fce8f0;
 }
 
 .add-child-form__btn--submit {
-  background: #7c5ccc;
+  background: #ff4d8d;
   border: none;
   color: #fff;
 }
 
 .add-child-form__btn--submit:hover:not(:disabled) {
-  background: #6a4db8;
+  background: #e63e7a;
 }
 
 .add-child-form__btn--submit:disabled {
@@ -619,5 +749,57 @@ function onAvatarChange(e: Event) {
 
 .add-child-form__upload-btn:hover {
   background: var(--color-surface-primary);
+}
+
+/* Lembaga Table Styles */
+.add-child-form__search-container {
+  margin-bottom: 12px;
+}
+.add-child-form__search-input {
+  width: 300px;
+}
+.add-child-form__lembaga-table-wrapper {
+  overflow-x: auto;
+  border-top: 1px solid #eaeaea;
+  margin-top: 8px;
+}
+.add-child-form__lembaga-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  text-align: left;
+}
+.add-child-form__lembaga-table th {
+  padding: 12px 16px;
+  font-weight: 600;
+  color: #2d2d2d;
+  border-bottom: 1px solid #eaeaea;
+}
+.add-child-form__lembaga-table td {
+  padding: 16px;
+  color: #555;
+  border-bottom: 1px solid #f5f5f5;
+  vertical-align: middle;
+}
+.add-child-form__btn-ajukan {
+  padding: 6px 16px;
+  border: 1px solid #ff4d8d;
+  color: #ff4d8d;
+  background: #fff;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.add-child-form__btn-ajukan:hover {
+  background: #fce8f0;
+}
+.add-child-form__btn-ajukan--active {
+  background: #ff4d8d;
+  color: #fff;
+}
+.add-child-form__btn-ajukan--active:hover {
+  background: #e63e7a;
 }
 </style>

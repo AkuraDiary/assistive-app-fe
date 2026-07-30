@@ -118,24 +118,6 @@ async function handleScreeningSubmit(payload: ScreeningPayload) {
   }
 }
 
-function handleStatusAction(id: string, status: ChildStatus) {
-  if (status === 'menunggu') return
-  if (status === 'diterima') {
-    handleScreeningAction(id, 'orang_tua')
-    return
-  }
-  if (status === 'ditolak') {
-    const record = childRecords.value.find((r) => r._id === id)
-    if (!record) return
-    overlay.openEditChild(id, {
-      fullName: record.fullName,
-      dateOfBirth: record.dateOfBirth ?? '',
-      therapyType: record.institutionId ? 'lembaga_sekolah' : 'individu',
-      institutionId: record.institutionId,
-    })
-  }
-}
-
 const props = defineProps<{
   date?: string // ISO string, defaults to today
 }>()
@@ -219,26 +201,10 @@ const formattedDate = computed(() => {
 
           <EmptyChildrenBanner
             v-if="!hasChildren && !loading"
+            class="parent-dashboard__empty"
             @add-child="overlay.openAddChild()"
-            @contact-support="() => {}"
           />
-          <ChildrenTable
-            v-else
-            :records="childRecords"
-            :loading="loading"
-            :show-actions="true"
-            @edit="handleEdit"
-            @delete="handleDelete"
-            @screening-action="handleScreeningAction"
-            @status-action="handleStatusAction"
-          />
-          <BaseButton
-            v-if="hasChildren && !loading"
-            class="dashboard__add-btn"
-            @click="overlay.openAddChild()"
-          >
-            + Tambah Anak
-          </BaseButton>
+
           <div class="dashboard__panels">
             <ParentCourseProgressPanel
               :children="childRecords"
@@ -251,8 +217,6 @@ const formattedDate = computed(() => {
           </div>
         </div>
       </Transition>
-
-
     </main>
   </div>
 </template>
