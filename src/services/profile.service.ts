@@ -1,4 +1,4 @@
-import { authAPI, type ApiResponse } from './api'
+import { apiService, type ApiResponse } from './api'
 import type { ProfileUser, UpdateProfilePayload } from '@/types/profile.types'
 const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? ''
 const USE_MOCK = !BASE_URL
@@ -15,7 +15,7 @@ let MOCK_PROFILE: ProfileUser = {
 export const profileService = {
   getProfile(): Promise<ApiResponse<ProfileUser>> {
     if (USE_MOCK) return Promise.resolve({ success: true, data: { ...MOCK_PROFILE } })
-    return authAPI.get('/profile')
+    return apiService.get('/profile')
   },
 
   updateProfile(payload: UpdateProfilePayload): Promise<ApiResponse<ProfileUser>> {
@@ -23,7 +23,7 @@ export const profileService = {
       MOCK_PROFILE = { ...MOCK_PROFILE, ...payload }
       return Promise.resolve({ success: true, data: { ...MOCK_PROFILE } })
     }
-    return authAPI.put('/profile', payload)
+    return apiService.put('/profile', payload)
   },
 
   uploadAvatar(file: File): Promise<ApiResponse<{ avatarUrl: string }>> {
@@ -34,6 +34,6 @@ export const profileService = {
     }
     const form = new FormData()
     form.append('avatar', file)
-    return authAPI.post('/profile/avatar', form)
+    return apiService.post('/profile/avatar', form)
   },
 }

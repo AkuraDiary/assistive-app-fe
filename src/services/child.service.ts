@@ -1,5 +1,5 @@
 import type { ChildRecord, AddChildPayload, Lembaga, ChildStatus } from '@/types/child.types'
-import { authAPI, USE_MOCK } from './api'
+import { apiService, USE_MOCK } from './api'
 import type { ApiResponse } from './api'
 
 const MOCK_LEMBAGA: Lembaga[] = [
@@ -43,7 +43,7 @@ export const MOCK_CHILD_RECORDS: ChildRecord[] = [
 export const childService = {
   async getChildRecords(): Promise<ChildRecord[]> {
     if (USE_MOCK) return [...MOCK_CHILD_RECORDS]
-    const res = await authAPI.get<ChildRecord[]>('/children/records')
+    const res = await apiService.get<ChildRecord[]>('/children/records')
     return res.data ?? []
   },
 
@@ -60,7 +60,7 @@ export const childService = {
       MOCK_CHILD_RECORDS.push(record)
       return record
     }
-    const res = await authAPI.post<ChildRecord>('/children/records', payload)
+    const res = await apiService.post<ChildRecord>('/children/records', payload)
     return res.data!
   },
 
@@ -78,7 +78,7 @@ export const childService = {
     }
     const form = new FormData()
     form.append('avatar', file)
-    const res = await authAPI.post<{ avatarUrl: string }>(`/children/records/${id}/avatar`, form)
+    const res = await apiService.post<{ avatarUrl: string }>(`/children/records/${id}/avatar`, form)
     return res.data!.avatarUrl
   },
   async updateChildRecord(id: string, payload: AddChildPayload): Promise<ChildRecord> {
@@ -99,7 +99,7 @@ export const childService = {
       }
       throw new Error(`Child record ${id} not found`)
     }
-    const res = await authAPI.put<ChildRecord>(`/children/records/${id}`, payload)
+    const res = await apiService.put<ChildRecord>(`/children/records/${id}`, payload)
     return res.data!
   },
 
@@ -109,12 +109,12 @@ export const childService = {
       if (index !== -1) MOCK_CHILD_RECORDS.splice(index, 1)
       return
     }
-    await authAPI.delete(`/children/records/${id}`)
+    await apiService.delete(`/children/records/${id}`)
   },
 
   async getLembagaList(): Promise<Lembaga[]> {
     if (USE_MOCK) return MOCK_LEMBAGA
-    const res = await authAPI.get<Lembaga[]>('/lembaga')
+    const res = await apiService.get<Lembaga[]>('/lembaga')
     return res.data ?? []
   },
 }

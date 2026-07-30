@@ -1,5 +1,6 @@
 import { ref, computed } from 'vue'
-import { authAPI, type LoginPayload, type RegisterPayload, type LoginResponse } from '@/services/api'
+import { authService, type LoginPayload, type RegisterPayload, type LoginResponse } from '@/services/AuthService'
+import router from '@/router'
 
 interface User {
   id: string
@@ -35,7 +36,7 @@ export function useAuth() {
     state.value.error = null
 
     try {
-      const response = await authAPI.login(payload)
+      const response = await authService.login(payload)
 
       if (!response.success || !response.data) {
         throw new Error(response.message || 'Login failed')
@@ -57,7 +58,7 @@ export function useAuth() {
       }
 
       return { success: true, user }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       const errorMsg = error.data?.message || error.message || 'Login failed'
       state.value.error = errorMsg
@@ -76,7 +77,7 @@ export function useAuth() {
     state.value.error = null
 
     try {
-      const response = await authAPI.register(payload)
+      const response = await authService.register(payload)
 
       if (!response.success || !response.data) {
         throw new Error(response.message || 'Registration failed')
@@ -101,7 +102,7 @@ export function useAuth() {
       }
 
       return { success: true, user }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       const errorMsg = error.data?.message || error.message || 'Registration failed'
       state.value.error = errorMsg
@@ -119,7 +120,7 @@ export function useAuth() {
     state.value.isLoading = true
 
     try {
-      await authAPI.logout()
+      await authService.logout()
     } catch (error) {
       console.error('Logout error:', error)
     } finally {

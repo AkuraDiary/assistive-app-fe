@@ -1,5 +1,5 @@
 import type { Course, CourseDetail } from '@/types/course.types'
-import { authAPI, USE_MOCK } from './api'
+import { apiService, USE_MOCK } from './api'
 
 const MOCK_COURSES: Course[] = [
   {
@@ -439,7 +439,7 @@ const MOCK_COURSE_DETAIL: CourseDetail[] = [
 export const courseService = {
   async getCourses(childId: string): Promise<Course[]> {
     if (USE_MOCK) return MOCK_COURSES
-    const res = await authAPI.get<Course[]>(`/children/${childId}/courses`)
+    const res = await apiService.get<Course[]>(`/children/${childId}/courses`)
     return res.data ?? []
   },
 
@@ -448,7 +448,7 @@ export const courseService = {
       const courseDetail = MOCK_COURSE_DETAIL.find((l) => l.id === courseId)
       if (courseDetail) return { ...courseDetail, id: courseId }
     }
-    const res = await authAPI.get<CourseDetail>(`/children/${childId}/courses/${courseId}`)
+    const res = await apiService.get<CourseDetail>(`/children/${childId}/courses/${courseId}`)
     return res.data!
   },
 }

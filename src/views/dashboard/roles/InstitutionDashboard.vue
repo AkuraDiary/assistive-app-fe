@@ -72,14 +72,13 @@ function handleStudentChange(id: string) {
       </p>
     </div>
 
-    <!-- Top Row: Stats and Recent Activity -->
+    <!-- Top Row: Stats and Application Table -->
     <div class="inst-dashboard__top-row">
       <div class="inst-dashboard__stats-col">
         <StatCards v-if="stats" :stats="stats" />
       </div>
-      <div class="inst-dashboard__recent-col">
-        <!-- Application Table -->
-        <div class="inst-dashboard__table-section">
+      <div class="inst-dashboard__table-col">
+        <div class="inst-dashboard__table-section inst-dashboard__table-section--compact">
           <div class="inst-dashboard__table-header">
             <div class="flex items-center gap-2">
               <svg
@@ -112,7 +111,7 @@ function handleStudentChange(id: string) {
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="app in applications" :key="app.id">
+                <tr v-for="app in applications.slice(0, 3)" :key="app.id">
                   <td class="font-semibold">{{ app.name }}</td>
                   <td>{{ app.gender }}</td>
                   <td>{{ app.dob }}</td>
@@ -185,16 +184,18 @@ function handleStudentChange(id: string) {
   flex: 1;
 }
 
-.inst-dashboard__recent-col {
+.inst-dashboard__table-col {
   width: 60%;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 @media (max-width: 1024px) {
   .inst-dashboard__top-row {
     flex-direction: column;
   }
-  .inst-dashboard__recent-col {
+  .inst-dashboard__table-col {
     width: 100%;
   }
 }
@@ -232,6 +233,11 @@ function handleStudentChange(id: string) {
   padding: 24px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
   border: 1px solid #f0f0f0;
+  height: 100%;
+}
+
+.inst-dashboard__table-section--compact {
+  padding: 20px;
 }
 
 .inst-dashboard__table-header {
@@ -265,6 +271,7 @@ function handleStudentChange(id: string) {
 .inst-dashboard__table {
   width: 100%;
   border-collapse: collapse;
+  font-size: 14px;
 }
 
 .inst-dashboard__table th {

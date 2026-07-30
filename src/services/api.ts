@@ -14,38 +14,8 @@ export interface ApiResponse<T = any> {
   errors?: Record<string, string>
 }
 
-export interface LoginPayload {
-  email: string
-  password: string
-}
+// Only generic config and ApiService class remaining
 
-export interface LoginResponse {
-  token: string
-  user: {
-    id: string
-    email: string
-    fullName: string
-    role: string
-  }
-}
-
-export interface RegisterPayload {
-  fullName: string
-  username: string
-  email: string
-  phone: string
-  password: string
-}
-
-export interface RegisterResponse {
-  user: {
-    id: string
-    email: string
-    fullName: string
-    username: string
-  }
-  token?: string
-}
 
 class ApiService {
   private baseUrl: string
@@ -96,52 +66,7 @@ class ApiService {
     }
   }
 
-  // Auth endpoints
-  async login(payload: LoginPayload): Promise<ApiResponse<LoginResponse>> {
-    // Check for dummy test accounts
-    const mockUser = getMockUser(payload.email)
-
-    if (mockUser) {
-      // Simulate network delay
-      await new Promise((resolve) => setTimeout(resolve, 500))
-      return {
-        success: true,
-        data: mockUser,
-      }
-    }
-
-    return this.request('/auth/login', {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    })
-  }
-
-  register(payload: RegisterPayload): Promise<ApiResponse<RegisterResponse>> {
-    return this.request('/auth/register', {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    })
-  }
-
-  logout(): Promise<ApiResponse<void>> {
-    return this.request('/auth/logout', {
-      method: 'POST',
-    })
-  }
-
-  forgotPassword(email: string): Promise<ApiResponse<{ message: string }>> {
-    return this.request('/auth/forgot-password', {
-      method: 'POST',
-      body: JSON.stringify({ email }),
-    })
-  }
-
-  resetPassword(token: string, password: string): Promise<ApiResponse<{ message: string }>> {
-    return this.request('/auth/reset-password', {
-      method: 'POST',
-      body: JSON.stringify({ token, password }),
-    })
-  }
+  // Auth endpoints moved to AuthService.ts
 
   // Generic GET request
   get<T>(endpoint: string): Promise<ApiResponse<T>> {
@@ -170,5 +95,5 @@ class ApiService {
   }
 }
 
-export const authAPI = new ApiService()
+export const apiService = new ApiService()
 

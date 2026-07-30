@@ -1,5 +1,5 @@
 import type { ScreeningQuestion, ScreeningPayload, ScreeningResult } from '@/types/screening.types'
-import { authAPI, USE_MOCK } from './api'
+import { apiService, USE_MOCK } from './api'
 
 const MOCK_SCREENING_QUESTIONS_ORTU: ScreeningQuestion[] = [
   { id: 'q1', order: 1, text: 'Apakah beliau mengalami kesulitan dalam mengeja?', required: true },
@@ -56,7 +56,7 @@ export const screeningService = {
       return type === 'orang_tua'
         ? [...MOCK_SCREENING_QUESTIONS_ORTU]
         : [...MOCK_SCREENING_QUESTIONS_ANAK]
-    const res = await authAPI.get<ScreeningQuestion[]>(`/screening/questions?type=${type}`)
+    const res = await apiService.get<ScreeningQuestion[]>(`/screening/questions?type=${type}`)
     return res.data ?? []
   },
 
@@ -75,7 +75,7 @@ export const screeningService = {
       })
       return
     }
-    await authAPI.post('/screening/submit', payload)
+    await apiService.post('/screening/submit', payload)
   },
 
   async getScreeningResult(childId: string): Promise<ScreeningResult[]> {
@@ -102,7 +102,7 @@ export const screeningService = {
         },
       ]
     }
-    const res = await authAPI.get<ScreeningResult[]>(`/screening/results?childId=${childId}`)
+    const res = await apiService.get<ScreeningResult[]>(`/screening/results?childId=${childId}`)
     return res.data ?? []
   },
 }
