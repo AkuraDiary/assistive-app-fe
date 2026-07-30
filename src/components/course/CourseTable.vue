@@ -5,6 +5,7 @@ import CourseStatusBadge from '@/components/shared/badge/CourseStatusBadge.vue'
 defineProps<{
   courses: Course[]
   loading?: boolean
+  showStudentName?: boolean
 }>()
 
 defineEmits<{
@@ -38,6 +39,7 @@ function formatDate(iso?: string) {
     <table v-else class="ct__table">
       <thead>
         <tr>
+          <th v-if="showStudentName" class="ct__th">Nama Anak</th>
           <th class="ct__th">Courses</th>
           <th class="ct__th">Progres</th>
           <th class="ct__th">Tanggal Mulai</th>
@@ -47,6 +49,11 @@ function formatDate(iso?: string) {
       </thead>
       <tbody>
         <tr v-for="course in courses" :key="course.id" class="ct__row">
+          <!-- Student name -->
+          <td v-if="showStudentName" class="ct__td">
+            <p class="ct__name">{{ course.studentName || '-' }}</p>
+          </td>
+
           <!-- Course name + level -->
           <td class="ct__td">
             <div class="ct__course-cell">
@@ -229,17 +236,17 @@ function formatDate(iso?: string) {
 }
 .ct__btn-detail {
   padding: 5px 14px;
-  border-radius: 8px;
-  border: 1.5px solid var(--color-primary);
+  border-radius: 99px; /* Pill shape */
+  border: 1.5px solid #EC4899; /* Pink border */
   background: transparent;
   font-size: 13px;
   font-weight: 500;
-  color: var(--color-primary);
+  color: #EC4899; /* Pink text */
   cursor: pointer;
   transition: all 0.15s;
 }
 .ct__btn-detail:hover {
-  background: var(--color-primary);
+  background: #EC4899;
   color: #fff;
 }
 .ct__btn-more {

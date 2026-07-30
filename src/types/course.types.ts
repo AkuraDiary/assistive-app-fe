@@ -18,6 +18,7 @@ export interface Course {
   tanggalMulai?: string
   status?: CourseStatus
   exercises?: CourseExercise[]  // ← kept for dashboard panel
+  studentName?: string // Used for Teacher view
 }
 
 // Used by detail page (rich)

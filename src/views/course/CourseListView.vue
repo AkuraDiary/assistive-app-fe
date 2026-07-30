@@ -80,7 +80,7 @@ const filterOptions: { label: string; value: CourseStatus | 'semua' }[] = [
               </select>
             </div>
           </div>
-          <div v-if="!selectedChildId" class="cl__empty-state">
+          <div v-if="user?.role === 'parent' && !selectedChildId" class="cl__empty-state">
             <p class="cl__empty-text">
               Pilih anak terlebih dahulu di Dashboard untuk melihat course.
             </p>
@@ -93,6 +93,7 @@ const filterOptions: { label: string; value: CourseStatus | 'semua' }[] = [
             v-else
             :courses="paginatedCourses"
             :loading="loading"
+            :show-student-name="user?.role === 'teacher' || user?.role === 'institution'"
             @detail="(id) => router.push(`/course/${id}`)"
             @action="(id) => console.log('action', id)"
           />

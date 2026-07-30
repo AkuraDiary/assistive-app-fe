@@ -122,6 +122,42 @@ const MOCK_COURSES: Course[] = [
   },
 ]
 
+const MOCK_TEACHER_COURSES: Course[] = [
+  {
+    id: 'tc1',
+    name: 'Pengenalan Huruf',
+    level: 'Level : 2 (Dua)',
+    progress: 80,
+    completedSessions: 4,
+    totalSessions: 5,
+    tanggalMulai: '2026-05-20',
+    status: 'dipelajari',
+    studentName: 'Budiman',
+  },
+  {
+    id: 'tc2',
+    name: 'Pengenalan Huruf',
+    level: 'Level : 2 (Dua)',
+    progress: 80,
+    completedSessions: 4,
+    totalSessions: 5,
+    tanggalMulai: '2026-05-20',
+    status: 'belum', // Menunggu is mapped to belum visually in badges? Actually the mockup says 'Menunggu'. Our CourseStatus is 'dipelajari'|'selesai'|'belum'. Let's use 'belum' which is visually similar, but maybe we need 'menunggu'? Let's keep it 'belum' for now.
+    studentName: 'Budiman',
+  },
+  {
+    id: 'tc3',
+    name: 'Pengenalan Huruf',
+    level: 'Level : 2 (Dua)',
+    progress: 100,
+    completedSessions: 5,
+    totalSessions: 5,
+    tanggalMulai: '2026-05-20',
+    status: 'selesai',
+    studentName: 'Budiman',
+  },
+]
+
 const MOCK_COURSE_DETAIL: CourseDetail[] = [
   {
     id: 'cr1',
@@ -440,6 +476,13 @@ export const courseService = {
   async getCourses(childId: string): Promise<Course[]> {
     if (USE_MOCK) return MOCK_COURSES
     const res = await apiService.get<Course[]>(`/children/${childId}/courses`)
+    return res.data ?? []
+  },
+
+  async getAllStudentCourses(): Promise<Course[]> {
+    if (USE_MOCK) return MOCK_TEACHER_COURSES
+    // Backend would need an endpoint to fetch all courses for all students managed by the teacher
+    const res = await apiService.get<Course[]>(`/teacher/courses`)
     return res.data ?? []
   },
 

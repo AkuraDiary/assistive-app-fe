@@ -26,6 +26,11 @@ export function useCourse() {
     currentPage.value = 1
   }
 
+  async function fetchAllStudentCourses() {
+    courses.value = await courseService.getAllStudentCourses()
+    currentPage.value = 1
+  }
+
   function setFilter(status: CourseStatus | 'semua') {
     filterStatus.value = status
     currentPage.value = 1
@@ -49,6 +54,7 @@ export function useCourse() {
     perPage,
     totalPages,
     fetchCourses,
+    fetchAllStudentCourses,
     setFilter,
     setPage,
     setPerPage,

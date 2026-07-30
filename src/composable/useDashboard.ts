@@ -46,9 +46,11 @@ export function useDashboard() {
   }
 
   watch(
-    selectedChildId,
-    (id) => {
-      if (id) {
+    [selectedChildId, user],
+    ([id, currentUser]) => {
+      if (currentUser?.role === 'teacher' || currentUser?.role === 'institution') {
+        course.fetchAllStudentCourses()
+      } else if (id) {
         course.fetchCourses(id)
         activity.fetchActivities(id)
       }
