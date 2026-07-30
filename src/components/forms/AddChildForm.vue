@@ -26,6 +26,7 @@ const institutionId = ref(props.initialData?.institutionId ?? '')
 const showTooltip = ref(false)
 
 const isLembaga = computed(() => therapyType.value === 'lembaga_sekolah')
+const isAccepted = computed(() => applicationStatus.value === 'diterima')
 
 function handleSubmit() {
   if (!fullName.value || !dateOfBirth.value) return
@@ -242,6 +243,7 @@ function handleNextStep() {
         <button
           class="add-child-form__radio"
           :class="{ 'add-child-form__radio--active': therapyType === 'individu' }"
+          :disabled="isAccepted"
           @click="therapyType = 'individu'"
         >
           <span
@@ -253,6 +255,7 @@ function handleNextStep() {
         <button
           class="add-child-form__radio"
           :class="{ 'add-child-form__radio--active': therapyType === 'lembaga_sekolah' }"
+          :disabled="isAccepted"
           @click="therapyType = 'lembaga_sekolah'"
         >
           <span
@@ -340,7 +343,7 @@ function handleNextStep() {
       </button>
 
       <button
-        v-if="step === 1 && isLembaga"
+        v-if="step === 1 && isLembaga && !isAccepted"
         class="add-child-form__btn add-child-form__btn--submit"
         @click="handleNextStep"
       >
@@ -486,6 +489,11 @@ function handleNextStep() {
 .add-child-form__radio--active {
   border-color: #ff4d8d;
   background: #fce8f0;
+}
+
+.add-child-form__radio:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .add-child-form__radio-dot {

@@ -37,9 +37,11 @@ function handleEdit(id: string) {
   overlay.openEditChild(id, {
     fullName: record.fullName,
     dateOfBirth: record.dateOfBirth ?? '',
+    gender: record.gender,
     therapyType: record.institutionId ? 'lembaga_sekolah' : 'individu',
     institutionId: record.institutionId,
     hasDiagnosis: record.hasDiagnosis,
+    applicationStatus: record.applicationStatus,
   })
 }
 
