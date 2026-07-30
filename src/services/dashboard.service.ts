@@ -10,7 +10,7 @@ export class DashboardService {
     await new Promise((resolve) => setTimeout(resolve, 300))
     return {
       success: true,
-      data: mockStudents,
+      data: [...mockStudents],
     }
   }
 
@@ -25,7 +25,7 @@ export class DashboardService {
     // In a real app we'd filter by studentId, here we return the mock list
     return {
       success: true,
-      data: mockActivities,
+      data: [...mockActivities],
     }
   }
 
@@ -34,7 +34,7 @@ export class DashboardService {
     // Filter by studentId if needed
     return {
       success: true,
-      data: mockCourses,
+      data: [...mockCourses],
     }
   }
 
@@ -43,9 +43,9 @@ export class DashboardService {
     return {
       success: true,
       data: {
-        stats: mockInstitutionStats,
-        recentActivities: mockInstitutionActivities,
-        applications: mockApplications,
+        stats: { ...mockInstitutionStats },
+        recentActivities: [...mockInstitutionActivities],
+        applications: [...mockApplications],
       }
     }
   }
@@ -55,9 +55,9 @@ export class DashboardService {
     return {
       success: true,
       data: {
-        recentActivities: mockAdminActivities,
-        chartData: mockAdminChartData,
-        institutions: mockInstitutions,
+        recentActivities: [...mockAdminActivities],
+        chartData: { ...mockAdminChartData },
+        institutions: [...mockInstitutions],
       }
     }
   }

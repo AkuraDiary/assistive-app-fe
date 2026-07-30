@@ -80,7 +80,7 @@ const router = createRouter({
           component: ProfileView,
         },
         // Placeholder routes for other roles
-        { path: '/pendaftaran', name: 'pendaftaran', component: () => import('@/views/dashboard/roles/PlaceholderView.vue') },
+        { path: '/pendaftaran', name: 'pendaftaran', component: () => import('@/views/dashboard/roles/PendaftaranView.vue') },
         { path: '/siswa', name: 'siswa', component: () => import('@/views/dashboard/roles/PlaceholderView.vue') },
         { path: '/guru', name: 'guru', component: () => import('@/views/dashboard/roles/PlaceholderView.vue') },
         { path: '/lembaga', name: 'lembaga', component: () => import('@/views/dashboard/roles/PlaceholderView.vue') },
