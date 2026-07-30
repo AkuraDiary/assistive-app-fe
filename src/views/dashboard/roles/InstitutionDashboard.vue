@@ -5,6 +5,7 @@ import StatCards from '@/components/dashboard/StatCards.vue'
 import SharedRecentActivity from '@/components/dashboard/SharedRecentActivity.vue'
 import SharedActivityPanel from '@/components/dashboard/SharedActivityPanel.vue'
 import SharedCourseProgressPanel from '@/components/dashboard/SharedCourseProgressPanel.vue'
+import ApplicationDetailModal from '@/components/dashboard/ApplicationDetailModal.vue'
 import { dashboardService } from '@/services/DashboardService'
 
 const { user } = useAuth()
@@ -17,6 +18,26 @@ const courses = ref<any[]>([])
 const students = ref<any[]>([])
 const selectedStudentId = ref<string | null>(null)
 const applications = ref<any[]>([])
+
+const showApplicationModal = ref(false)
+const selectedApplication = ref<any>(null)
+
+function openDetailModal(app: any) {
+  selectedApplication.value = app
+  showApplicationModal.value = true
+}
+
+function handleAcceptApplication(id: string) {
+  const idx = applications.value.findIndex((a) => a.id === id)
+  if (idx !== -1) applications.value[idx].status = 'diterima'
+  showApplicationModal.value = false
+}
+
+function handleRejectApplication(id: string) {
+  const idx = applications.value.findIndex((a) => a.id === id)
+  if (idx !== -1) applications.value[idx].status = 'ditolak'
+  showApplicationModal.value = false
+}
 
 async function loadData() {
   loading.value = true
@@ -117,8 +138,8 @@ function handleStudentChange(id: string) {
                   <td>{{ app.dob }}</td>
                   <td class="text-right">
                     <div class="flex items-center justify-end gap-3">
-                      <button class="inst-dashboard__btn-outline">Detail</button>
-                      <button class="inst-dashboard__btn-primary">Terima Pengajuan</button>
+                      <button class="inst-dashboard__btn-outline" @click="openDetailModal(app)">Detail</button>
+                      <button class="inst-dashboard__btn-primary" @click="handleAcceptApplication(app.id)">Terima Pengajuan</button>
                     </div>
                   </td>
                 </tr>
@@ -146,6 +167,14 @@ function handleStudentChange(id: string) {
     </div>
 
     <SharedRecentActivity :activities="recentActivities" />
+
+    <ApplicationDetailModal
+      :show="showApplicationModal"
+      :application="selectedApplication"
+      @close="showApplicationModal = false"
+      @accept="handleAcceptApplication"
+      @reject="handleRejectApplication"
+    />
   </div>
 </template>
 
