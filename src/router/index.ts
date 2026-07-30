@@ -81,7 +81,7 @@ const router = createRouter({
         },
         // Placeholder routes for other roles
         { path: '/pendaftaran', name: 'pendaftaran', component: () => import('@/views/dashboard/roles/PendaftaranView.vue') },
-        { path: '/siswa', name: 'siswa', component: () => import('@/views/dashboard/roles/PlaceholderView.vue') },
+        { path: '/siswa', name: 'siswa', component: () => import('@/views/dashboard/roles/SiswaView.vue') },
         { path: '/guru', name: 'guru', component: () => import('@/views/dashboard/roles/PlaceholderView.vue') },
         { path: '/lembaga', name: 'lembaga', component: () => import('@/views/dashboard/roles/PlaceholderView.vue') },
         { path: '/paket-penjualan', name: 'paket-penjualan', component: () => import('@/views/dashboard/roles/PlaceholderView.vue') },

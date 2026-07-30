@@ -3,9 +3,11 @@ import type { Course } from '@/types/course.types'
 
 // Mock Students for Teacher/Institution
 export const mockStudents = [
-  { _id: 's1', fullName: 'Fatur rahman', age: 7, gender: 'L' },
-  { _id: 's2', fullName: 'Budi Santoso', age: 8, gender: 'L' },
-  { _id: 's3', fullName: 'Siti Aminah', age: 7, gender: 'P' },
+  { _id: 's1', fullName: 'Rizky Pratama', gender: 'L', dateOfBirth: '30 Juni 2017', parentName: 'Agus Dermawan', teacherName: 'Riya Wijaya', status: 'aktif' },
+  { _id: 's2', fullName: 'Nabila Putri', gender: 'P', dateOfBirth: '18 September 2016', parentName: 'Rinaawati', teacherName: 'Riya Wijaya', status: 'aktif' },
+  { _id: 's3', fullName: 'Dimas Aditya', gender: 'L', dateOfBirth: '03 Februari 2015', parentName: 'Joko Susilo', teacherName: 'Riya Wijaya', status: 'aktif' },
+  { _id: 's4', fullName: 'Amelia Rosa', gender: 'P', dateOfBirth: '25 November 2017', parentName: 'Sari Indah', teacherName: 'Riya Wijaya', status: 'nonaktif' },
+  { _id: 's5', fullName: 'Kevin Sanjaya', gender: 'L', dateOfBirth: '09 Juli 2016', parentName: 'Rudi Hermawan', teacherName: 'Mamang Hermanto', status: 'nonaktif' },
 ]
 
 export const mockActivities: ActivityEntry[] = [

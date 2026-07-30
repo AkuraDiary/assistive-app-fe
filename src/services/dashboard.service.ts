@@ -76,6 +76,15 @@ export class DashboardService {
     }
     return { success: true }
   }
+
+  async updateStudentStatus(id: string, status: 'aktif' | 'nonaktif'): Promise<ApiResponse<void>> {
+    await new Promise((resolve) => setTimeout(resolve, 300))
+    const index = mockStudents.findIndex((s) => s._id === id)
+    if (index !== -1 && mockStudents[index]) {
+      mockStudents[index]!.status = status
+    }
+    return { success: true }
+  }
 }
 
 export const dashboardService = new DashboardService()
