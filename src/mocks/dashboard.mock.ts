@@ -193,34 +193,49 @@ export const mockInstitutions = [
     name: 'Klinik Tumbuh Kembang Anak',
     description: 'Fokus pada autisme dan speech delay',
     address: 'Jakarta Selatan',
-    phone: '021-1234567'
+    phone: '021-1234567',
+    email: 'kliniktumbuhkembang@gmail.com',
+    status: 'aktif',
+    username: 'kliniktumbuhkembanganak'
   },
   {
     _id: 'inst2',
     name: 'Pusat Terapi Disleksia',
     description: 'Terapi membaca dan menulis',
     address: 'Bandung',
-    phone: '022-7654321'
+    phone: '022-7654321',
+    email: 'pusatterapidisleksia@gmail.com',
+    status: 'aktif',
+    username: 'pusatterapidisleksia'
   },
   {
     _id: 'inst3',
     name: 'Yayasan Peduli Anak Spesial',
     description: 'Dukungan komprehensif ABK',
     address: 'Surabaya',
-    phone: '031-5556667'
+    phone: '031-5556667',
+    email: 'yayasanpedulianakspesial@gmail.com',
+    status: 'aktif',
+    username: 'yayasanpedulianakspesial'
   },
   {
     _id: 'inst4',
     name: 'Klinik Psikologi Anak',
     description: 'Konseling dan terapi perilaku',
     address: 'Yogyakarta',
-    phone: '0274-888999'
+    phone: '0274-888999',
+    email: 'klinikpsikologianak@gmail.com',
+    status: 'aktif',
+    username: 'klinikpsikologianak'
   },
   {
     _id: 'inst5',
     name: 'Sentra Terapi Bermain',
     description: 'Pendekatan melalui bermain terarah',
     address: 'Medan',
-    phone: '061-222333'
+    phone: '061-222333',
+    email: 'sentraterapibermain@gmail.com',
+    status: 'aktif',
+    username: 'sentraterapibermain'
   },
 ]

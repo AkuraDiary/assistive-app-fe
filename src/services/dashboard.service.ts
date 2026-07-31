@@ -82,6 +82,57 @@ export class DashboardService {
     }
   }
 
+  async getInstitutions(): Promise<ApiResponse<any[]>> {
+    await new Promise((resolve) => setTimeout(resolve, 300))
+    return {
+      success: true,
+      data: [...mockInstitutions],
+    }
+  }
+
+  async getInstitutionById(id: string): Promise<ApiResponse<any>> {
+    await new Promise((resolve) => setTimeout(resolve, 300))
+    const institution = mockInstitutions.find(i => i._id === id)
+    return {
+      success: !!institution,
+      data: institution
+    }
+  }
+
+  async createInstitution(data: any): Promise<ApiResponse<void>> {
+    await new Promise((resolve) => setTimeout(resolve, 300))
+    const newId = 'inst' + (mockInstitutions.length + 1)
+    mockInstitutions.push({
+      _id: newId,
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      address: data.address,
+      description: data.name,
+      status: 'aktif',
+      username: data.name.toLowerCase().replace(/\s+/g, '')
+    })
+    return { success: true }
+  }
+
+  async updateInstitution(id: string, data: any): Promise<ApiResponse<void>> {
+    await new Promise((resolve) => setTimeout(resolve, 300))
+    const index = mockInstitutions.findIndex(i => i._id === id)
+    if (index !== -1 && mockInstitutions[index]) {
+      mockInstitutions[index] = { ...mockInstitutions[index], ...data }
+    }
+    return { success: true }
+  }
+
+  async toggleInstitutionStatus(id: string): Promise<ApiResponse<void>> {
+    await new Promise((resolve) => setTimeout(resolve, 300))
+    const index = mockInstitutions.findIndex(i => i._id === id)
+    if (index !== -1 && mockInstitutions[index]) {
+      mockInstitutions[index].status = mockInstitutions[index].status === 'aktif' ? 'nonaktif' : 'aktif'
+    }
+    return { success: true }
+  }
+
   async getAdminDashboardData(): Promise<ApiResponse<any>> {
     await new Promise((resolve) => setTimeout(resolve, 300))
     return {

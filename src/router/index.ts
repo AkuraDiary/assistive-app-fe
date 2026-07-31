@@ -84,7 +84,10 @@ const router = createRouter({
         { path: '/siswa', name: 'siswa', component: () => import('@/views/dashboard/roles/SiswaView.vue') },
         { path: '/guru', name: 'guru', component: () => import('@/views/dashboard/roles/GuruView.vue') },
         { path: '/guru/:id', name: 'guru-detail', component: () => import('@/views/dashboard/roles/GuruDetailView.vue') },
-        { path: '/lembaga', name: 'lembaga', component: () => import('@/views/dashboard/roles/PlaceholderView.vue') },
+        { path: '/lembaga', name: 'lembaga', component: () => import('@/views/dashboard/roles/LembagaListView.vue') },
+        { path: '/lembaga/create', name: 'lembaga-create', component: () => import('@/views/dashboard/roles/LembagaFormView.vue') },
+        { path: '/lembaga/:id/edit', name: 'lembaga-edit', component: () => import('@/views/dashboard/roles/LembagaFormView.vue') },
+        { path: '/lembaga/:id', name: 'lembaga-detail', component: () => import('@/views/dashboard/roles/LembagaDetailView.vue') },
         { path: '/paket-penjualan', name: 'paket-penjualan', component: () => import('@/views/dashboard/roles/PlaceholderView.vue') },
         { path: '/manajemen-pengguna', name: 'manajemen-pengguna', component: () => import('@/views/dashboard/roles/PlaceholderView.vue') },
         {
