@@ -60,7 +60,7 @@ const filterOptions: { label: string; value: CourseStatus | 'semua' }[] = [
           <div class="cl__header">
             <div>
               <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 8px">
-                <h1 class="cl__title" style="margin: 0">Course List</h1>
+                <h1 class="cl__title" style="margin: 0">Daftar Course</h1>
               </div>
               <p class="cl__subtitle">Total Course : {{ totalCount }}</p>
             </div>
@@ -141,7 +141,7 @@ const filterOptions: { label: string; value: CourseStatus | 'semua' }[] = [
 }
 
 .cl__card {
-  background: var(--color-primary-muted);
+  background: var(--color-background);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
   display: flex;

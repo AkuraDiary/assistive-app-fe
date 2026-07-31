@@ -3,11 +3,16 @@ import type { Course } from '@/types/course.types'
 
 // Mock Students for Teacher/Institution
 export const mockStudents = [
-  { _id: 's1', fullName: 'Rizky Pratama', gender: 'L', dateOfBirth: '30 Juni 2017', parentName: 'Agus Dermawan', teacherName: 'Riya Wijaya', status: 'aktif' },
-  { _id: 's2', fullName: 'Nabila Putri', gender: 'P', dateOfBirth: '18 September 2016', parentName: 'Rinaawati', teacherName: 'Riya Wijaya', status: 'aktif' },
-  { _id: 's3', fullName: 'Dimas Aditya', gender: 'L', dateOfBirth: '03 Februari 2015', parentName: 'Joko Susilo', teacherName: 'Riya Wijaya', status: 'aktif' },
-  { _id: 's4', fullName: 'Amelia Rosa', gender: 'P', dateOfBirth: '25 November 2017', parentName: 'Sari Indah', teacherName: 'Riya Wijaya', status: 'nonaktif' },
-  { _id: 's5', fullName: 'Kevin Sanjaya', gender: 'L', dateOfBirth: '09 Juli 2016', parentName: 'Rudi Hermawan', teacherName: 'Mamang Hermanto', status: 'nonaktif' },
+  { _id: 's1', fullName: 'Budiman', gender: 'L', dateOfBirth: '20 Mei 2016', parentName: 'Agus Dermawan', teacherName: 'Riya Wijaya', teacherId: 't1', status: 'aktif', jenisTerapi: 'Lembaga', lembagaTerapi: 'Klinik Tumbuh Kembang Anak' },
+  { _id: 's2', fullName: 'Komang', gender: 'L', dateOfBirth: '20 Mei 2016', parentName: 'Rinaawati', teacherName: 'Riya Wijaya', teacherId: 't1', status: 'aktif', jenisTerapi: 'Lembaga', lembagaTerapi: '-' },
+  { _id: 's3', fullName: 'Bumandi', gender: 'P', dateOfBirth: '20 Mei 2016', parentName: 'Joko Susilo', teacherName: 'Riya Wijaya', teacherId: 't1', status: 'aktif', jenisTerapi: 'Individu', lembagaTerapi: '-' },
+  { _id: 's4', fullName: 'Amelia Rosa', gender: 'P', dateOfBirth: '25 November 2017', parentName: 'Sari Indah', teacherName: 'Riya Wijaya', teacherId: 't1', status: 'nonaktif', jenisTerapi: 'Lembaga', lembagaTerapi: 'Klinik Tumbuh Kembang Anak' },
+  { _id: 's5', fullName: 'Kevin Sanjaya', gender: 'L', dateOfBirth: '09 Juli 2016', parentName: 'Rudi Hermawan', teacherName: 'Mamang Hermanto', teacherId: 't2', status: 'nonaktif', jenisTerapi: 'Individu', lembagaTerapi: '-' },
+]
+
+export const mockTeachers = [
+  { _id: 't1', fullName: 'Riya Wijaya', gender: 'P', dateOfBirth: '15 Januari 1990', phone: '08123456789', address: 'Jl. Sukarejo' },
+  { _id: 't2', fullName: 'Mamang Hermanto', gender: 'L', dateOfBirth: '20 Maret 1988', phone: '08987654321', address: 'Jl. Kebon Kacang' },
 ]
 
 export const mockActivities: ActivityEntry[] = [

@@ -1,4 +1,4 @@
-import { mockStudents, mockActivities, mockCourses, mockInstitutionStats, mockInstitutionActivities, mockApplications, mockAdminActivities, mockAdminChartData, mockInstitutions } from '@/mocks/dashboard.mock'
+import { mockStudents, mockTeachers, mockActivities, mockCourses, mockInstitutionStats, mockInstitutionActivities, mockApplications, mockAdminActivities, mockAdminChartData, mockInstitutions } from '@/mocks/dashboard.mock'
 import type { ApiResponse } from '@/services/api'
 import type { ActivityEntry } from '@/types/activity.types'
 import type { Course } from '@/types/course.types'
@@ -11,6 +11,32 @@ export class DashboardService {
     return {
       success: true,
       data: [...mockStudents],
+    }
+  }
+
+  async getTeachers(): Promise<ApiResponse<any[]>> {
+    await new Promise((resolve) => setTimeout(resolve, 300))
+    return {
+      success: true,
+      data: [...mockTeachers],
+    }
+  }
+
+  async getTeacherById(id: string): Promise<ApiResponse<any>> {
+    await new Promise((resolve) => setTimeout(resolve, 300))
+    const teacher = mockTeachers.find((t) => t._id === id)
+    return {
+      success: !!teacher,
+      data: teacher,
+    }
+  }
+
+  async getStudentsByTeacherId(teacherId: string): Promise<ApiResponse<any[]>> {
+    await new Promise((resolve) => setTimeout(resolve, 300))
+    const students = mockStudents.filter((s) => s.teacherId === teacherId)
+    return {
+      success: true,
+      data: students,
     }
   }
 
