@@ -22,8 +22,12 @@ onMounted(() => {
 })
 
 // Separate modules by type
-const materiModules = computed(() => courseDetail.value?.modules.filter(m => m.type === 'materi') ?? [])
-const assessmentModules = computed(() => courseDetail.value?.modules.filter(m => m.type === 'assessment') ?? [])
+const materiModules = computed(
+  () => courseDetail.value?.modules.filter((m) => m.type === 'materi') ?? [],
+)
+const assessmentModules = computed(
+  () => courseDetail.value?.modules.filter((m) => m.type === 'assessment') ?? [],
+)
 
 function onOpenMateri(moduleId: string) {
   router.push({
@@ -52,13 +56,32 @@ function onLanjut() {
   <div class="cdv-page">
     <div v-if="loading" class="cdv-page__loading">Loading course detail...</div>
     <div v-else-if="error" class="cdv-page__error">{{ error }}</div>
-    
+
     <template v-else-if="courseDetail">
-      <CourseDetailHeader :course="courseDetail" />
+      <div class="cdv-page__header-actions">
+        <CourseDetailHeader :course="courseDetail" />
+
+        <button
+          class="cdv-btn cdv-btn--primary"
+          @click="router.push({ name: 'tambah-modul', params: { courseId: courseId } })"
+        >
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+          Tambah Modul Baru
+        </button>
+      </div>
 
       <div class="cdv-page__body">
         <CourseOverallProgress :progress="courseDetail.progress" />
-        
+
         <div class="cdv-page__sections-title">Pilih Modul</div>
 
         <!-- Latihan / Materi List -->
@@ -78,15 +101,33 @@ function onLanjut() {
 
       <div class="cdv-page__actions">
         <button class="cdv-btn cdv-btn--outline" @click="goBack">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M15 18l-6-6 6-6"/>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M15 18l-6-6 6-6" />
           </svg>
           Kembali
         </button>
         <button class="cdv-btn cdv-btn--outline" @click="onLanjut">
           Lanjut
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 18l6-6-6-6"/>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M9 18l6-6-6-6" />
           </svg>
         </button>
       </div>
@@ -141,7 +182,7 @@ function onLanjut() {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  width: 110px;
+  height: fit-content;
   padding: 10px;
   border-radius: 8px;
   font-size: 13px;
@@ -158,5 +199,25 @@ function onLanjut() {
 
 .cdv-btn--outline:hover {
   background: rgba(255, 60, 138, 0.05); /* Faint pink hover */
+}
+
+.cdv-page__header-actions {
+  display: flex;
+  align-items: flex-center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.cdv-btn--primary {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 12px rgba(255, 60, 138, 0.2);
+}
+
+.cdv-btn--primary:hover {
+  background: #e62c76;
+  transform: translateY(-1px);
 }
 </style>
