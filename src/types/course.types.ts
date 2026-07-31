@@ -21,40 +21,28 @@ export interface Course {
   studentName?: string // Used for Teacher view
 }
 
-// Used by detail page (rich)
-export interface LatihanItem {
+export type ModuleType = 'materi' | 'assessment'
+
+export interface CourseModule {
   id: string
   title: string
   description?: string
-  progress: number
+  type: ModuleType
+  progress?: number
   tanggalDikerjakan?: string
   isLocked: boolean
-  materi?: MateriContent[] 
-}
-
-export interface Modul {
-  id: string
-  label: string
-  description?: string
-  latihan: LatihanItem[]
-}
-
-export interface AssessmentItem {
-  id: string
-  title: string
-  description?: string
-  level: string
-  skills: string[]
-  tanggalDikerjakan?: string
-  isLocked: boolean
+  
+  // If materi
+  materi?: MateriContent[]
+  
+  // If assessment
+  level?: string
+  skills?: string[]
 }
 
 export interface CourseDetail extends Course {
   description?: string
-  totalModul: number
-  totalAssessment: number
-  moduls: Modul[]
-  assessments: AssessmentItem[]
+  modules: CourseModule[]
 }
 
 

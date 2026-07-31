@@ -11,6 +11,7 @@ import ScreeningView from '@/views/screening/ScreeningView.vue'
 import ProfileView from '@/views/profile/ProfileView.vue'
 import CourseListView from '@/views/course/CourseListView.vue'
 import CourseDetailView from '@/views/course/CourseDetailView.vue'
+import ModulFormView from '@/views/course/ModulFormView.vue'
 import MateriView from '@/views/course/MateriView.vue'
 import DashboardLayout from '@/layouts/DashboardLayout.vue'
 
@@ -102,6 +103,11 @@ const router = createRouter({
           path: '/course/:courseId/latihan/:latihanId/materi',
           name: 'materi',
           component: MateriView,
+        },
+        {
+          path: '/course/:courseId/tambah-modul',
+          name: 'tambah-modul',
+          component: ModulFormView,
         },
         {
           path: '/course/:courseId',

@@ -140,7 +140,7 @@ function handleSubmit() {
 
 .sf__required-note {
   font-size: 13px;
-  color: var(--color-secondary);
+  color: var(--color-primary);
   margin: 0;
 }
 
@@ -195,7 +195,7 @@ function handleSubmit() {
 }
 
 .sf__required {
-  color: var(--color-secondary);
+  color: var(--color-primary);
   margin-left: 2px;
 }
 

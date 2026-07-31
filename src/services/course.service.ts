@@ -169,151 +169,65 @@ const MOCK_COURSE_DETAIL: CourseDetail[] = [
     totalSessions: 4,
     tanggalMulai: '2026-05-20',
     status: 'dipelajari',
-    totalModul: 3,
-    totalAssessment: 1,
-   
-    exercises: [
-      { id: 'ex1', title: 'Mengenal Huruf Vocal', progress: 70 },
-      { id: 'ex2', title: 'Mengenal Huruf Konsonan', progress: 85 },
-    ],
-    moduls: [
+    modules: [
       {
-        id: 'm1',
-        label: 'Modul 1',
-        description:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et',
-        latihan: [
+        id: 'l1',
+        title: 'Latihan Mengenal huruf Vocal (A, I, U, E, O)',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+        type: 'materi',
+        progress: 70,
+        tanggalDikerjakan: '2026-04-10',
+        isLocked: false,
+        materi: [
           {
-            id: 'l1',
-            title: 'Latihan Mengenal huruf Vocal (A, I, U, E, O)',
-            description:
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et (Deskripsi)',
-            progress: 70,
-            tanggalDikerjakan: '2026-04-10',
-            isLocked: false,
-            materi: [
+            id: 'mat1',
+            metodeBelajar: 'membaca',
+            title: 'Mimi Sang Kucing',
+            subtitle: 'Sentuh Untuk Mendengarkan saaranya dan perhatikan Suku kata',
+            mediaUrl: undefined,
+            words: [
               {
-                id: 'mat1',
-                metodeBelajar: 'membaca',
-                title: 'Mimi Sang Kucing',
-                subtitle: 'Sentuh Untuk Mendengarkan saaranya dan perhatikan Suku kata',
-                mediaUrl: undefined,
-                words: [
-                  {
-                    id: 'w1',
-                    text: 'MIMI',
-                    syllables: [
-                      { text: 'MI', color: 'blue' },
-                      { text: 'MI', color: 'green' },
-                    ],
-                  },
-                  {
-                    id: 'w2',
-                    text: 'ADALAH',
-                    syllables: [
-                      { text: 'A', color: 'default' },
-                      { text: 'DA', color: 'blue' },
-                      { text: 'LAH', color: 'green' },
-                    ],
-                  },
-                  {
-                    id: 'w3',
-                    text: 'KUCING',
-                    syllables: [
-                      { text: 'KU', color: 'default' },
-                      { text: 'CI', color: 'blue' },
-                      { text: 'NG', color: 'green' },
-                    ],
-                  },
-                  {
-                    id: 'w4',
-                    text: 'LUCU',
-                    syllables: [
-                      { text: 'LU', color: 'default' },
-                      { text: 'CU', color: 'default' },
-                    ],
-                  },
+                id: 'w1',
+                text: 'MIMI',
+                syllables: [
+                  { text: 'MI', color: 'blue' },
+                  { text: 'MI', color: 'green' },
                 ],
-                focusHuruf: 'M',
-                focusInstruction: 'Tekan huruf M untuk mendengarkan Bunyinya',
-                tips: 'Klik pada setiap kata yang berwarna biru dan hijau. Warna ini membantu kamu melihat pemisahan suku kata agar lebih mudah dibaca.',
               },
               {
-                id: 'mat2',
-                metodeBelajar: 'membaca',
-                title: 'Budi Sang Anjing',
-                subtitle: 'Sentuh Untuk Mendengarkan saara dan perhatikan Suku kata',
-                words: [
-                  {
-                    id: 'w5',
-                    text: 'BUDI',
-                    syllables: [
-                      { text: 'BU', color: 'blue' },
-                      { text: 'DI', color: 'green' },
-                    ],
-                  },
+                id: 'w2',
+                text: 'ADALAH',
+                syllables: [
+                  { text: 'A', color: 'default' },
+                  { text: 'DA', color: 'blue' },
+                  { text: 'LAH', color: 'green' },
                 ],
-                focusHuruf: 'B',
-                focusInstruction: 'Tekan huruf B untuk mendengarkan Bunyinya',
-                tips: 'Perhatikan setiap suku kata dengan seksama.',
+              },
+              {
+                id: 'w3',
+                text: 'KUCING',
+                syllables: [
+                  { text: 'KU', color: 'default' },
+                  { text: 'CI', color: 'blue' },
+                  { text: 'NG', color: 'green' },
+                ],
+              },
+              {
+                id: 'w4',
+                text: 'LUCU',
+                syllables: [
+                  { text: 'LU', color: 'default' },
+                  { text: 'CU', color: 'default' },
+                ],
               },
             ],
+            focusHuruf: 'M',
+            focusInstruction: 'Tekan huruf M untuk mendengarkan Bunyinya',
+            tips: 'Klik pada setiap kata yang berwarna biru dan hijau. Warna ini membantu kamu melihat pemisahan suku kata agar lebih mudah dibaca.',
           },
-          {
-            id: 'l2',
-            title: 'Latihan Mengenal huruf Vocal (A, I, U, E, O)',
-            progress: 80,
-            tanggalDikerjakan: '2026-04-10',
-            isLocked: false,
-          },
-          {
-            id: 'l3',
-            title: 'Latihan Mengenal huruf Vocal (A, I, U, E, O)',
-            progress: 80,
-            tanggalDikerjakan: '2026-04-10',
-            isLocked: false,
-          },
-        ],
-      },
-      {
-        id: 'm2',
-        label: 'Modul 2',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        latihan: [
-          {
-            id: 'l4',
-            title: 'Latihan Mengenal huruf Vocal (A, I, U, E, O)',
-            progress: 50,
-            tanggalDikerjakan: '2026-04-12',
-            isLocked: false,
-          },
-        ],
-      },
-      {
-        id: 'm3',
-        label: 'Modul 3',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        latihan: [
-          {
-            id: 'l5',
-            title: 'Latihan Mengenal huruf Vocal (A, I, U, E, O)',
-            progress: 0,
-            isLocked: true,
-          },
-        ],
-      },
-    ],
-    assessments: [
-      {
-        id: 'as1',
-        title: 'Mengenal huruf Vocal (A, I, U, E, O)',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        level: 'Level 1',
-        skills: ['Mendengar', 'Menulis', 'Membaca'],
-        tanggalDikerjakan: '2026-04-12',
-        isLocked: true,
-      },
-    ],
+        ]
+      }
+    ]
   },
   {
     id: 'cr2',
@@ -325,151 +239,27 @@ const MOCK_COURSE_DETAIL: CourseDetail[] = [
     totalSessions: 4,
     tanggalMulai: '2026-05-20',
     status: 'dipelajari',
-    totalModul: 3,
-    totalAssessment: 1,
-    exercises: [
-      { id: 'ex1', title: 'Mengenal Huruf Vocal', progress: 70 },
-      { id: 'ex2', title: 'Mengenal Huruf Konsonan', progress: 85 },
-    ],
-    moduls: [
+    modules: [
       {
-        id: 'm1',
-        label: 'Modul 1',
-        description:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et',
-        latihan: [
-          {
-            id: 'l1',
-            title: 'Latihan Mengenal huruf Vocal (A, I, U, E, O)',
-            description:
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et (Deskripsi)',
-            progress: 70,
-            tanggalDikerjakan: '2026-04-10',
-            isLocked: false,
-            materi: [
-              {
-                id: 'mat1',
-                metodeBelajar: 'membaca',
-                title: 'Mimi Sang Kucing',
-                subtitle: 'Sentuh Untuk Mendengarkan saaranya dan perhatikan Suku kata',
-                mediaUrl: undefined,
-                words: [
-                  {
-                    id: 'w1',
-                    text: 'MIMI',
-                    syllables: [
-                      { text: 'MI', color: 'blue' },
-                      { text: 'MI', color: 'green' },
-                    ],
-                  },
-                  {
-                    id: 'w2',
-                    text: 'ADALAH',
-                    syllables: [
-                      { text: 'A', color: 'default' },
-                      { text: 'DA', color: 'blue' },
-                      { text: 'LAH', color: 'green' },
-                    ],
-                  },
-                  {
-                    id: 'w3',
-                    text: 'KUCING',
-                    syllables: [
-                      { text: 'KU', color: 'default' },
-                      { text: 'CI', color: 'blue' },
-                      { text: 'NG', color: 'green' },
-                    ],
-                  },
-                  {
-                    id: 'w4',
-                    text: 'LUCU',
-                    syllables: [
-                      { text: 'LU', color: 'default' },
-                      { text: 'CU', color: 'default' },
-                    ],
-                  },
-                ],
-                focusHuruf: 'M',
-                focusInstruction: 'Tekan huruf M untuk mendengarkan Bunyinya',
-                tips: 'Klik pada setiap kata yang berwarna biru dan hijau. Warna ini membantu kamu melihat pemisahan suku kata agar lebih mudah dibaca.',
-              },
-              {
-                id: 'mat2',
-                metodeBelajar: 'membaca',
-                title: 'Budi Sang Anjing',
-                subtitle: 'Sentuh Untuk Mendengarkan saara dan perhatikan Suku kata',
-                words: [
-                  {
-                    id: 'w5',
-                    text: 'BUDI',
-                    syllables: [
-                      { text: 'BU', color: 'blue' },
-                      { text: 'DI', color: 'green' },
-                    ],
-                  },
-                ],
-                focusHuruf: 'B',
-                focusInstruction: 'Tekan huruf B untuk mendengarkan Bunyinya',
-                tips: 'Perhatikan setiap suku kata dengan seksama.',
-              },
-            ],
-          },
-          {
-            id: 'l2',
-            title: 'Latihan Mengenal huruf Vocal (A, I, U, E, O)',
-            progress: 80,
-            tanggalDikerjakan: '2026-04-10',
-            isLocked: false,
-          },
-          {
-            id: 'l3',
-            title: 'Latihan Mengenal huruf Vocal (A, I, U, E, O)',
-            progress: 80,
-            tanggalDikerjakan: '2026-04-10',
-            isLocked: false,
-          },
-        ],
+        id: 'l2',
+        title: 'Latihan Mengenal Huruf Konsonan',
+        description: 'Latihan kedua untuk mengenal konsonan dasar.',
+        type: 'materi',
+        progress: 30,
+        isLocked: false,
       },
-      {
-        id: 'm2',
-        label: 'Modul 2',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        latihan: [
-          {
-            id: 'l4',
-            title: 'Latihan Mengenal huruf Vocal (A, I, U, E, O)',
-            progress: 50,
-            tanggalDikerjakan: '2026-04-12',
-            isLocked: false,
-          },
-        ],
-      },
-      {
-        id: 'm3',
-        label: 'Modul 3',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        latihan: [
-          {
-            id: 'l5',
-            title: 'Latihan Mengenal huruf Vocal (A, I, U, E, O)',
-            progress: 0,
-            isLocked: true,
-          },
-        ],
-      },
-    ],
-    assessments: [
       {
         id: 'as1',
         title: 'Mengenal huruf Vocal (A, I, U, E, O)',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+        type: 'assessment',
         level: 'Level 1',
         skills: ['Mendengar', 'Menulis', 'Membaca'],
         tanggalDikerjakan: '2026-04-12',
         isLocked: true,
-      },
-    ],
-  },
+      }
+    ]
+  }
 ]
 
 export const courseService = {
@@ -488,10 +278,52 @@ export const courseService = {
 
   async getCourseDetail(childId: string, courseId: string): Promise<CourseDetail> {
     if (USE_MOCK) {
-      const courseDetail = MOCK_COURSE_DETAIL.find((l) => l.id === courseId)
+      let courseDetail = MOCK_COURSE_DETAIL.find((l) => l.id === courseId)
+      // Fallback for mocked teacher courses (tc1, etc) to prevent crashes
+      if (!courseDetail) {
+        courseDetail = MOCK_COURSE_DETAIL[0]
+      }
       if (courseDetail) return { ...courseDetail, id: courseId }
     }
     const res = await apiService.get<CourseDetail>(`/children/${childId}/courses/${courseId}`)
     return res.data!
   },
+
+  async addModulToCourse(courseId: string, payload: { label: string; description: string; hasLatihan: boolean }): Promise<void> {
+    if (USE_MOCK) {
+      const course = MOCK_COURSE_DETAIL.find((c) => c.id === courseId) || MOCK_COURSE_DETAIL[0]
+      if (course) {
+        course.modules.push({
+          id: `l${Date.now()}`,
+          title: payload.label,
+          description: payload.description,
+          type: 'materi',
+          progress: 0,
+          isLocked: false,
+          materi: []
+        })
+      }
+      return
+    }
+    await apiService.post(`/teacher/courses/${courseId}/moduls`, payload)
+  },
+
+  async addAssessmentToCourse(courseId: string, payload: { title: string; description: string; poinMinimal: number; skills: string[] }): Promise<void> {
+    if (USE_MOCK) {
+      const course = MOCK_COURSE_DETAIL.find((c) => c.id === courseId) || MOCK_COURSE_DETAIL[0]
+      if (course) {
+        course.modules.push({
+          id: `a${Date.now()}`,
+          title: payload.title,
+          description: payload.description,
+          type: 'assessment',
+          level: 'Level 1', // default for now
+          skills: payload.skills,
+          isLocked: false,
+        })
+      }
+      return
+    }
+    await apiService.post(`/teacher/courses/${courseId}/assessments`, payload)
+  }
 }

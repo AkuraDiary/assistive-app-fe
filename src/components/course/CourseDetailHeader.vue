@@ -1,9 +1,13 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import type { CourseDetail } from '@/types/course.types'
 
-defineProps<{
+const props = defineProps<{
   course: CourseDetail
 }>()
+
+const totalModul = computed(() => props.course.modules.filter(m => m.type === 'materi').length)
+const totalAssessment = computed(() => props.course.modules.filter(m => m.type === 'assessment').length)
 </script>
 
 <template>
@@ -15,8 +19,8 @@ defineProps<{
       <p class="cdh__desc">{{ course.description ?? '-' }}</p>
 
       <div class="cdh__badges">
-        <span class="cdh__badge cdh__badge--primary"> {{ course.totalModul }} Modul </span>
-        <span class="cdh__badge cdh__badge--outline"> {{ course.totalAssessment }} Assesment </span>
+        <span class="cdh__badge cdh__badge--primary"> {{ totalModul }} Modul </span>
+        <span class="cdh__badge cdh__badge--outline"> {{ totalAssessment }} Assesment </span>
       </div>
     </div>
   </div>
@@ -74,7 +78,7 @@ defineProps<{
 }
 
 .cdh__badge--primary {
-  background: var(--color-secondary-muted);
+  background: var(--color-primary-muted);
   color: var(--color-text-dark);
 }
 

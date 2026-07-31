@@ -1,18 +1,13 @@
 <script setup lang="ts">
-import type { AssessmentItem } from '@/types/course.types'
+import type { CourseModule } from '@/types/course.types'
 
 defineProps<{
-  assessments: AssessmentItem[]
+  modules: CourseModule[]
 }>()
 
-function formatDate(iso?: string) {
-  if (!iso) return '-'
-  return new Date(iso).toLocaleDateString('id-ID', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  })
-}
+const emit = defineEmits<{
+  (e: 'open-assessment', moduleId: string): void
+}>()
 </script>
 
 <template>
@@ -20,60 +15,52 @@ function formatDate(iso?: string) {
     <!-- Section header -->
     <div class="as__header">
       <div class="as__title-row">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5" />
-          <path d="M17.5 2.5a2.121 2.121 0 013 3L12 14l-4 1 1-4 7.5-7.5z" />
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 20h9"></path>
+          <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
         </svg>
         <span class="as__title">Assessment</span>
       </div>
-      <p class="as__desc">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
-      </p>
+      <p class="as__desc">Waktunya membuktikan kemampuanmu! Pastikan semua modul telah selesai dipelajari sebelum memulai ujian akhir ini</p>
     </div>
 
-    <!-- Assessment list -->
+    <!-- Module list -->
     <div class="as__list">
       <div
-        v-for="item in assessments"
+        v-for="item in modules"
         :key="item.id"
-        class="as__item"
+        class="as__card"
       >
-        <!-- Top row -->
-        <div class="as__item-header">
-          <div class="as__item-info">
-            <span class="as__item-title">{{ item.title }}</span>
-            <p class="as__item-desc">{{ item.description ?? '-' }}</p>
-            <div class="as__skills">
-              <span
-                v-for="skill in item.skills"
-                :key="skill"
-                class="as__skill-tag"
-              >
-                {{ skill }}
-              </span>
-            </div>
-            <p v-if="item.tanggalDikerjakan" class="as__item-date">
-              Dikerjakan: {{ formatDate(item.tanggalDikerjakan) }}
-            </p>
+        <div class="as__card-header">
+          <span class="as__card-title">{{ item.title }}</span>
+          <div class="as__card-tags">
+            <span class="as__tag">Kata</span>
+            <span class="as__tag">Kalimat</span>
+            <span class="as__tag">Objek</span>
           </div>
-          <span class="as__level-badge">{{ item.level }}</span>
         </div>
 
-        <!-- CTA -->
-        <button
-          class="as__cta"
-          :class="{ 'as__cta--locked': item.isLocked }"
+        <p class="as__card-desc">
+          {{ item.description ?? 'Evaluasi akhir pemahaman huruf vokal melalui tes mendengar, menulis, dan membaca.' }}
+        </p>
+
+        <div class="as__card-skills">
+          <span v-for="skill in (item.skills ?? ['Mendengar', 'Menulis', 'Membaca'])" :key="skill" class="as__skill">
+            {{ skill }}
+          </span>
+        </div>
+
+        <button 
+          class="as__btn" 
+          :class="item.isLocked ? 'as__btn--locked' : 'as__btn--primary'"
           :disabled="item.isLocked"
+          @click="emit('open-assessment', item.id)"
         >
-          <template v-if="item.isLocked">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M18 11H6V8a6 6 0 1112 0v3zm-6 9a3 3 0 110-6 3 3 0 010 6z" />
-            </svg>
-            Terkunci
-          </template>
-          <template v-else>
-            Mulai Assessment
-          </template>
+          <svg v-if="item.isLocked" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          {{ item.isLocked ? 'Terkunci' : 'Mulai Ujian' }}
         </button>
       </div>
     </div>
@@ -88,7 +75,7 @@ function formatDate(iso?: string) {
   padding: 1.25rem 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 /* Header */
@@ -104,120 +91,110 @@ function formatDate(iso?: string) {
   color: var(--color-text-dark);
 }
 .as__title {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--color-text-dark);
 }
 .as__desc {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--color-text-light);
   margin: 0;
-  line-height: 1.5;
 }
 
 /* List */
 .as__list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 1rem;
 }
 
-/* Item */
-.as__item {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  padding: 1rem 1.25rem;
+/* Card */
+.as__card {
+  border: 1.5px solid var(--color-primary);
+  border-radius: 8px;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.as__item-header {
+.as__card-header {
   display: flex;
-  align-items: flex-start;
   justify-content: space-between;
-  gap: 12px;
+  align-items: center;
 }
 
-.as__item-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  flex: 1;
-}
-
-.as__item-title {
-  font-size: 14px;
+.as__card-title {
+  font-size: 15px;
   font-weight: 600;
   color: var(--color-text-dark);
 }
 
-.as__item-desc {
-  font-size: 13px;
-  color: var(--color-text-light);
-  margin: 0;
-  line-height: 1.5;
-}
-
-.as__item-date {
-  font-size: 12px;
-  color: var(--color-text-light);
-  margin: 0;
-}
-
-/* Skills */
-.as__skills {
+.as__card-tags {
   display: flex;
-  flex-wrap: wrap;
   gap: 6px;
-  margin-top: 2px;
 }
-.as__skill-tag {
-  padding: 3px 10px;
+
+.as__tag {
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 8px;
   border-radius: 999px;
-  border: 1px solid var(--color-border);
+  text-transform: capitalize;
+}
+
+.as__card-desc {
   font-size: 12px;
   color: var(--color-text-light);
-  background: var(--color-background);
+  line-height: 1.4;
+  margin: 0;
 }
 
-/* Level badge */
-.as__level-badge {
-  padding: 4px 12px;
+.as__card-skills {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.as__skill {
+  border: 1px solid var(--color-border);
+  color: var(--color-text-light);
+  font-size: 10px;
+  padding: 4px 10px;
   border-radius: 999px;
-  background: var(--color-primary-muted);
-  color: var(--color-primary);
-  font-size: 12px;
-  font-weight: 500;
-  white-space: nowrap;
-  flex-shrink: 0;
+  background: #fff;
 }
 
-/* CTA button */
-.as__cta {
+/* Button */
+.as__btn {
+  margin-top: 8px;
   width: 100%;
-  padding: 11px 0;
-  border-radius: 10px;
-  border: none;
-  font-size: 14px;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 13px;
   font-weight: 600;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  transition: all 0.15s;
-  background: var(--color-primary-muted);
-  color: var(--color-primary);
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
 }
-.as__cta:hover:not(:disabled) {
+
+.as__btn--locked {
+  background: rgba(255, 60, 138, 0.4); /* Faded pink */
+  color: #fff;
+  cursor: not-allowed;
+}
+
+.as__btn--primary {
   background: var(--color-primary);
   color: #fff;
 }
-.as__cta--locked {
-  background: var(--color-primary-muted);
-  color: var(--color-primary);
-  cursor: not-allowed;
-  opacity: 0.8;
+.as__btn--primary:hover {
+  background: #e62c76;
 }
 </style>

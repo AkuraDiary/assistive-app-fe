@@ -6,7 +6,6 @@ import { useCourse } from './useCourse'
 const courseDetail = ref<CourseDetail | null>(null)
 const loading = ref(false)
 const error = ref<string | null>(null)
-const activeModulId = ref<string | null>(null)
 
 export function useCourseDetail() {
   const { courses } = useCourse()
@@ -15,21 +14,12 @@ export function useCourseDetail() {
     error.value = null
     try {
       courseDetail.value = await courseService.getCourseDetail(childId, courseId)
-      activeModulId.value = courseDetail.value.moduls[0]?.id ?? null
     } catch (err) {
       error.value = (err as Error).message
     } finally {
       loading.value = false
     }
   }
-
-  function setActiveModul(id: string) {
-    activeModulId.value = id
-  }
-
-  const activeModul = computed(
-    () => courseDetail.value?.moduls.find((m) => m.id === activeModulId.value) ?? null,
-  )
 
   const currentIndex = computed(() =>
     courses.value.findIndex((c) => c.id === courseDetail.value?.id),
@@ -46,11 +36,8 @@ export function useCourseDetail() {
     courseDetail,
     nextCourse,
     prevCourse,
-    activeModul,
-    activeModulId,
     loading,
     error,
     fetchCourseDetail,
-    setActiveModul,
   }
 }
