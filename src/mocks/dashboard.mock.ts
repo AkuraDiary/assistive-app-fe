@@ -299,3 +299,42 @@ export const mockRoles = [
     access: generateDefaultAccess()
   }
 ]
+
+export const mockUsers = [
+  {
+    _id: 'user1',
+    name: 'Stevan',
+    username: 'stevanandreas',
+    email: 'stevan@gmail.com',
+    roleId: 'role1',
+    roleName: 'Admin',
+    status: 'aktif'
+  },
+  {
+    _id: 'user2',
+    name: 'Klinik Tumbuh Kembang Anak',
+    username: 'kliniktumbuhkembang',
+    email: 'kliniktumbuhkembanganak@gmail.com',
+    roleId: 'role2',
+    roleName: 'Lembaga',
+    status: 'aktif'
+  },
+  {
+    _id: 'user3',
+    name: 'Riya Wijaya',
+    username: 'riyawijaya',
+    email: 'riyawijaya@gmail.com',
+    roleId: 'role2',
+    roleName: 'Lembaga',
+    status: 'aktif'
+  },
+  {
+    _id: 'user4',
+    name: 'Bu Dian',
+    username: 'dian',
+    email: 'dian@gmail.com',
+    roleId: 'role3',
+    roleName: 'Guru',
+    status: 'aktif'
+  }
+]

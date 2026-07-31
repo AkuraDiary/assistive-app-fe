@@ -94,6 +94,10 @@ const router = createRouter({
         { path: '/manajemen-pengguna/roles/create', name: 'roles-create', component: () => import('@/views/dashboard/roles/RoleFormView.vue') },
         { path: '/manajemen-pengguna/roles/:id/edit', name: 'roles-edit', component: () => import('@/views/dashboard/roles/RoleFormView.vue') },
         { path: '/manajemen-pengguna/roles/:id', name: 'roles-detail', component: () => import('@/views/dashboard/roles/RoleDetailView.vue') },
+        { path: '/manajemen-pengguna/users', name: 'users', component: () => import('@/views/dashboard/roles/UserListView.vue') },
+        { path: '/manajemen-pengguna/users/create', name: 'users-create', component: () => import('@/views/dashboard/roles/UserFormView.vue') },
+        { path: '/manajemen-pengguna/users/:id/edit', name: 'users-edit', component: () => import('@/views/dashboard/roles/UserFormView.vue') },
+        { path: '/manajemen-pengguna/users/:id', name: 'users-detail', component: () => import('@/views/dashboard/roles/UserDetailView.vue') },
         {
           path: '/course/:courseId/latihan/:latihanId/materi',
           name: 'materi',

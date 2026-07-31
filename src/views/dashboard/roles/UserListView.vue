@@ -5,14 +5,14 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const loading = ref(true)
-const roles = ref<any[]>([])
+const users = ref<any[]>([])
 
 async function loadData() {
   loading.value = true
   try {
-    const res = await dashboardService.getRoles()
+    const res = await dashboardService.getUsers()
     if (res.success) {
-      roles.value = res.data || []
+      users.value = res.data || []
     }
   } finally {
     loading.value = false
@@ -23,44 +23,44 @@ onMounted(() => {
   loadData()
 })
 
-async function handleToggleStatus(role: any) {
-  await dashboardService.toggleRoleStatus(role._id)
+async function handleToggleStatus(user: any) {
+  await dashboardService.toggleUserStatus(user._id)
   await loadData()
 }
 
 function goToCreate() {
-  router.push('/manajemen-pengguna/roles/create')
+  router.push('/manajemen-pengguna/users/create')
 }
 
 function goToDetail(id: string) {
-  router.push(`/manajemen-pengguna/roles/${id}`)
+  router.push(`/manajemen-pengguna/users/${id}`)
 }
 
 function goToEdit(id: string) {
-  router.push(`/manajemen-pengguna/roles/${id}/edit`)
+  router.push(`/manajemen-pengguna/users/${id}/edit`)
 }
 
-function goToUsers() {
-  router.push('/manajemen-pengguna/users')
+function goToRoles() {
+  router.push('/manajemen-pengguna/roles')
 }
 </script>
 
 <template>
-  <div class="role-page">
+  <div class="user-page">
     <div class="sidebar">
-      <div class="sidebar-item active">
+      <div class="sidebar-item" @click="goToRoles">
         Daftar Role
-        <div class="active-indicator"></div>
       </div>
-      <div class="sidebar-item" @click="goToUsers">
+      <div class="sidebar-item active">
         Daftar Pengguna
+        <div class="active-indicator"></div>
       </div>
     </div>
 
     <div class="content">
       <div class="page-header">
-        <h1 class="page-title">Daftar Role</h1>
-        <button class="btn-primary" @click="goToCreate">+ Tambah Role</button>
+        <h1 class="page-title">Daftar Pengguna</h1>
+        <button class="btn-primary" @click="goToCreate">+ Tambah Akun</button>
       </div>
 
       <div class="table-section">
@@ -68,32 +68,36 @@ function goToUsers() {
           <table class="data-table">
             <thead>
               <tr>
-                <th class="py-4">Nama Role</th>
-                <th class="py-4 text-center">Deskripsi</th>
+                <th class="py-4">Nama</th>
+                <th class="py-4">Username</th>
+                <th class="py-4">Email</th>
+                <th class="py-4 text-center">Role</th>
                 <th class="py-4 text-center">Status</th>
                 <th class="py-4 text-center">Aksi</th>
               </tr>
             </thead>
             <tbody>
               <tr v-if="loading">
-                <td colspan="4" class="text-center py-8">Memuat data...</td>
+                <td colspan="6" class="text-center py-8">Memuat data...</td>
               </tr>
-              <tr v-else-if="roles.length === 0">
-                <td colspan="4" class="text-center py-8">Tidak ada data role yang ditemukan.</td>
+              <tr v-else-if="users.length === 0">
+                <td colspan="6" class="text-center py-8">Tidak ada data pengguna yang ditemukan.</td>
               </tr>
-              <tr v-for="role in roles" :key="role._id" :class="{'opacity-60': role.status === 'nonaktif'}">
-                <td class="font-bold text-gray-800">{{ role.name }}</td>
-                <td class="text-center text-gray-500">{{ role.description }}</td>
+              <tr v-for="user in users" :key="user._id" :class="{'opacity-60': user.status === 'nonaktif'}">
+                <td class="font-bold text-gray-800">{{ user.name }}</td>
+                <td class="text-gray-500">{{ user.username }}</td>
+                <td class="text-gray-500">{{ user.email }}</td>
+                <td class="text-center font-bold text-gray-800">{{ user.roleName }}</td>
                 <td class="text-center">
                   <div class="flex items-center justify-center gap-3">
                     <span class="text-sm font-bold text-gray-900">
-                      {{ role.status === 'aktif' ? 'Aktif' : 'Tidak Aktif' }}
+                      {{ user.status === 'aktif' ? 'Aktif' : 'Tidak Aktif' }}
                     </span>
                     <label class="switch" title="Toggle Status">
                       <input 
                         type="checkbox" 
-                        :checked="role.status === 'aktif'"
-                        @change="handleToggleStatus(role)"
+                        :checked="user.status === 'aktif'"
+                        @change="handleToggleStatus(user)"
                       >
                       <span class="slider"></span>
                     </label>
@@ -101,8 +105,8 @@ function goToUsers() {
                 </td>
                 <td class="text-center">
                   <div class="flex items-center justify-center gap-2">
-                    <button class="btn-action" @click="goToDetail(role._id)">Detail</button>
-                    <button class="btn-action" @click="goToEdit(role._id)">Edit</button>
+                    <button class="btn-action" @click="goToDetail(user._id)">Detail</button>
+                    <button class="btn-action" @click="goToEdit(user._id)">Edit</button>
                   </div>
                 </td>
               </tr>
@@ -115,7 +119,7 @@ function goToUsers() {
 </template>
 
 <style scoped>
-.role-page {
+.user-page {
   display: flex;
   gap: 2rem;
   padding: 2rem;

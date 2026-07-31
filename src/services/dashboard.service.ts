@@ -1,4 +1,4 @@
-import { mockStudents, mockTeachers, mockActivities, mockCourses, mockInstitutionStats, mockInstitutionActivities, mockApplications, mockAdminActivities, mockAdminChartData, mockInstitutions, mockRoles, mockModules } from '@/mocks/dashboard.mock'
+import { mockStudents, mockTeachers, mockActivities, mockCourses, mockInstitutionStats, mockInstitutionActivities, mockApplications, mockAdminActivities, mockAdminChartData, mockInstitutions, mockRoles, mockModules, mockUsers } from '@/mocks/dashboard.mock'
 import type { ApiResponse } from '@/services/api'
 import type { ActivityEntry } from '@/types/activity.types'
 import type { Course } from '@/types/course.types'
@@ -217,6 +217,67 @@ export class DashboardService {
       success: true,
       data: [...mockModules],
     }
+  }
+
+  async getUsers(): Promise<ApiResponse<any[]>> {
+    await new Promise((resolve) => setTimeout(resolve, 300))
+    return {
+      success: true,
+      data: [...mockUsers],
+    }
+  }
+
+  async getUserById(id: string): Promise<ApiResponse<any>> {
+    await new Promise((resolve) => setTimeout(resolve, 300))
+    const user = mockUsers.find(u => u._id === id)
+    return {
+      success: !!user,
+      data: user
+    }
+  }
+
+  async createUser(data: any): Promise<ApiResponse<void>> {
+    await new Promise((resolve) => setTimeout(resolve, 300))
+    const newId = 'user' + (mockUsers.length + 1)
+    
+    // Find role name based on roleId
+    const role = mockRoles.find(r => r._id === data.roleId)
+    
+    mockUsers.push({
+      _id: newId,
+      name: data.name,
+      username: data.username,
+      email: data.email,
+      roleId: data.roleId,
+      roleName: role ? role.name : '',
+      status: 'aktif'
+    })
+    return { success: true }
+  }
+
+  async updateUser(id: string, data: any): Promise<ApiResponse<void>> {
+    await new Promise((resolve) => setTimeout(resolve, 300))
+    const index = mockUsers.findIndex(u => u._id === id)
+    if (index !== -1 && mockUsers[index]) {
+      // Find role name if roleId changed
+      let roleName = mockUsers[index].roleName
+      if (data.roleId && data.roleId !== mockUsers[index].roleId) {
+        const role = mockRoles.find(r => r._id === data.roleId)
+        if (role) roleName = role.name
+      }
+      
+      mockUsers[index] = { ...mockUsers[index], ...data, roleName }
+    }
+    return { success: true }
+  }
+
+  async toggleUserStatus(id: string): Promise<ApiResponse<void>> {
+    await new Promise((resolve) => setTimeout(resolve, 300))
+    const index = mockUsers.findIndex(u => u._id === id)
+    if (index !== -1 && mockUsers[index]) {
+      mockUsers[index].status = mockUsers[index].status === 'aktif' ? 'nonaktif' : 'aktif'
+    }
+    return { success: true }
   }
 }
 
