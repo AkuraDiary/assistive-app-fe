@@ -239,3 +239,63 @@ export const mockInstitutions = [
     username: 'sentraterapibermain'
   },
 ]
+
+export const mockModules = [
+  { id: 'mod1', name: 'Dashboard' },
+  { id: 'mod2', name: 'Lembaga' },
+  { id: 'mod3', name: 'Paket Penjualan' },
+  { id: 'mod4', name: 'Manajemen Pengguna' },
+  { id: 'mod5', name: 'Siswa' },
+  { id: 'mod6', name: 'Guru' }
+]
+
+const generateDefaultAccess = () => {
+  return mockModules.map(m => ({
+    moduleId: m.id,
+    moduleName: m.name,
+    canView: true,
+    canAdd: false,
+    canEdit: false,
+    canDelete: false,
+    canDetail: true
+  }))
+}
+
+export const mockRoles = [
+  {
+    _id: 'role1',
+    name: 'Admin',
+    description: 'Role paling jago',
+    status: 'aktif',
+    access: mockModules.map(m => ({
+      moduleId: m.id,
+      moduleName: m.name,
+      canView: true,
+      canAdd: true,
+      canEdit: true,
+      canDelete: true,
+      canDetail: true
+    }))
+  },
+  {
+    _id: 'role2',
+    name: 'Lembaga',
+    description: 'Akun lembaga',
+    status: 'aktif',
+    access: generateDefaultAccess()
+  },
+  {
+    _id: 'role3',
+    name: 'Guru',
+    description: 'Akun guru dari lembaga',
+    status: 'aktif',
+    access: generateDefaultAccess()
+  },
+  {
+    _id: 'role4',
+    name: 'Orang Tua',
+    description: 'Akun orang tua',
+    status: 'aktif',
+    access: generateDefaultAccess()
+  }
+]

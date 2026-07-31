@@ -89,7 +89,11 @@ const router = createRouter({
         { path: '/lembaga/:id/edit', name: 'lembaga-edit', component: () => import('@/views/dashboard/roles/LembagaFormView.vue') },
         { path: '/lembaga/:id', name: 'lembaga-detail', component: () => import('@/views/dashboard/roles/LembagaDetailView.vue') },
         { path: '/paket-penjualan', name: 'paket-penjualan', component: () => import('@/views/dashboard/roles/PlaceholderView.vue') },
-        { path: '/manajemen-pengguna', name: 'manajemen-pengguna', component: () => import('@/views/dashboard/roles/PlaceholderView.vue') },
+        { path: '/manajemen-pengguna', name: 'manajemen-pengguna', redirect: '/manajemen-pengguna/roles' },
+        { path: '/manajemen-pengguna/roles', name: 'roles', component: () => import('@/views/dashboard/roles/RoleListView.vue') },
+        { path: '/manajemen-pengguna/roles/create', name: 'roles-create', component: () => import('@/views/dashboard/roles/RoleFormView.vue') },
+        { path: '/manajemen-pengguna/roles/:id/edit', name: 'roles-edit', component: () => import('@/views/dashboard/roles/RoleFormView.vue') },
+        { path: '/manajemen-pengguna/roles/:id', name: 'roles-detail', component: () => import('@/views/dashboard/roles/RoleDetailView.vue') },
         {
           path: '/course/:courseId/latihan/:latihanId/materi',
           name: 'materi',

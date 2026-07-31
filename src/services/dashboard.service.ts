@@ -1,4 +1,4 @@
-import { mockStudents, mockTeachers, mockActivities, mockCourses, mockInstitutionStats, mockInstitutionActivities, mockApplications, mockAdminActivities, mockAdminChartData, mockInstitutions } from '@/mocks/dashboard.mock'
+import { mockStudents, mockTeachers, mockActivities, mockCourses, mockInstitutionStats, mockInstitutionActivities, mockApplications, mockAdminActivities, mockAdminChartData, mockInstitutions, mockRoles, mockModules } from '@/mocks/dashboard.mock'
 import type { ApiResponse } from '@/services/api'
 import type { ActivityEntry } from '@/types/activity.types'
 import type { Course } from '@/types/course.types'
@@ -161,6 +161,62 @@ export class DashboardService {
       mockStudents[index]!.status = status
     }
     return { success: true }
+  }
+
+  async getRoles(): Promise<ApiResponse<any[]>> {
+    await new Promise((resolve) => setTimeout(resolve, 300))
+    return {
+      success: true,
+      data: [...mockRoles],
+    }
+  }
+
+  async getRoleById(id: string): Promise<ApiResponse<any>> {
+    await new Promise((resolve) => setTimeout(resolve, 300))
+    const role = mockRoles.find(r => r._id === id)
+    return {
+      success: !!role,
+      data: role
+    }
+  }
+
+  async createRole(data: any): Promise<ApiResponse<void>> {
+    await new Promise((resolve) => setTimeout(resolve, 300))
+    const newId = 'role' + (mockRoles.length + 1)
+    mockRoles.push({
+      _id: newId,
+      name: data.name,
+      description: data.description,
+      status: 'aktif',
+      access: data.access || []
+    })
+    return { success: true }
+  }
+
+  async updateRole(id: string, data: any): Promise<ApiResponse<void>> {
+    await new Promise((resolve) => setTimeout(resolve, 300))
+    const index = mockRoles.findIndex(r => r._id === id)
+    if (index !== -1 && mockRoles[index]) {
+      mockRoles[index] = { ...mockRoles[index], ...data }
+    }
+    return { success: true }
+  }
+
+  async toggleRoleStatus(id: string): Promise<ApiResponse<void>> {
+    await new Promise((resolve) => setTimeout(resolve, 300))
+    const index = mockRoles.findIndex(r => r._id === id)
+    if (index !== -1 && mockRoles[index]) {
+      mockRoles[index].status = mockRoles[index].status === 'aktif' ? 'nonaktif' : 'aktif'
+    }
+    return { success: true }
+  }
+
+  async getModules(): Promise<ApiResponse<any[]>> {
+    await new Promise((resolve) => setTimeout(resolve, 300))
+    return {
+      success: true,
+      data: [...mockModules],
+    }
   }
 }
 
