@@ -36,19 +36,30 @@ const filteredTeachers = computed(() => {
 function goToDetail(id: string) {
   router.push(`/guru/${id}`)
 }
+
+function goToEdit(id: string) {
+  router.push(`/guru/${id}/edit`)
+}
+
+function goToCreate() {
+  router.push('/guru/create')
+}
 </script>
 
 <template>
   <div class="guru-page">
     <div class="guru-page__header">
       <h1 class="guru-page__title">Daftar Guru</h1>
-      <div class="guru-page__search">
-        <input
-          v-model="searchQuery"
-          type="text"
-          placeholder="Cari Data Guru"
-          class="guru-page__search-input"
-        />
+      <div class="guru-page__actions">
+        <div class="guru-page__search">
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Cari Data Guru"
+            class="guru-page__search-input"
+          />
+        </div>
+        <button class="btn-solid-pink" @click="goToCreate">Tambah Data Guru</button>
       </div>
     </div>
 
@@ -57,10 +68,10 @@ function goToDetail(id: string) {
         <table class="guru-page__table">
           <thead>
             <tr>
-              <th class="py-4">Nama Lengkap</th>
-              <th class="py-4 text-center">Jenis Kelamin</th>
-              <th class="py-4 text-center">No. HP</th>
+              <th class="py-4 text-left">Nama</th>
+              <th class="py-4 text-center">Nomor Telepon</th>
               <th class="py-4 text-center">Alamat</th>
+              <th class="py-4 text-center">Status Guru</th>
               <th class="py-4 text-center">Aksi</th>
             </tr>
           </thead>
@@ -73,16 +84,29 @@ function goToDetail(id: string) {
             </tr>
             <tr v-for="teacher in filteredTeachers" :key="teacher._id">
               <td class="font-bold text-gray-800">{{ teacher.fullName }}</td>
-              <td class="text-center font-bold text-gray-700">{{ teacher.gender === 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
-              <td class="text-center text-gray-500">{{ teacher.phone }}</td>
+              <td class="text-center text-gray-700 font-bold">{{ teacher.phone }}</td>
               <td class="text-center text-gray-500">{{ teacher.address }}</td>
               <td class="text-center">
-                <button 
-                  @click="goToDetail(teacher._id)"
-                  class="px-6 py-2 text-sm font-semibold border-2 border-pink-500 text-pink-500 rounded-full hover:bg-pink-50 transition-colors"
-                >
-                  Detail
-                </button>
+                <div class="status-toggle-wrapper">
+                  <span class="status-text">{{
+                    teacher.status === 'Aktif' || !teacher.status ? 'Aktif' : 'Tidak Aktif'
+                  }}</span>
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      :checked="teacher.status === 'Aktif' || !teacher.status"
+                    />
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </td>
+              <td class="text-center">
+                <div class="action-buttons">
+                  <button @click="goToDetail(teacher._id)" class="btn-outline-pink-sm">
+                    Detail
+                  </button>
+                  <button @click="goToEdit(teacher._id)" class="btn-outline-pink-sm">Edit</button>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -111,6 +135,7 @@ function goToDetail(id: string) {
 .guru-page__title {
   font-size: 28px;
   font-weight: 700;
+  min-width: 250px;
   color: #2d2d2d;
   margin: 0;
 }
@@ -150,21 +175,130 @@ function goToDetail(id: string) {
 }
 
 .guru-page__table th {
-  text-align: left;
+  border-bottom: 1px solid #f0f0f0;
+  color: #6b7280;
   font-weight: 600;
-  color: #2d2d2d;
-  padding: 16px;
-  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 16px;
 }
 
 .guru-page__table td {
-  padding: 20px 16px;
-  color: #4b5563;
-  border-bottom: 1px solid #f3f4f6;
-  vertical-align: middle;
+  padding: 16px 0;
+  border-bottom: 1px solid #f9fafb;
 }
 
-.guru-page__table tbody tr:last-child td {
+.guru-page__table tr:last-child td {
   border-bottom: none;
+}
+
+/* Actions */
+.guru-page__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.btn-solid-pink {
+  padding: 12px 24px;
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-solid-pink:hover {
+  background: #e62c76;
+}
+
+.btn-outline-pink-sm {
+  padding: 4px 16px;
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
+  background: white;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-outline-pink-sm:hover {
+  background: #fff0f5;
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Toggle Switch */
+.status-toggle-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.status-text {
+  font-size: 12px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 20px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #e5e7eb;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: '';
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: var(--color-primary);
+}
+
+input:checked + .slider:before {
+  transform: translateX(16px);
+}
+
+.slider.round {
+  border-radius: 20px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }
 </style>
