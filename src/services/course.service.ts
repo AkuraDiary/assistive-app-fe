@@ -254,6 +254,7 @@ const MOCK_COURSE_DETAIL: CourseDetail[] = [
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
         type: 'assessment',
         level: 'Level 1',
+        categories: ['Kata', 'Kalimat', 'Objek'],
         skills: ['Mendengar', 'Menulis', 'Membaca'],
         tanggalDikerjakan: '2026-04-12',
         isLocked: true,
@@ -310,7 +311,7 @@ export const courseService = {
     return res.data?.id || 'm1'
   },
 
-  async addAssessmentToCourse(courseId: string, payload: { title: string; description: string; poinMinimal: number; skills: string[] }): Promise<string> {
+  async addAssessmentToCourse(courseId: string, payload: { title: string; description: string; poinMinimal: number; categories: string[] }): Promise<string> {
     if (USE_MOCK) {
       const course = MOCK_COURSE_DETAIL.find((c) => c.id === courseId) || MOCK_COURSE_DETAIL[0]
       const newId = `a${Date.now()}`
@@ -321,7 +322,8 @@ export const courseService = {
           description: payload.description,
           type: 'assessment',
           level: 'Level 1', // default for now
-          skills: payload.skills,
+          categories: payload.categories,
+          skills: ['Mendengar', 'Menulis', 'Membaca'], // Default skills for now
           isLocked: false,
         })
       }

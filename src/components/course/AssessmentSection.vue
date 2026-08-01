@@ -34,9 +34,9 @@ const emit = defineEmits<{
         <div class="as__card-header">
           <span class="as__card-title">{{ item.title }}</span>
           <div class="as__card-tags">
-            <span class="as__tag">Kata</span>
-            <span class="as__tag">Kalimat</span>
-            <span class="as__tag">Objek</span>
+            <span v-for="cat in (item.categories || [])" :key="cat" class="as__tag">
+              {{ cat.charAt(0).toUpperCase() + cat.slice(1) }}
+            </span>
           </div>
         </div>
 

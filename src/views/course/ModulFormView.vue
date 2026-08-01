@@ -38,7 +38,7 @@ async function handleSubmit() {
       title: form.value.nama,
       description: form.value.deskripsi,
       poinMinimal: Number(form.value.poinMinimal),
-      skills: form.value.kategoriSoal
+      categories: form.value.kategoriSoal
     })
     router.push({ name: 'assessment-edit', params: { courseId, moduleId } })
   }

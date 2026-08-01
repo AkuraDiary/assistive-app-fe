@@ -37,7 +37,8 @@ export interface CourseModule {
   
   // If assessment
   level?: string
-  skills?: string[]
+  categories?: string[] // Kata, Kalimat, Objek
+  skills?: string[] // Mendengar, Menulis, Membaca
 }
 
 export interface CourseDetail extends Course {
