@@ -13,6 +13,8 @@ import CourseListView from '@/views/course/CourseListView.vue'
 import CourseDetailView from '@/views/course/CourseDetailView.vue'
 import ModulFormView from '@/views/course/ModulFormView.vue'
 import MateriView from '@/views/course/MateriView.vue'
+import MateriEditorView from '@/views/course/MateriEditorView.vue'
+import AssessmentEditorView from '@/views/course/AssessmentEditorView.vue'
 import DashboardLayout from '@/layouts/DashboardLayout.vue'
 
 const router = createRouter({
@@ -108,6 +110,16 @@ const router = createRouter({
           path: '/course/:courseId/tambah-modul',
           name: 'tambah-modul',
           component: ModulFormView,
+        },
+        {
+          path: '/course/:courseId/materi/:moduleId/edit',
+          name: 'materi-edit',
+          component: MateriEditorView,
+        },
+        {
+          path: '/course/:courseId/assessment/:moduleId/edit',
+          name: 'assessment-edit',
+          component: AssessmentEditorView,
         },
         {
           path: '/course/:courseId',

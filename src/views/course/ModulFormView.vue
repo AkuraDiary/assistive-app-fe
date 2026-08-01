@@ -27,22 +27,21 @@ async function handleSubmit() {
   const courseId = route.params.courseId as string
   
   if (jenisModul.value === 'materi') {
-    await courseService.addModulToCourse(courseId, {
+    const moduleId = await courseService.addModulToCourse(courseId, {
       label: form.value.nama,
       description: form.value.deskripsi,
       hasLatihan: form.value.tambahLatihan
     })
+    router.push({ name: 'materi-edit', params: { courseId, moduleId } })
   } else {
-    await courseService.addAssessmentToCourse(courseId, {
+    const moduleId = await courseService.addAssessmentToCourse(courseId, {
       title: form.value.nama,
       description: form.value.deskripsi,
       poinMinimal: Number(form.value.poinMinimal),
       skills: form.value.kategoriSoal
     })
+    router.push({ name: 'assessment-edit', params: { courseId, moduleId } })
   }
-  
-  // Navigate back to course detail
-  router.push(`/course/${courseId}`)
 }
 </script>
 

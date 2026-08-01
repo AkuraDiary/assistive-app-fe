@@ -289,12 +289,13 @@ export const courseService = {
     return res.data!
   },
 
-  async addModulToCourse(courseId: string, payload: { label: string; description: string; hasLatihan: boolean }): Promise<void> {
+  async addModulToCourse(courseId: string, payload: { label: string; description: string; hasLatihan: boolean }): Promise<string> {
     if (USE_MOCK) {
       const course = MOCK_COURSE_DETAIL.find((c) => c.id === courseId) || MOCK_COURSE_DETAIL[0]
+      const newId = `l${Date.now()}`
       if (course) {
         course.modules.push({
-          id: `l${Date.now()}`,
+          id: newId,
           title: payload.label,
           description: payload.description,
           type: 'materi',
@@ -303,17 +304,19 @@ export const courseService = {
           materi: []
         })
       }
-      return
+      return newId
     }
-    await apiService.post(`/teacher/courses/${courseId}/moduls`, payload)
+    const res = await apiService.post(`/teacher/courses/${courseId}/moduls`, payload)
+    return res.data?.id || 'm1'
   },
 
-  async addAssessmentToCourse(courseId: string, payload: { title: string; description: string; poinMinimal: number; skills: string[] }): Promise<void> {
+  async addAssessmentToCourse(courseId: string, payload: { title: string; description: string; poinMinimal: number; skills: string[] }): Promise<string> {
     if (USE_MOCK) {
       const course = MOCK_COURSE_DETAIL.find((c) => c.id === courseId) || MOCK_COURSE_DETAIL[0]
+      const newId = `a${Date.now()}`
       if (course) {
         course.modules.push({
-          id: `a${Date.now()}`,
+          id: newId,
           title: payload.title,
           description: payload.description,
           type: 'assessment',
@@ -322,8 +325,9 @@ export const courseService = {
           isLocked: false,
         })
       }
-      return
+      return newId
     }
-    await apiService.post(`/teacher/courses/${courseId}/assessments`, payload)
+    const res = await apiService.post(`/teacher/courses/${courseId}/assessments`, payload)
+    return res.data?.id || 'a1'
   }
 }

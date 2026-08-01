@@ -19,6 +19,7 @@
     "format": "prettier --write --experimental-cli src/"
   },
   "dependencies": {
+    "@vueup/vue-quill": "^1.5.5",
     "chart.js": "^4.5.1",
     "clsx": "^2.1.1",
     "lucide-vue-next": "^1.0.0",
