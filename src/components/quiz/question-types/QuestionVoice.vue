@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import type { ScreeningQuestion } from '@/types/screening.types';
-import { ref, onUnmounted } from 'vue'
+import { ref, onUnmounted, watch } from 'vue'
 
 const props = defineProps<{ 
   question: ScreeningQuestion,
-  recordedAudioUrl?: string // For review mode
+  recordedAudioUrl?: string, // Initial answer
+  readonly?: boolean // Review mode
 }>()
 const emit = defineEmits<{ (e: 'answer', value: string): void }>()
 
@@ -13,6 +14,12 @@ const audioUrl = ref<string | null>(props.recordedAudioUrl || null)
 const mediaRecorder = ref<MediaRecorder | null>(null)
 const audioChunks = ref<Blob[]>([])
 const mediaStream = ref<MediaStream | null>(null)
+
+watch(() => props.recordedAudioUrl, (newVal) => {
+  if (newVal !== undefined) {
+    audioUrl.value = newVal || null
+  }
+})
 
 async function toggleRecord() {
   if (recording.value) {
@@ -63,30 +70,30 @@ async function toggleRecord() {
   }
 }
 
+function resetRecording() {
+  audioUrl.value = null
+  emit('answer', '') // Clear answer in parent
+}
+
 // Cleanup object URLs on unmount to prevent memory leaks
 onUnmounted(() => {
   if (mediaStream.value) {
     mediaStream.value.getTracks().forEach(track => track.stop())
   }
-  // We keep the data URL, but we can revoke the local blob object url if we want.
-  // Actually, let's leave it as is to keep playback smooth until navigation.
 })
 </script>
 
 <template>
   <div class="qv">
-    <p class="qv__prompt">{{ question.text }}</p>
-
     <div class="qv__media-card">
-      <span class="qv__media-label">{{ question.mediaLabel }}</span>
+      <span class="qv__media-label">{{ question.mediaLabel || question.text }}</span>
     </div>
 
     <!-- If we have recorded audio (or review mode), show player -->
     <div v-if="audioUrl" class="qv__player-container">
       <audio controls :src="audioUrl" class="qv__audio-player"></audio>
       
-      <!-- Only show retake button if not in readonly/review mode -->
-      <button v-if="!recordedAudioUrl" class="qv__retake-btn" @click="audioUrl = null">
+      <button v-if="!readonly" class="qv__retake-btn" @click="resetRecording">
         Ulangi Rekaman
       </button>
     </div>
@@ -105,42 +112,48 @@ onUnmounted(() => {
       <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
         <rect x="6" y="6" width="12" height="12" rx="2" />
       </svg>
-      {{ recording ? 'Berhenti Merekam' : 'Tekan Untuk mulai Berbicara' }}
+      {{ recording ? 'Berhenti Merekam' : 'Rekam Suara' }}
     </button>
   </div>
 </template>
 
 <style scoped>
-.qv { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; width: 100%; }
-.qv__prompt { font-size: 1.1em; font-weight: 700; color: var(--color-text-dark); text-align: center; margin: 0; }
+.qv { display: flex; flex-direction: column; align-items: center; gap: 2rem; width: 100%; max-width: 600px; }
 .qv__media-card {
-  width: 280px; height: 280px;
-  background: linear-gradient(135deg, #e8e4f8 0%, #ddf0e8 100%);
+  width: 100%; height: 240px;
+  background: #FCE7F3; /* Soft pink */
   border-radius: 24px;
   display: flex; align-items: center; justify-content: center;
+  padding: 2rem;
 }
-.qv__media-label { font-size: 1.5em; font-weight: 700; color: var(--color-text-dark); }
+.qv__media-label { 
+  font-size: 4rem; 
+  font-weight: 800; 
+  color: #334155; /* Dark gray for contrast */
+  text-align: center;
+}
 .qv__mic-btn {
   display: flex; align-items: center; gap: 0.75rem;
-  padding: 0.875rem 2rem;
-  border-radius: var(--radius-full);
-  border: 1.5px solid #b8e8d0;
-  background: #edf8f3;
-  font-size: 14px; font-weight: 600;
-  color: var(--color-text-dark); cursor: pointer;
-  transition: all var(--transition-fast);
-  min-width: 280px; justify-content: center;
+  padding: 0.875rem 4rem;
+  border-radius: 9999px;
+  border: 1.5px solid #FF3366;
+  background: var(--color-white);
+  font-size: 1rem; font-weight: 600;
+  color: #FF3366; cursor: pointer;
+  transition: all 0.2s;
+  justify-content: center;
 }
 .qv__mic-btn--active { 
-  background: #fde8e8; 
-  border-color: #f4a0a0; 
+  background: #FFE4E6; 
+  border-color: #E11D48; 
+  color: #E11D48;
   animation: pulse-red 1.5s infinite;
 }
 
 @keyframes pulse-red {
-  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
-  70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(225, 29, 72, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0); }
 }
 
 .qv__player-container {
@@ -149,7 +162,7 @@ onUnmounted(() => {
   align-items: center;
   gap: 1rem;
   width: 100%;
-  max-width: 320px;
+  max-width: 400px;
 }
 
 .qv__audio-player {
@@ -158,7 +171,7 @@ onUnmounted(() => {
 
 .qv__retake-btn {
   background: transparent;
-  color: #ef4444;
+  color: #FF3366;
   border: none;
   font-size: 14px;
   font-weight: 600;

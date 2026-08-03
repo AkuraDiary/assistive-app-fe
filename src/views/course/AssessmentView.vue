@@ -19,6 +19,7 @@ const answers = ref<Record<string, any>>({})
 const currentIndex = ref(0)
 const loading = ref(true)
 const submitting = ref(false)
+const isSidebarOpen = ref(true)
 
 onMounted(() => {
   // Mock questions for the assessment based on mockup
@@ -28,31 +29,37 @@ onMounted(() => {
       questionType: 'voice',
       category: 'Kata',
       text: 'Ayam',
+      mediaLabel: 'Ayam',
       audioUrl: '', // optional audio hint
     },
     {
       id: 'q2',
-      questionType: 'voice',
+      questionType: 'upload',
       category: 'Kata',
-      text: 'Ikan',
+      text: 'Tulislah kata "Ikan"',
+      mediaLabel: 'Ikan',
     },
     {
       id: 'q3',
-      questionType: 'voice',
+      questionType: 'tap',
       category: 'Kata',
-      text: 'Bebek',
+      text: 'Pilih huruf awal dari kata "Bebek"',
+      mediaLabel: 'Bebek',
+      options: ['A', 'B', 'C', 'D']
     },
     {
       id: 'q4',
       questionType: 'voice',
-      category: 'Kata',
-      text: 'Capung',
+      category: 'Kalimat',
+      text: 'Baca kalimat di bawah ini',
+      mediaLabel: 'Budi bermain bola',
     },
     {
       id: 'q5',
-      questionType: 'voice',
-      category: 'Kata',
-      text: 'Angsa',
+      questionType: 'upload',
+      category: 'Angka',
+      text: 'Gambarkan angka lima',
+      mediaLabel: '5',
     }
   ]
   loading.value = false
@@ -96,42 +103,76 @@ async function next() {
 
 <template>
   <div class="assessment-page" :class="[fontSizeClass, dyslexiaClass]">
-    <h1 class="assessment-page__title">Mengenal Huruf Vokal</h1>
+    <div class="assessment-page__header">
+      <button class="assessment-page__back-btn" @click="router.back()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <h1 class="assessment-page__title">Mengenal Huruf Vokal</h1>
+    </div>
 
     <div v-if="loading" class="assessment-page__loading">
       <div class="assessment-page__spinner" />
     </div>
 
-    <div v-else-if="current" class="assessment-page__card">
-      <div class="assessment-page__card-header">
-        <h2 class="assessment-page__section">Soal {{ currentIndex + 1 }} dari {{ questions.length }}</h2>
-        <span class="assessment-page__badge">{{ current.category }}</span>
-      </div>
+    <div v-else-if="current" class="assessment-page__content">
+      <!-- Sidebar Navigation -->
+      <aside class="assessment-page__sidebar" :class="{ 'assessment-page__sidebar--collapsed': !isSidebarOpen }">
+        <div class="assessment-page__sidebar-header" @click="isSidebarOpen = !isSidebarOpen">
+          <svg class="assessment-page__sidebar-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          <h2 class="assessment-page__sidebar-title">Navigasi Soal</h2>
+        </div>
+        
+        <ul v-show="isSidebarOpen" class="assessment-page__nav-list">
+          <li 
+            v-for="(q, index) in questions" 
+            :key="q.id"
+            class="assessment-page__nav-item"
+            :class="{ 'assessment-page__nav-item--active': currentIndex === index }"
+            @click="currentIndex = index"
+          >
+            <span class="assessment-page__nav-num">{{ index + 1 }}</span>
+            <span class="assessment-page__nav-text">{{ q.text }}</span>
+          </li>
+        </ul>
+      </aside>
 
-      <div class="assessment-page__question-area">
-        <component
-          :is="
-            current.questionType === 'voice'
-              ? QuestionVoice
-              : current.questionType === 'upload'
-                ? QuestionUpload
-                : QuestionTap
-          "
-          :key="current.id + (answers[current.id] ? '-done' : '-empty')"
-          :question="current"
-          :recordedAudioUrl="answers[current.id]?.value"
-          @answer="handleAnswer"
-        />
-      </div>
-    </div>
+      <!-- Main Area -->
+      <main class="assessment-page__main">
+        <h3 class="assessment-page__subtitle">
+          Jawab dengan {{ current.questionType === 'upload' ? 'menulis di kertas lalu di-upload, atau menggambar di canvas' : 'merekam suaramu' }}.
+        </h3>
 
-    <!-- Nav -->
-    <div class="assessment-page__nav">
-      <button class="assessment-page__nav-btn" @click="prev">Kembali</button>
-      <button class="assessment-page__nav-btn assessment-page__nav-btn--mid" @click="retry">Ulangi Lagi</button>
-      <button class="assessment-page__nav-btn assessment-page__nav-btn--primary" :disabled="submitting" @click="next">
-        {{ isLast ? (submitting ? 'Menyimpan...' : 'Selesai') : 'Lanjut' }}
-      </button>
+        <div class="assessment-page__question-area">
+          <component
+            :is="
+              current.questionType === 'voice'
+                ? QuestionVoice
+                : current.questionType === 'upload'
+                  ? QuestionUpload
+                  : QuestionTap
+            "
+            :key="current.id + (answers[current.id] ? '-done' : '-empty')"
+            :question="current"
+            :recordedAudioUrl="answers[current.id]?.value"
+            @answer="handleAnswer"
+          />
+        </div>
+
+        <div class="assessment-page__nav-actions">
+          <button class="assessment-page__nav-btn" @click="prev" :disabled="currentIndex === 0">
+            &lt; Sebelumnya
+          </button>
+          <button class="assessment-page__nav-btn" :disabled="submitting" @click="next">
+            {{ isLast ? (submitting ? 'Menyimpan...' : 'Selesai') : 'Selanjutnya >' }}
+          </button>
+        </div>
+      </main>
     </div>
 
     <AccessibilityMenu />
@@ -140,20 +181,35 @@ async function next() {
 
 <style scoped>
 .assessment-page {
-  min-height: 100vh;
-  background: var(--color-bg);
+  padding: 1.5rem 2rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 2rem 1rem 6rem;
   gap: 1.5rem;
-  position: relative;
+  height: 100vh;
+  background: var(--color-white);
+}
+
+.assessment-page__header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.assessment-page__back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  background: transparent;
+  border: none;
+  color: #FF3366;
+  cursor: pointer;
 }
 
 .assessment-page__title {
-  font-size: 1.75em;
+  font-size: 1.25rem;
   font-weight: 700;
-  color: var(--color-text-dark);
+  color: #FF3366;
   margin: 0;
 }
 
@@ -166,7 +222,7 @@ async function next() {
   width: 28px;
   height: 28px;
   border: 2px solid #ede8fa;
-  border-top-color: var(--color-primary);
+  border-top-color: #FF3366;
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
@@ -174,77 +230,148 @@ async function next() {
   to { transform: rotate(360deg); }
 }
 
-.assessment-page__card {
+.assessment-page__content {
+  display: flex;
+  gap: 2rem;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.assessment-page__sidebar {
+  width: max-content;
+  min-width: 200px;
   background: var(--color-white);
   border: 1px solid var(--color-border);
-  border-radius: 1.5rem;
-  padding: 2rem;
-  width: 100%;
-  max-width: 600px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-radius: 0.75rem;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  align-self: flex-start;
+  transition: all 0.3s ease;
+}
+
+.assessment-page__sidebar-header {
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  color: var(--color-text-dark);
+  transition: background-color 0.2s;
+}
+
+.assessment-page__sidebar-header:hover {
+  background-color: #f8fafc;
+}
+
+.assessment-page__sidebar-icon {
+  color: #64748B;
+}
+
+.assessment-page__sidebar-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.assessment-page__nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid var(--color-border);
+  overflow-y: auto;
+  flex: 1;
+}
+
+.assessment-page__nav-item {
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  border-bottom: 1px solid var(--color-border);
+  transition: background 0.2s;
+}
+
+.assessment-page__nav-item:hover {
+  background: #f8fafc;
+}
+
+.assessment-page__nav-item--active {
+  background: #FCE7F3; /* tailwind pink-100 */
+}
+
+.assessment-page__nav-item--active .assessment-page__nav-num,
+.assessment-page__nav-item--active .assessment-page__nav-text {
+  color: #FF3366;
+  font-weight: 700;
+}
+
+.assessment-page__nav-num {
+  font-size: 0.875rem;
+  color: var(--color-text-light);
+  width: 1rem;
+}
+
+.assessment-page__nav-text {
+  font-size: 0.875rem;
+  color: var(--color-text-dark);
+  font-weight: 500;
+}
+
+/* Main Area */
+.assessment-page__main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  padding: 1rem 2rem 4rem;
   gap: 2rem;
 }
 
-.assessment-page__card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 1rem;
-  border-bottom: 1px dashed var(--color-border);
-}
-
-.assessment-page__section {
-  font-size: 1.125em;
+.assessment-page__subtitle {
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--color-text-dark);
+  text-align: center;
   margin: 0;
 }
 
-.assessment-page__badge {
-  background: var(--color-primary);
-  color: white;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
 .assessment-page__question-area {
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 300px;
+  justify-content: center;
 }
 
-/* Nav */
-.assessment-page__nav {
+.assessment-page__nav-actions {
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
+  margin-top: 2rem;
   width: 100%;
-  max-width: 600px;
   justify-content: space-between;
+  max-width: 600px;
 }
+
 .assessment-page__nav-btn {
-  padding: 1rem 1.5rem;
-  border-radius: var(--radius-full);
-  border: 2px solid var(--color-primary);
+  padding: 0.75rem 2rem;
+  border-radius: 9999px;
+  border: 1px solid #FF3366;
   background: transparent;
-  color: var(--color-primary);
-  font-weight: 700;
+  color: #FF3366;
+  font-weight: 600;
+  font-size: 0.875rem;
   cursor: pointer;
-  flex: 1;
-  text-align: center;
+  transition: all 0.2s;
 }
-.assessment-page__nav-btn--mid {
-  border-color: #fca5a5; /* lighter red/pink if desired */
-  color: #ef4444;
+
+.assessment-page__nav-btn:hover:not(:disabled) {
+  background: #FF3366;
+  color: white;
 }
-.assessment-page__nav-btn--primary {
-  background: var(--color-primary);
-  color: var(--color-white);
-}
+
 .assessment-page__nav-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;

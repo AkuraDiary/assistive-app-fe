@@ -174,8 +174,9 @@ function prevQuestion() {
         <h3 class="review-page__modal-title">Review Media Jawaban</h3>
         <component
           :is="activeQuestion?.questionType === 'voice' ? QuestionVoice : QuestionUpload"
-          :question="{ id: activeQuestion?.id, text: activeQuestion?.questionText, questionType: activeQuestion?.questionType }"
-          :recordedAudioUrl="activeQuestion?.questionType === 'voice' ? activeQuestion?.userAnswer : undefined"
+          :question="{ id: activeQuestion?.id, text: activeQuestion?.questionText, questionType: activeQuestion?.questionType, mediaLabel: activeQuestion?.questionText }"
+          :recordedAudioUrl="activeQuestion?.userAnswer"
+          :readonly="true"
           class="review-page__modal-component"
         />
         <button class="review-page__btn review-page__btn--primary" style="margin-top: 1rem; width: 100%" @click="showMediaModal = false">Tutup</button>

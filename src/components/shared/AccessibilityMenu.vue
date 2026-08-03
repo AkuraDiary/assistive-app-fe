@@ -138,7 +138,7 @@ const open = ref(false)
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: var(--color-primary);
+  background: var(--color-secondary);
   color: white;
   border: none;
   border-radius: var(--radius-full);
