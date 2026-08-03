@@ -15,6 +15,9 @@ import ModulFormView from '@/views/course/ModulFormView.vue'
 import MateriView from '@/views/course/MateriView.vue'
 import MateriEditorView from '@/views/course/MateriEditorView.vue'
 import AssessmentEditorView from '@/views/course/AssessmentEditorView.vue'
+import AssessmentView from '@/views/course/AssessmentView.vue'
+import AssessmentResultView from '@/views/course/AssessmentResultView.vue'
+import AssessmentReviewView from '@/views/course/AssessmentReviewView.vue'
 import DashboardLayout from '@/layouts/DashboardLayout.vue'
 
 const router = createRouter({
@@ -122,6 +125,21 @@ const router = createRouter({
           path: '/course/:courseId/assessment/:moduleId/edit',
           name: 'assessment-edit',
           component: AssessmentEditorView,
+        },
+        {
+          path: '/course/:courseId/assessment/:moduleId/take',
+          name: 'assessment-take',
+          component: AssessmentView,
+        },
+        {
+          path: '/course/:courseId/assessment/:moduleId/result',
+          name: 'assessment-result',
+          component: AssessmentResultView,
+        },
+        {
+          path: '/course/:courseId/assessment/:moduleId/review',
+          name: 'assessment-review',
+          component: AssessmentReviewView,
         },
         {
           path: '/course/:courseId',

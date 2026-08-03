@@ -87,7 +87,9 @@ async function next() {
                 ? QuestionUpload
                 : QuestionTap
           "
+          :key="current.id + (answers[current.id] ? '-done' : '-empty')"
           :question="current"
+          :recordedAudioUrl="answers[current.id]?.value"
           @answer="handleAnswer"
         />
       </div>

@@ -38,8 +38,8 @@ function onOpenMateri(moduleId: string) {
 
 function onOpenAssessment(moduleId: string) {
   router.push({
-    name: 'assessment', // Adjust to actual route name if different
-    params: { courseId: courseId.value, assessmentId: moduleId },
+    name: 'assessment-take',
+    params: { courseId: courseId.value, moduleId: moduleId },
   })
 }
 

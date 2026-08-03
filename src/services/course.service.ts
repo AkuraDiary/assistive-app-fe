@@ -1,5 +1,6 @@
 import type { Course, CourseDetail } from '@/types/course.types'
 import { apiService, USE_MOCK } from './api'
+import { ref } from 'vue'
 
 const MOCK_COURSES: Course[] = [
   {
@@ -226,6 +227,17 @@ const MOCK_COURSE_DETAIL: CourseDetail[] = [
             tips: 'Klik pada setiap kata yang berwarna biru dan hijau. Warna ini membantu kamu melihat pemisahan suku kata agar lebih mudah dibaca.',
           },
         ]
+      },
+      {
+        id: 'as1',
+        title: 'Mengenal huruf Vocal (A, I, U, E, O)',
+        description: 'Ujian mengenai huruf vokal yang telah dipelajari.',
+        type: 'assessment',
+        level: 'Level 1',
+        categories: ['Kata', 'Kalimat', 'Objek'],
+        skills: ['Mendengar', 'Menulis', 'Membaca'],
+        tanggalDikerjakan: '2026-04-12',
+        isLocked: false,
       }
     ]
   },
@@ -262,6 +274,8 @@ const MOCK_COURSE_DETAIL: CourseDetail[] = [
     ]
   }
 ]
+
+export const latestAssessmentAnswers = ref<Record<string, any>>({})
 
 export const courseService = {
   async getCourses(childId: string): Promise<Course[]> {
