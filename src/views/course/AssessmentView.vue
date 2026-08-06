@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useAccessibility } from '@/composable/useAccessibility'
-import QuestionTap from '@/components/quiz/question-types/QuestionTap.vue'
+import AccessibilityMenu from '@/components/shared/AccessibilityMenu.vue'
 import QuestionVoice from '@/components/quiz/question-types/QuestionVoice.vue'
 import QuestionUpload from '@/components/quiz/question-types/QuestionUpload.vue'
-import AccessibilityMenu from '@/components/shared/AccessibilityMenu.vue'
+import QuestionTap from '@/components/quiz/question-types/QuestionTap.vue'
+import QuestionRapidNaming from '@/components/quiz/question-types/QuestionRapidNaming.vue'
 
-const route = useRoute()
 const router = useRouter()
+const route = useRoute()
 const { fontSizeClass, dyslexiaClass } = useAccessibility()
 
-const courseId = route.params.courseId as string
 const moduleId = route.params.moduleId as string
 
 const questions = ref<any[]>([])
@@ -26,6 +26,26 @@ onMounted(() => {
   questions.value = [
     {
       id: 'q1',
+      questionType: 'rapid-naming',
+      category: 'Warna',
+      text: 'Sebutkan warna-warna berikut',
+      rapidNamingType: 'color',
+      rapidNamingItems: ['#FF0000', '#FFA500', '#00C853'] // Red, Orange, Green
+    },
+    {
+      id: 'q2',
+      questionType: 'rapid-naming',
+      category: 'Hewan',
+      text: 'Sebutkan hewan-hewan berikut',
+      rapidNamingType: 'picture',
+      rapidNamingItems: [
+        'https://placehold.co/120x120?text=Singa',
+        'https://placehold.co/120x120?text=Anjing',
+        'https://placehold.co/120x120?text=Kucing'
+      ]
+    },
+    {
+      id: 'q3',
       questionType: 'voice',
       category: 'Kata',
       text: 'Ayam',
@@ -33,33 +53,19 @@ onMounted(() => {
       audioUrl: '', // optional audio hint
     },
     {
-      id: 'q2',
+      id: 'q4',
       questionType: 'upload',
       category: 'Kata',
       text: 'Tulislah kata "Ikan"',
       mediaLabel: 'Ikan',
     },
     {
-      id: 'q3',
+      id: 'q5',
       questionType: 'tap',
       category: 'Kata',
       text: 'Pilih huruf awal dari kata "Bebek"',
       mediaLabel: 'Bebek',
       options: ['A', 'B', 'C', 'D']
-    },
-    {
-      id: 'q4',
-      questionType: 'voice',
-      category: 'Kalimat',
-      text: 'Baca kalimat di bawah ini',
-      mediaLabel: 'Budi bermain bola',
-    },
-    {
-      id: 'q5',
-      questionType: 'upload',
-      category: 'Angka',
-      text: 'Gambarkan angka lima',
-      mediaLabel: '5',
     }
   ]
   loading.value = false
@@ -151,11 +157,13 @@ async function next() {
         <div class="assessment-page__question-area">
           <component
             :is="
-              current.questionType === 'voice'
-                ? QuestionVoice
-                : current.questionType === 'upload'
-                  ? QuestionUpload
-                  : QuestionTap
+              current.questionType === 'rapid-naming'
+                ? QuestionRapidNaming
+                : current.questionType === 'voice'
+                  ? QuestionVoice
+                  : current.questionType === 'upload'
+                    ? QuestionUpload
+                    : QuestionTap
             "
             :key="current.id + (answers[current.id] ? '-done' : '-empty')"
             :question="current"

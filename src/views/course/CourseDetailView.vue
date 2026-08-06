@@ -31,8 +31,8 @@ const assessmentModules = computed(
 
 function onOpenMateri(moduleId: string) {
   router.push({
-    name: 'materi', // As defined in router
-    params: { courseId: courseId.value, latihanId: moduleId },
+    name: 'materi-view', // As defined in router
+    params: { courseId: courseId.value, moduleId: moduleId },
   })
 }
 

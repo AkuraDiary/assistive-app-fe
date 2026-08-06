@@ -3,14 +3,16 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import QuestionVoice from '@/components/quiz/question-types/QuestionVoice.vue'
 import QuestionUpload from '@/components/quiz/question-types/QuestionUpload.vue'
+import QuestionTap from '@/components/quiz/question-types/QuestionTap.vue'
+import QuestionRapidNaming from '@/components/quiz/question-types/QuestionRapidNaming.vue'
 import { latestAssessmentAnswers } from '@/services/course.service'
 
 const router = useRouter()
 
 // Mock data based on mockups
 const questions = ref([
-  { id: 'q1', number: 1, title: 'Ayam', category: 'Kata', questionType: 'voice', questionText: 'Ayam', userAnswer: 'Ayam', correctAnswer: 'Ayam', isCorrect: true },
-  { id: 'q2', number: 2, title: 'Ikan', category: 'Kata', questionType: 'voice', questionText: 'Ikan', userAnswer: 'Kain', correctAnswer: 'Ikan', isCorrect: false },
+  { id: 'q1', number: 1, title: 'Warna', category: 'Rapid Naming', questionType: 'rapid-naming', questionText: 'Sebutkan warna-warna berikut', userAnswer: 'Merah, Oranye, Hijau', correctAnswer: 'Merah, Oranye, Hijau', isCorrect: true },
+  { id: 'q2', number: 2, title: 'Hewan', category: 'Rapid Naming', questionType: 'rapid-naming', questionText: 'Sebutkan hewan-hewan berikut', userAnswer: 'Singa, Anjing, Kucing', correctAnswer: 'Singa, Anjing, Kucing', isCorrect: true },
   { id: 'q3', number: 3, title: 'Bebek', category: 'Kata', questionType: 'voice', questionText: 'Bebek', userAnswer: 'Bebek', correctAnswer: 'Bebek', isCorrect: true },
   { id: 'q4', number: 4, title: 'Capung', category: 'Kata', questionType: 'voice', questionText: 'Capung', userAnswer: 'Capung', correctAnswer: 'Capung', isCorrect: true },
   { id: 'q5', number: 5, title: 'Angsa', category: 'Kata', questionType: 'voice', questionText: 'Angsa', userAnswer: 'Angsa', correctAnswer: 'Angsa', isCorrect: true },
@@ -133,7 +135,7 @@ function prevQuestion() {
               </button>
               
               <button 
-                v-else-if="activeQuestion.questionType === 'voice'" 
+                v-else-if="['voice', 'rapid-naming'].includes(activeQuestion.questionType)" 
                 class="review-page__media-link"
                 @click="showMediaModal = true"
               >
@@ -173,8 +175,23 @@ function prevQuestion() {
       <div class="review-page__modal-content">
         <h3 class="review-page__modal-title">Review Media Jawaban</h3>
         <component
-          :is="activeQuestion?.questionType === 'voice' ? QuestionVoice : QuestionUpload"
-          :question="{ id: activeQuestion?.id, text: activeQuestion?.questionText, questionType: activeQuestion?.questionType, mediaLabel: activeQuestion?.questionText }"
+          :is="
+            activeQuestion?.questionType === 'rapid-naming'
+              ? QuestionRapidNaming
+              : activeQuestion?.questionType === 'voice'
+                ? QuestionVoice
+                : activeQuestion?.questionType === 'upload'
+                  ? QuestionUpload
+                  : QuestionTap
+          "
+          :question="{ 
+            id: activeQuestion?.id, 
+            text: activeQuestion?.questionText, 
+            questionType: activeQuestion?.questionType, 
+            mediaLabel: activeQuestion?.questionText,
+            rapidNamingType: activeQuestion?.rapidNamingType,
+            rapidNamingItems: activeQuestion?.rapidNamingItems 
+          }"
           :recordedAudioUrl="activeQuestion?.userAnswer"
           :readonly="true"
           class="review-page__modal-component"

@@ -269,7 +269,7 @@ const MOCK_COURSE_DETAIL: CourseDetail[] = [
         categories: ['Kata', 'Kalimat', 'Objek'],
         skills: ['Mendengar', 'Menulis', 'Membaca'],
         tanggalDikerjakan: '2026-04-12',
-        isLocked: true,
+        isLocked: false,
       }
     ]
   }

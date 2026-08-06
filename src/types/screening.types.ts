@@ -1,6 +1,6 @@
 export type ScreeningType = 'orang_tua' | 'anak'
 export type ScreeningUIState = 'disable' | 'lihat_hasil' | ScreeningType
-export type QuestionType = 'tap' | 'voice' | 'upload'
+export type QuestionType = 'tap' | 'voice' | 'upload' | 'rapid-naming'
 
 export interface ScreeningAnswer {
   questionId: string
@@ -22,6 +22,8 @@ export interface ScreeningQuestion {
   mediaLabel?: string
   mediaUrl?: string
   options?: string[]
+  rapidNamingType?: 'color' | 'picture'
+  rapidNamingItems?: string[]
 }
 
 export interface CategoryScore {
