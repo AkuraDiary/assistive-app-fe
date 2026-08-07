@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useCourseDetail } from '@/composable/useCourseDetail'
 import CourseDetailHeader from '@/components/course/CourseDetailHeader.vue'
@@ -10,6 +10,12 @@ import AssessmentSection from '@/components/course/AssessmentSection.vue'
 const router = useRouter()
 const route = useRoute()
 const { courseDetail, loading, error, fetchCourseDetail } = useCourseDetail()
+
+// UI state
+const isEditMode = ref(false)
+const userRole = ref('teacher')
+// Toggle for progress testing
+const debugProgress100 = ref(false)
 
 const courseId = computed(() => route.params.courseId as string)
 // If we don't have childId in route, we use a default (like 'ch1') or adjust based on role
@@ -43,6 +49,13 @@ function onOpenAssessment(moduleId: string) {
   })
 }
 
+function onEditAssessment(moduleId: string) {
+  router.push({
+    name: 'assessment-edit',
+    params: { courseId: courseId.value, moduleId: moduleId },
+  })
+}
+
 function goBack() {
   router.push({ name: 'dashboard' }) // Or equivalent
 }
@@ -54,6 +67,19 @@ function onLanjut() {
 
 <template>
   <div class="cdv-page">
+    <div class="debug-controls" style="padding: 10px; background: #eee; border-radius: 8px; margin-bottom: 16px; font-size: 12px; display: flex; gap: 12px; align-items: center;">
+      <strong>Debug:</strong>
+      <label><input type="checkbox" v-model="isEditMode" /> isEditMode</label>
+      <label>
+        Role:
+        <select v-model="userRole">
+          <option value="teacher">Teacher</option>
+          <option value="student">Student</option>
+        </select>
+      </label>
+      <label><input type="checkbox" v-model="debugProgress100" /> Force 100% Progress</label>
+    </div>
+
     <div v-if="loading" class="cdv-page__loading">Loading course detail...</div>
     <div v-else-if="error" class="cdv-page__error">{{ error }}</div>
 
@@ -62,6 +88,7 @@ function onLanjut() {
         <CourseDetailHeader :course="courseDetail" />
 
         <button
+          v-if="isEditMode"
           class="cdv-btn cdv-btn--primary"
           @click="router.push({ name: 'tambah-modul', params: { courseId: courseId } })"
         >
@@ -80,7 +107,7 @@ function onLanjut() {
       </div>
 
       <div class="cdv-page__body">
-        <CourseOverallProgress :progress="courseDetail.progress" />
+        <CourseOverallProgress v-if="!isEditMode" :progress="debugProgress100 ? 100 : courseDetail.progress" />
 
         <div class="cdv-page__sections-title">Pilih Modul</div>
 
@@ -88,14 +115,20 @@ function onLanjut() {
         <LatihanSection
           v-if="materiModules.length > 0"
           :modules="materiModules"
+          :is-edit-mode="isEditMode"
+          :user-role="userRole"
           @open-materi="onOpenMateri"
+          @toggle-edit-mode="isEditMode = !isEditMode"
         />
 
         <!-- Assessment List -->
         <AssessmentSection
           v-if="assessmentModules.length > 0"
           :modules="assessmentModules"
+          :is-edit-mode="isEditMode"
+          :progress="debugProgress100 ? 100 : courseDetail.progress"
           @open-assessment="onOpenAssessment"
+          @edit-assessment="onEditAssessment"
         />
       </div>
 

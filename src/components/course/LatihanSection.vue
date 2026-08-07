@@ -4,6 +4,8 @@ import type { CourseModule } from '@/types/course.types'
 
 defineProps<{
   modules: CourseModule[]
+  isEditMode: boolean
+  userRole: string
 }>()
 
 const expandedId = ref<string | null>(null)
@@ -13,6 +15,7 @@ function toggle(id: string) {
 }
 const emit = defineEmits<{
   (e: 'open-materi', moduleId: string): void
+  (e: 'toggle-edit-mode'): void
 }>()
 
 function formatDate(iso?: string) {
@@ -39,6 +42,25 @@ function formatDate(iso?: string) {
       <p class="ls__desc">Pelajari materinya dan kerjakan latihan untuk menguji pemahamanmu.</p>
     </div>
 
+    <!-- Toggle Mode Button -->
+    <div class="ls__toggle-wrapper" v-if="userRole === 'teacher'">
+      <button class="ls__toggle-btn" @click="emit('toggle-edit-mode')">
+        <template v-if="isEditMode">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+             <path d="M15 18l-6-6 6-6"/>
+          </svg>
+          Kembali ke Mode Belajar
+        </template>
+        <template v-else>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Masuk ke Mode Edit
+        </template>
+      </button>
+    </div>
+
     <!-- Module list -->
     <div class="ls__list">
       <div
@@ -53,7 +75,7 @@ function formatDate(iso?: string) {
             <span class="ls__item-title">{{ item.title }}</span>
           </div>
           <div class="ls__row-right">
-            <span v-if="item.progress !== undefined" class="ls__item-pct" :class="{ 'ls__item-pct--pink': expandedId === item.id }">{{ item.progress }} %</span>
+            <span v-if="!isEditMode && item.progress !== undefined" class="ls__item-pct" :class="{ 'ls__item-pct--pink': expandedId === item.id }">{{ item.progress }} %</span>
             <svg
               class="ls__chevron"
               :class="{ 'ls__chevron--up': expandedId === item.id, 'ls__chevron--pink': expandedId === item.id }"
@@ -75,21 +97,39 @@ function formatDate(iso?: string) {
             <div class="ls__expanded-inner">
               <p class="ls__expanded-desc">{{ item.description ?? 'Belajar huruf vocal' }}</p>
 
-              <div class="ls__expanded-meta">
+              <div class="ls__expanded-meta" v-if="!isEditMode">
                 <span class="ls__expanded-date">
                   Terakhir Dikerjakan: {{ formatDate(item.tanggalDikerjakan) }}
                 </span>
                 <span v-if="item.progress !== undefined" class="ls__expanded-pct-bold">{{ item.progress }}%</span>
               </div>
 
-              <div v-if="item.progress !== undefined" class="ls__expanded-track">
+              <div v-if="!isEditMode && item.progress !== undefined" class="ls__expanded-track">
                 <div class="ls__expanded-fill" :style="{ width: `${item.progress}%` }" />
               </div>
 
               <div class="ls__expanded-actions">
-                <button class="ls__btn ls__btn--primary" @click="emit('open-materi', item.id)">
-                  Lanjutan pelajaran
-                </button>
+                <template v-if="isEditMode">
+                  <button class="ls__btn ls__btn--primary" style="flex: 1" @click.stop>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                    </svg>
+                    Edit Modul
+                  </button>
+                  <button class="ls__btn ls__btn--danger" style="flex: 1" @click.stop>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M18.36 6.64a9 9 0 1 1-12.73 0" />
+                      <line x1="12" y1="2" x2="12" y2="12" />
+                    </svg>
+                    Nonaktifkan Modul
+                  </button>
+                </template>
+                <template v-else>
+                  <button class="ls__btn ls__btn--primary" @click="emit('open-materi', item.id)">
+                    Lanjutan pelajaran
+                  </button>
+                </template>
               </div>
             </div>
           </div>
@@ -257,6 +297,40 @@ function formatDate(iso?: string) {
 }
 .ls__btn--primary:hover {
   background: #e62c76;
+}
+
+.ls__btn--danger {
+  background: #d32f2f;
+  border: none;
+  color: #fff;
+}
+.ls__btn--danger:hover {
+  background: #b71c1c;
+}
+
+.ls__toggle-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -10px;
+}
+.ls__toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: white;
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 6px rgba(255, 60, 138, 0.1);
+  z-index: 10;
+}
+.ls__toggle-btn:hover {
+  background: rgba(255, 60, 138, 0.05);
 }
 
 /* Transition */

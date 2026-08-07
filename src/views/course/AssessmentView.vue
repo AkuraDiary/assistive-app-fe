@@ -13,6 +13,7 @@ const route = useRoute()
 const { fontSizeClass, dyslexiaClass } = useAccessibility()
 
 const moduleId = route.params.moduleId as string
+const courseId = route.params.courseId as string
 
 const questions = ref<any[]>([])
 const answers = ref<Record<string, any>>({})

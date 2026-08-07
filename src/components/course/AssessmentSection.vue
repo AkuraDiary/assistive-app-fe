@@ -3,10 +3,13 @@ import type { CourseModule } from '@/types/course.types'
 
 defineProps<{
   modules: CourseModule[]
+  isEditMode: boolean
+  progress: number
 }>()
 
 const emit = defineEmits<{
   (e: 'open-assessment', moduleId: string): void
+  (e: 'edit-assessment', moduleId: string): void
 }>()
 </script>
 
@@ -50,18 +53,38 @@ const emit = defineEmits<{
           </span>
         </div>
 
-        <button 
-          class="as__btn" 
-          :class="item.isLocked ? 'as__btn--locked' : 'as__btn--primary'"
-          :disabled="item.isLocked"
-          @click="emit('open-assessment', item.id)"
-        >
-          <svg v-if="item.isLocked" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-          </svg>
-          {{ item.isLocked ? 'Terkunci' : 'Mulai Ujian' }}
-        </button>
+        <template v-if="isEditMode">
+          <div style="display: flex; gap: 12px; margin-top: 8px;">
+            <button class="as__btn as__btn--primary" style="flex: 1;" @click="emit('edit-assessment', item.id)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+              </svg>
+              Edit Assessment
+            </button>
+            <button class="as__btn as__btn--danger" style="flex: 1;" @click.stop>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18.36 6.64a9 9 0 1 1-12.73 0" />
+                <line x1="12" y1="2" x2="12" y2="12" />
+              </svg>
+              Nonaktifkan Assessment
+            </button>
+          </div>
+        </template>
+        <template v-else>
+          <button 
+            class="as__btn" 
+            :class="progress < 100 || item.isLocked ? 'as__btn--locked' : 'as__btn--primary'"
+            :disabled="progress < 100 || item.isLocked"
+            @click="emit('open-assessment', item.id)"
+          >
+            <svg v-if="progress < 100 || item.isLocked" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            {{ progress < 100 || item.isLocked ? 'Terkunci' : 'Mulai Ujian' }}
+          </button>
+        </template>
       </div>
     </div>
   </div>
@@ -196,5 +219,14 @@ const emit = defineEmits<{
 }
 .as__btn--primary:hover {
   background: #e62c76;
+}
+
+.as__btn--danger {
+  background: #d32f2f;
+  color: #fff;
+  border: none;
+}
+.as__btn--danger:hover {
+  background: #b71c1c;
 }
 </style>
