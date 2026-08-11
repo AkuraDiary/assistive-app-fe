@@ -14,23 +14,34 @@ export function useScreening(childRecords: ReturnType<typeof ref<ChildRecord[]>>
   }
 
   async function getScreeningQuestions(type: 'orang_tua' | 'anak') {
-    return screeningService.getScreeningQuestions(type)
+    const res = await screeningService.getScreeningQuestions(type)
+    if (res.success && res.data) {
+      return res.data
+    }
+    return []
   }
 
   async function submitScreening(payload: Parameters<typeof screeningService.submitScreening>[0]) {
     screeningLoading.value = true
     screeningError.value = null
     try {
-      await screeningService.submitScreening(payload)
+      const res = await screeningService.submitScreening(payload)
+      if (!res.success) {
+        throw new Error(res.message || 'Gagal submit screening')
+      }
     } catch (e: any) {
-      screeningError.value = e?.data?.message ?? 'Gagal submit screening'
+      screeningError.value = e?.message ?? 'Gagal submit screening'
     } finally {
       screeningLoading.value = false
     }
   }
 
   async function getScreeningResult(childId: string) {
-    return screeningService.getScreeningResult(childId)
+    const res = await screeningService.getScreeningResult(childId)
+    if (res.success && res.data) {
+      return res.data
+    }
+    return []
   }
 
   return {

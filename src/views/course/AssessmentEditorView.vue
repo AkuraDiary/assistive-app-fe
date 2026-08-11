@@ -48,13 +48,16 @@ function handleFileUpload(event: Event) {
   if (!files || files.length === 0) return
 
   const file = files[0]
+  if (!file) return
+
   const reader = new FileReader()
   reader.onload = (e) => {
     if (e.target?.result) {
+      if (!activeQuestion.value) return
       if (!activeQuestion.value.options) {
         activeQuestion.value.options = []
       }
-      activeQuestion.value.options.push(e.target.result)
+      activeQuestion.value.options.push(e.target.result as string)
     }
   }
   reader.readAsDataURL(file)
@@ -64,6 +67,7 @@ function handleFileUpload(event: Event) {
 }
 
 function toggleColor(color: string) {
+  if (!activeQuestion.value) return
   if (!activeQuestion.value.options) {
     activeQuestion.value.options = []
   }

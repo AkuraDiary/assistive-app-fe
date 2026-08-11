@@ -19,8 +19,8 @@ const result = ref<ScreeningResult | null>(null)
 const isFetching = ref(true)
 
 onMounted(async () => {
-  const results = await screeningService.getScreeningResult(props.childId)
-  result.value = results[0] ?? null
+  const res = await screeningService.getScreeningResult(props.childId)
+  result.value = res.success && res.data && res.data.length > 0 ? (res.data[0] ?? null) : null
   isFetching.value = false
 })
 

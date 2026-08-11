@@ -95,13 +95,21 @@ function draw(e: MouseEvent | TouchEvent) {
   const scaleX = canvas.width / rect.width
   const scaleY = canvas.height / rect.height
 
-  let clientX, clientY
+  let clientX = 0, clientY = 0
   if (e instanceof MouseEvent) {
     clientX = e.clientX
     clientY = e.clientY
+  } else if ('touches' in e && e.touches.length > 0) {
+    const touchEvent = e as TouchEvent
+    const touch = touchEvent.touches[0]
+    if (touch) {
+      clientX = touch.clientX
+      clientY = touch.clientY
+    } else {
+      return
+    }
   } else {
-    clientX = e.touches[0].clientX
-    clientY = e.touches[0].clientY
+    return
   }
   
   ctx.lineTo((clientX - rect.left) * scaleX, (clientY - rect.top) * scaleY)

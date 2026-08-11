@@ -24,7 +24,8 @@ const loading = ref(true)
 const submitting = ref(false)
 
 onMounted(async () => {
-  questions.value = await screeningService.getScreeningQuestions(screeningType)
+  const res = await screeningService.getScreeningQuestions(screeningType)
+  questions.value = res.success && res.data ? res.data : []
   loading.value = false
 })
 

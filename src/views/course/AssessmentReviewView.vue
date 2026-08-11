@@ -19,8 +19,10 @@ const questions = ref<any[]>([])
 
 onMounted(async () => {
   try {
-    const course = await courseService.getCourseDetail('c1', courseId)
-    const module = course.modules.find(m => m.id === moduleId)
+    const res = await courseService.getCourseDetail('c1', courseId)
+    const course = res.data
+    courseDetail.value = course
+    const module = course ? course.modules.find(m => m.id === moduleId) : null
     
     if (module && module.questions) {
       questions.value = module.questions.map((q, index) => {
@@ -45,6 +47,7 @@ onMounted(async () => {
 
 const activeQuestionId = ref('')
 const activeQuestion = computed(() => questions.value.find(q => q.id === activeQuestionId.value))
+const courseDetail = ref<any>(null)
 
 const showMediaModal = ref(false)
 
@@ -78,7 +81,7 @@ function prevQuestion() {
         </svg>
         Kembali
       </button>
-      <h1 class="review-page__title">Mengenal Huruf Vokal</h1>
+      <h1 class="review-page__title">{{ courseDetail?.name ?? 'Loading...' }}</h1>
     </div>
 
     <div class="review-page__content">
@@ -203,7 +206,9 @@ function prevQuestion() {
             questionType: activeQuestion?.questionType,
             mediaLabel: activeQuestion?.questionText,
             rapidNamingType: activeQuestion?.rapidNamingType,
-            rapidNamingItems: activeQuestion?.rapidNamingItems
+            rapidNamingItems: activeQuestion?.rapidNamingItems,
+            order: activeQuestion?.number || 0,
+            required: true
           }"
           :recordedAudioUrl="activeQuestion?.userAnswer"
           :readonly="true"

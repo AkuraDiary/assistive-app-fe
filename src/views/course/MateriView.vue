@@ -29,9 +29,9 @@ onMounted(async () => {
     await fetchCourseDetail(selectedChildId.value, courseId)
   }
 
-  const latihan = courseDetail.value?.moduls
-    .flatMap((m) => m.latihan)
-    .find((l) => l.id === latihanId)
+  const latihan = courseDetail.value?.modules
+    .flatMap((m: any) => m.latihan || [])
+    .find((l: any) => l.id === latihanId)
 
   if (!latihan?.materi?.length) return router.back()
   setMateri(latihan.materi)

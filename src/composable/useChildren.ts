@@ -9,35 +9,46 @@ export function useChildren() {
   const hasChildren = computed(() => childRecords.value.length > 0)
 
   async function fetchChildren() {
-    const [records, lembaga] = await Promise.all([
+    const [recordsRes, lembagaRes] = await Promise.all([
       childService.getChildRecords(),
       childService.getLembagaList(),
     ])
-    childRecords.value = records
-    lembagaList.value = lembaga
+    if (recordsRes.success && recordsRes.data) childRecords.value = recordsRes.data
+    if (lembagaRes.success && lembagaRes.data) lembagaList.value = lembagaRes.data
   }
 
   async function addChild(payload: AddChildPayload) {
-    const record = await childService.addChildRecord(payload)
-    childRecords.value.push(record)
-    return record
+    const res = await childService.addChildRecord(payload)
+    if (res.success && res.data) {
+      childRecords.value.push(res.data)
+      return res.data
+    }
+    throw new Error(res.message || 'Failed to add child')
   }
+
   async function uploadChildAvatar(id: string, file: File) {
-    const avatarUrl = await childService.uploadChildAvatar(id, file)
-    const index = childRecords.value.findIndex((r) => r._id === id)
-    if (index !== -1 && childRecords.value[index]) {
-      childRecords.value[index].avatar = avatarUrl
+    const res = await childService.uploadChildAvatar(id, file)
+    if (res.success && res.data) {
+      const index = childRecords.value.findIndex((r) => r._id === id)
+      if (index !== -1 && childRecords.value[index]) {
+        childRecords.value[index].avatar = res.data
+      }
     }
   }
+
   async function updateChild(id: string, payload: AddChildPayload) {
-    const record = await childService.updateChildRecord(id, payload)
-    const index = childRecords.value.findIndex((r) => r._id === id)
-    if (index !== -1) childRecords.value[index] = record
+    const res = await childService.updateChildRecord(id, payload)
+    if (res.success && res.data) {
+      const index = childRecords.value.findIndex((r) => r._id === id)
+      if (index !== -1) childRecords.value[index] = res.data
+    }
   }
 
   async function deleteChild(id: string) {
-    await childService.deleteChildRecord(id)
-    childRecords.value = childRecords.value.filter((r) => r._id !== id)
+    const res = await childService.deleteChildRecord(id)
+    if (res.success) {
+      childRecords.value = childRecords.value.filter((r) => r._id !== id)
+    }
   }
 
   return {

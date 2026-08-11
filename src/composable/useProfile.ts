@@ -41,7 +41,7 @@ export function useProfile() {
     try {
       const res = await profileService.uploadAvatar(file)
       if (res.success && res.data && user.value) {
-        user.value.avatarUrl = res.data.avatarUrl
+        user.value.avatarUrl = res.data
       }
     } catch (e: any) {
       error.value = e?.data?.message ?? 'Gagal mengunggah foto'

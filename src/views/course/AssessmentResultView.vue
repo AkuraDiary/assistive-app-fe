@@ -10,6 +10,19 @@ const { fontSizeClass, dyslexiaClass } = useAccessibility()
 const courseId = route.params.courseId as string
 const moduleId = route.params.moduleId as string
 
+import { useCourseDetail } from '@/composable/useCourseDetail'
+import { onMounted, computed } from 'vue'
+
+const { courseDetail, fetchCourseDetail, loading } = useCourseDetail()
+
+onMounted(() => {
+  fetchCourseDetail('c1', courseId)
+})
+
+const moduleDetail = computed(() => {
+  return courseDetail.value?.modules.find(m => m.id === moduleId) || null
+})
+
 function goToReview() {
   router.push({ name: 'assessment-review', params: { courseId, moduleId } })
 }
@@ -22,10 +35,10 @@ function finish() {
 <template>
   <div class="result-page" :class="[fontSizeClass, dyslexiaClass]">
     <div class="result-page__content">
-      <div class="result-page__header">
+      <div class="result-page__header" v-if="courseDetail && moduleDetail">
         <h1 class="result-page__title">Horray! Kamu berhasil menyelesaikan ujian</h1>
-        <h2 class="result-page__course-title">Mengenal Huruf Vokal</h2>
-        <p class="result-page__module-name">Modul 1</p>
+        <h2 class="result-page__course-title">{{ courseDetail.name }}</h2>
+        <p class="result-page__module-name">{{ moduleDetail.title }}</p>
       </div>
 
       <div class="result-page__stats">
@@ -62,12 +75,12 @@ function finish() {
         </div>
       </div>
 
-      <div class="result-page__category-card">
+      <div class="result-page__category-card" v-if="moduleDetail">
         <h3 class="result-page__category-title">Kategori</h3>
         <div class="result-page__category-pills">
-          <span class="result-page__pill">Mendengar</span>
-          <span class="result-page__pill">Menulis</span>
-          <span class="result-page__pill">Membaca</span>
+          <span v-for="skill in (moduleDetail.skills || ['Mendengar', 'Menulis', 'Membaca'])" :key="skill" class="result-page__pill">
+            {{ skill }}
+          </span>
         </div>
       </div>
 

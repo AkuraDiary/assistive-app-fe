@@ -22,12 +22,18 @@ export function useCourse() {
   })
 
   async function fetchCourses(childId: string) {
-    courses.value = await courseService.getCourses(childId)
+    const res = await courseService.getCourses(childId)
+    if (res.success && res.data) {
+      courses.value = res.data
+    }
     currentPage.value = 1
   }
 
   async function fetchAllStudentCourses() {
-    courses.value = await courseService.getAllStudentCourses()
+    const res = await courseService.getAllStudentCourses()
+    if (res.success && res.data) {
+      courses.value = res.data
+    }
     currentPage.value = 1
   }
 

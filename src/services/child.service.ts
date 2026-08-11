@@ -1,55 +1,20 @@
-import type { ChildRecord, AddChildPayload, Lembaga, ChildStatus } from '@/types/child.types'
-import { apiService, USE_MOCK } from './api'
-import type { ApiResponse } from './api'
-
-const MOCK_LEMBAGA: Lembaga[] = [
-  { _id: 'l1', name: 'SLB Mutiara', description: 'Lorem ipsum odor amet,' },
-  { _id: 'l2', name: 'SLB Harapan', description: 'Lorem ipsum odor amet,' },
-]
-
-export const MOCK_CHILD_RECORDS: ChildRecord[] = [
-  {
-    _id: 'c1',
-    fullName: 'Fatur Rahman',
-    dateOfBirth: '2026-05-02',
-    gender: 'laki_laki',
-    therapyType: 'individu',
-    applicationStatus: 'diterima',
-    screeningAction: 'lihat_hasil',
-    institutionId: undefined,
-  },
-  {
-    _id: 'c2',
-    fullName: 'Budi Santoso',
-    dateOfBirth: '2016-03-12',
-    gender: 'laki_laki',
-    therapyType: 'lembaga_sekolah',
-    applicationStatus: 'menunggu',
-    screeningAction: 'disable',
-    institutionId: 'l1',
-  },
-  {
-    _id: 'c3',
-    fullName: 'Citra Kirana',
-    dateOfBirth: '2015-11-20',
-    gender: 'perempuan',
-    therapyType: 'lembaga_sekolah',
-    applicationStatus: 'diterima',
-    screeningAction: 'orang_tua',
-    avatar: '',
-  },
-]
+import type { ChildRecord, AddChildPayload, Lembaga } from '@/types/child.types'
+import { apiService, USE_MOCK, type ApiResponse } from './api'
+import { mockLembaga, mockChildRecords } from '@/mocks/child.mock'
 
 export const childService = {
-  async getChildRecords(): Promise<ChildRecord[]> {
-    if (USE_MOCK) return [...MOCK_CHILD_RECORDS]
-    const res = await apiService.get<ChildRecord[]>('/children/records')
-    return res.data ?? []
+  async getChildRecords(): Promise<ApiResponse<ChildRecord[]>> {
+    if (USE_MOCK) {
+      await new Promise(resolve => setTimeout(resolve, 300))
+      return { success: true, data: [...mockChildRecords] }
+    }
+    return await apiService.get<ChildRecord[]>('/children/records')
   },
 
-  async addChildRecord(payload: AddChildPayload): Promise<ChildRecord> {
+  async addChildRecord(payload: AddChildPayload): Promise<ApiResponse<ChildRecord>> {
     if (USE_MOCK) {
-      const lembaga = MOCK_LEMBAGA.find((l) => l._id === payload.institutionId)
+      await new Promise(resolve => setTimeout(resolve, 300))
+      const lembaga = mockLembaga.find((l) => l._id === payload.institutionId)
       const record: ChildRecord = {
         _id: `c${Date.now()}`,
         ...payload,
@@ -57,35 +22,38 @@ export const childService = {
         applicationStatus: 'menunggu',
         screeningAction: payload.therapyType === 'individu' ? 'disable' : 'orang_tua',
       }
-      MOCK_CHILD_RECORDS.push(record)
-      return record
+      mockChildRecords.push(record)
+      return { success: true, data: record }
     }
-    const res = await apiService.post<ChildRecord>('/children/records', payload)
-    return res.data!
+    return await apiService.post<ChildRecord>('/children/records', payload)
   },
 
-  async uploadChildAvatar(id: string, file: File): Promise<string> {
+  async uploadChildAvatar(id: string, file: File): Promise<ApiResponse<string>> {
     if (USE_MOCK) {
-      const index = MOCK_CHILD_RECORDS.findIndex((r) => r._id === id)
+      await new Promise(resolve => setTimeout(resolve, 300))
+      const index = mockChildRecords.findIndex((r) => r._id === id)
       if (index !== -1) {
         const url = URL.createObjectURL(file) // temp preview URL
-        const existing = MOCK_CHILD_RECORDS[index]
+        const existing = mockChildRecords[index]
         if (existing) {
           existing.avatar = url
         }
       }
-      return URL.createObjectURL(file)
+      return { success: true, data: URL.createObjectURL(file) }
     }
     const form = new FormData()
     form.append('avatar', file)
     const res = await apiService.post<{ avatarUrl: string }>(`/children/records/${id}/avatar`, form)
-    return res.data!.avatarUrl
+    if (!res.success) return { success: false, message: res.message }
+    return { success: true, data: res.data!.avatarUrl }
   },
-  async updateChildRecord(id: string, payload: AddChildPayload): Promise<ChildRecord> {
+
+  async updateChildRecord(id: string, payload: AddChildPayload): Promise<ApiResponse<ChildRecord>> {
     if (USE_MOCK) {
-      const index = MOCK_CHILD_RECORDS.findIndex((r) => r._id === id)
+      await new Promise(resolve => setTimeout(resolve, 300))
+      const index = mockChildRecords.findIndex((r) => r._id === id)
       if (index !== -1) {
-        const existing = MOCK_CHILD_RECORDS[index]
+        const existing = mockChildRecords[index]
         const updated: ChildRecord = {
           _id: existing?._id ?? '',
           ...payload,
@@ -94,27 +62,29 @@ export const childService = {
           applicationStatus: payload.applicationStatus ?? 'menunggu',
           screeningAction: payload.applicationStatus === 'diterima' ? 'orang_tua' : 'disable',
         }
-        MOCK_CHILD_RECORDS[index] = updated
-        return updated
+        mockChildRecords[index] = updated
+        return { success: true, data: updated }
       }
-      throw new Error(`Child record ${id} not found`)
+      return { success: false, message: `Child record ${id} not found` }
     }
-    const res = await apiService.put<ChildRecord>(`/children/records/${id}`, payload)
-    return res.data!
+    return await apiService.put<ChildRecord>(`/children/records/${id}`, payload)
   },
 
-  async deleteChildRecord(id: string): Promise<void> {
+  async deleteChildRecord(id: string): Promise<ApiResponse<void>> {
     if (USE_MOCK) {
-      const index = MOCK_CHILD_RECORDS.findIndex((r) => r._id === id)
-      if (index !== -1) MOCK_CHILD_RECORDS.splice(index, 1)
-      return
+      await new Promise(resolve => setTimeout(resolve, 300))
+      const index = mockChildRecords.findIndex((r) => r._id === id)
+      if (index !== -1) mockChildRecords.splice(index, 1)
+      return { success: true }
     }
-    await apiService.delete(`/children/records/${id}`)
+    return await apiService.delete(`/children/records/${id}`)
   },
 
-  async getLembagaList(): Promise<Lembaga[]> {
-    if (USE_MOCK) return MOCK_LEMBAGA
-    const res = await apiService.get<Lembaga[]>('/lembaga')
-    return res.data ?? []
+  async getLembagaList(): Promise<ApiResponse<Lembaga[]>> {
+    if (USE_MOCK) {
+      await new Promise(resolve => setTimeout(resolve, 300))
+      return { success: true, data: [...mockLembaga] }
+    }
+    return await apiService.get<Lembaga[]>('/lembaga')
   },
 }

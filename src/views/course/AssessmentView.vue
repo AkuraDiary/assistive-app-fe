@@ -7,7 +7,9 @@ import QuestionVoice from '@/components/quiz/question-types/QuestionVoice.vue'
 import QuestionUpload from '@/components/quiz/question-types/QuestionUpload.vue'
 import QuestionTap from '@/components/quiz/question-types/QuestionTap.vue'
 import QuestionRapidNaming from '@/components/quiz/question-types/QuestionRapidNaming.vue'
-import { courseService } from '@/services/course.service'
+import { useCourseDetail } from '@/composable/useCourseDetail'
+import { courseService, latestAssessmentAnswers } from '@/services/course.service'
+import type { AssessmentQuestion } from '@/types/course.types'
 
 const router = useRouter()
 const route = useRoute()
@@ -28,9 +30,10 @@ const hasStarted = ref(false)
 
 onMounted(async () => {
   try {
-    const course = await courseService.getCourseDetail('c1', courseId)
-    courseData.value = course
-    const module = course.modules.find(m => m.id === moduleId)
+    const res = await courseService.getCourseDetail('c1', courseId)
+    const course = res.data
+    courseData.value = course || null
+    const module = course ? course.modules.find(m => m.id === moduleId) : null
     if (module) {
       moduleData.value = module
       if (module.questions) {
@@ -67,9 +70,7 @@ async function next() {
     // Simulate submission delay
     await new Promise((resolve) => setTimeout(resolve, 500))
     // Save answers temporarily to simulate backend
-    import('@/services/course.service').then(m => {
-      m.latestAssessmentAnswers.value = { ...answers.value }
-    })
+    latestAssessmentAnswers.value = { ...answers.value }
 
     submitting.value = false
     router.push({ name: 'assessment-result', params: { courseId, moduleId } })

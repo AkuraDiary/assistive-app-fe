@@ -13,7 +13,12 @@ export function useCourseDetail() {
     loading.value = true
     error.value = null
     try {
-      courseDetail.value = await courseService.getCourseDetail(childId, courseId)
+      const res = await courseService.getCourseDetail(childId, courseId)
+      if (res.success && res.data) {
+        courseDetail.value = res.data
+      } else {
+        error.value = res.message || 'Failed to fetch course detail'
+      }
     } catch (err) {
       error.value = (err as Error).message
     } finally {

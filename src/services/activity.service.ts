@@ -1,122 +1,13 @@
 import type { ActivityEntry } from '@/types/activity.types'
-import { apiService, USE_MOCK } from './api'
-
-const MOCK_ACTIVITIES: ActivityEntry[] = [
-  {
-    id: 'act1',
-    childId: 'c1',
-    date: '2026-05-27T10:00:00Z',
-    durationMinutes: 30,
-    topic: 'Mengenal Huruf A-E',
-    status: 'belum',
-    progress: 80,
-  },
-  {
-    id: 'act2',
-    childId: 'c1',
-    date: '2026-05-26T14:30:00Z',
-    durationMinutes: 45,
-    topic: 'Menulis Angka 1-10',
-    score: 90,
-    status: 'belum',
-    progress: 80,
-  },
-  {
-    id: 'act3',
-    childId: 'c1',
-    date: '2026-05-25T09:15:00Z',
-    durationMinutes: 20,
-    topic: 'Bermain Warna',
-    score: 100,
-    status: 'belum',
-    progress: 80,
-  },
-  {
-    id: 'act4',
-    childId: 'c1',
-    date: '2026-05-24T16:00:00Z',
-    durationMinutes: 60,
-    topic: 'Membaca Suku Kata',
-    score: 75,
-    status: 'belum',
-    progress: 80,
-  },
-  {
-    id: 'act5',
-    childId: 'c1',
-    date: '2026-05-23T11:00:00Z',
-    durationMinutes: 30,
-    topic: 'Mengenal Hewan',
-    score: 95,
-    status: 'belum',
-    progress: 80,
-  },
-  {
-    id: 'act6',
-    childId: 'c1',
-    date: '2026-05-22T08:00:00Z',
-    durationMinutes: 15,
-    topic: 'Menyusun Puzzle',
-    score: 80,
-    status: 'belum',
-    progress: 80,
-  },
-  {
-    id: 'act7',
-    childId: 'c1',
-    date: '2026-05-22T08:00:00Z',
-    durationMinutes: 15,
-    topic: 'Menyusun Puzzle',
-    score: 80,
-    status: 'belum',
-    progress: 80,
-  },
-  {
-    id: 'act7',
-    childId: 'c1',
-    date: '2026-05-22T08:00:00Z',
-    durationMinutes: 15,
-    topic: 'Menyusun Puzzle',
-    status: 'dipelajari',
-    progress: 80,
-    score: 80,
-  },
-  {
-    id: 'act8',
-    childId: 'c1',
-    date: '2026-05-22T08:00:00Z',
-    durationMinutes: 15,
-    topic: 'Menyusun Puzzle',
-    score: 80,
-    status: 'selesai',
-    progress: 100,
-  },
-  {
-    id: 'act9',
-    childId: 'c1',
-    date: '2026-05-22T08:00:00Z',
-    durationMinutes: 15,
-    status: 'belum',
-    progress: 70,
-    topic: 'Menyusun Puzzle',
-    score: 80,
-  },
-  {
-    id: 'act10',
-    childId: 'c1',
-    date: '2026-05-22T08:00:00Z',
-    durationMinutes: 15,
-    topic: 'Menyusun Puzzle',
-    score: 80,
-    status: 'belum',
-    progress: 90,
-  },
-]
+import { apiService, USE_MOCK, type ApiResponse } from './api'
+import { mockActivities } from '@/mocks/activity.mock'
 
 export const activityService = {
-  async getActivities(childId: string): Promise<ActivityEntry[]> {
-    if (USE_MOCK) return MOCK_ACTIVITIES
-    const res = await apiService.get<ActivityEntry[]>(`/children/${childId}/activities`)
-    return res.data ?? []
+  async getActivities(childId: string): Promise<ApiResponse<ActivityEntry[]>> {
+    if (USE_MOCK) {
+      await new Promise(resolve => setTimeout(resolve, 300))
+      return { success: true, data: [...mockActivities] }
+    }
+    return await apiService.get<ActivityEntry[]>(`/children/${childId}/activities`)
   },
 }

@@ -1,39 +1,60 @@
-import { apiService, type ApiResponse } from './api'
-import type { ProfileUser, UpdateProfilePayload } from '@/types/profile.types'
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? ''
-const USE_MOCK = !BASE_URL
-let MOCK_PROFILE: ProfileUser = {
-  _id: '1',
-  name: 'Debby',
-  username: 'debby.kt',
-  email: 'debby123@gmail.com',
-  address: 'Jl. Pegangsaan Timur',
-  phone: '+62 8123456',
-  avatarUrl: undefined,
-}
+import type { ProfileUser } from '@/types/profile.types'
+import { apiService, USE_MOCK, type ApiResponse } from './api'
+import { mockProfile } from '@/mocks/profile.mock'
 
 export const profileService = {
-  getProfile(): Promise<ApiResponse<ProfileUser>> {
-    if (USE_MOCK) return Promise.resolve({ success: true, data: { ...MOCK_PROFILE } })
-    return apiService.get('/profile')
-  },
-
-  updateProfile(payload: UpdateProfilePayload): Promise<ApiResponse<ProfileUser>> {
+  async getProfile(): Promise<ApiResponse<ProfileUser>> {
     if (USE_MOCK) {
-      MOCK_PROFILE = { ...MOCK_PROFILE, ...payload }
-      return Promise.resolve({ success: true, data: { ...MOCK_PROFILE } })
+      await new Promise(resolve => setTimeout(resolve, 300))
+      return { success: true, data: { ...mockProfile } }
     }
-    return apiService.put('/profile', payload)
+    return await apiService.get<ProfileUser>('/profile')
   },
 
-  uploadAvatar(file: File): Promise<ApiResponse<{ avatarUrl: string }>> {
+  async updateProfile(payload: Partial<ProfileUser>): Promise<ApiResponse<ProfileUser>> {
     if (USE_MOCK) {
-      const avatarUrl = URL.createObjectURL(file)
-      MOCK_PROFILE.avatarUrl = avatarUrl
-      return Promise.resolve({ success: true, data: { avatarUrl } })
+      await new Promise(resolve => setTimeout(resolve, 300))
+      Object.assign(mockProfile, payload)
+      return { success: true, data: { ...mockProfile } }
+    }
+    return await apiService.put<ProfileUser>('/profile', payload)
+  },
+
+  async uploadAvatar(file: File): Promise<ApiResponse<string>> {
+    if (USE_MOCK) {
+      await new Promise(resolve => setTimeout(resolve, 300))
+      const url = URL.createObjectURL(file)
+      mockProfile.avatarUrl = url
+      return { success: true, data: url }
     }
     const form = new FormData()
     form.append('avatar', file)
-    return apiService.post('/profile/avatar', form)
+    const res = await apiService.post<{ avatarUrl: string }>('/profile/avatar', form)
+    if (!res.success) return { success: false, message: res.message }
+    return { success: true, data: res.data!.avatarUrl }
   },
+
+  async getRoleStats(role: 'parent' | 'teacher' | 'school_admin' | 'super_admin'): Promise<ApiResponse<any>> {
+    if (USE_MOCK) {
+      await new Promise(resolve => setTimeout(resolve, 300))
+      if (role === 'teacher') {
+        return {
+          success: true,
+          data: {
+            studentsCount: 24,
+            coursesCreated: 12,
+            averageRating: 4.8
+          }
+        }
+      }
+      return {
+        success: true,
+        data: {
+          childrenCount: 2,
+          activeCourses: 5,
+        }
+      }
+    }
+    return await apiService.get(`/profile/stats?role=${role}`)
+  }
 }

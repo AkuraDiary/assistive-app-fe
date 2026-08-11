@@ -27,20 +27,24 @@ async function handleSubmit() {
   const courseId = route.params.courseId as string
   
   if (jenisModul.value === 'materi') {
-    const moduleId = await courseService.addModulToCourse(courseId, {
+    const res = await courseService.addModulToCourse(courseId, {
       label: form.value.nama,
       description: form.value.deskripsi,
       hasLatihan: form.value.tambahLatihan
     })
-    router.push({ name: 'materi-edit', params: { courseId, moduleId } })
+    if (res.success && res.data) {
+      router.push({ name: 'materi-edit', params: { courseId, moduleId: res.data } })
+    }
   } else {
-    const moduleId = await courseService.addAssessmentToCourse(courseId, {
+    const res = await courseService.addAssessmentToCourse(courseId, {
       title: form.value.nama,
       description: form.value.deskripsi,
       poinMinimal: Number(form.value.poinMinimal),
       categories: form.value.kategoriSoal
     })
-    router.push({ name: 'assessment-edit', params: { courseId, moduleId } })
+    if (res.success && res.data) {
+      router.push({ name: 'assessment-edit', params: { courseId, moduleId: res.data } })
+    }
   }
 }
 </script>

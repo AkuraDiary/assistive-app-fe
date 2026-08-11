@@ -7,8 +7,8 @@ import { useCourse } from './useCourse'
 import { useActivity } from './useActivity'
 
 const user = ref<DashboardUser | null>(null)
-const loading = ref(false)
-const error = ref<string | null>(null)
+const dashboardLoading = ref(false)
+const dashboardError = ref<string | null>(null)
 const selectedChildId = ref<string | null>(
   (sessionStorage.getItem('selectedChildId') as 'string | null') ?? null,
 )
@@ -30,8 +30,8 @@ export function useDashboard() {
   }
 
   async function initialize() {
-    loading.value = true
-    error.value = null
+    dashboardLoading.value = true
+    dashboardError.value = null
     try {
       const [fetchedUser] = await Promise.all([
         dashboardService.getUser(),
@@ -39,9 +39,9 @@ export function useDashboard() {
       ])
       user.value = fetchedUser
     } catch (err) {
-      error.value = (err as Error).message
+      dashboardError.value = (err as Error).message
     } finally {
-      loading.value = false
+      dashboardLoading.value = false
     }
   }
 
@@ -61,8 +61,8 @@ export function useDashboard() {
   return {
     // state
     user,
-    loading,
-    error,
+    dashboardLoading,
+    dashboardError,
     selectedChildId,
     selectedChild,
 
