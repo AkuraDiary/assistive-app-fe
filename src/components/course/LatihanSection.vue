@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { CourseModule } from '@/types/course.types'
+// UI state
 
 defineProps<{
   modules: CourseModule[]
@@ -8,15 +9,24 @@ defineProps<{
   userRole: string
 }>()
 
+const emit = defineEmits<{
+  (e: 'open-materi', moduleId: string): void
+}>()
+
 const expandedId = ref<string | null>(null)
 
 function toggle(id: string) {
   expandedId.value = expandedId.value === id ? null : id
 }
-const emit = defineEmits<{
-  (e: 'open-materi', moduleId: string): void
-  (e: 'toggle-edit-mode'): void
-}>()
+// const expandedId = ref<string | null>(null)
+
+// function toggle(id: string) {
+//   expandedId.value = expandedId.value === id ? null : id
+// }
+// const emit = defineEmits<{
+//   (e: 'open-materi', moduleId: string): void
+//   (e: 'toggle-edit-mode'): void
+// }>()
 
 function formatDate(iso?: string) {
   if (!iso) return '-'
@@ -33,32 +43,22 @@ function formatDate(iso?: string) {
     <!-- Section header -->
     <div class="ls__header">
       <div class="ls__title-row">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
           <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
         </svg>
         <span class="ls__title">Latihan</span>
       </div>
       <p class="ls__desc">Pelajari materinya dan kerjakan latihan untuk menguji pemahamanmu.</p>
-    </div>
-
-    <!-- Toggle Mode Button -->
-    <div class="ls__toggle-wrapper" v-if="userRole === 'teacher'">
-      <button class="ls__toggle-btn" @click="emit('toggle-edit-mode')">
-        <template v-if="isEditMode">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-             <path d="M15 18l-6-6 6-6"/>
-          </svg>
-          Kembali ke Mode Belajar
-        </template>
-        <template v-else>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-          </svg>
-          Masuk ke Mode Edit
-        </template>
-      </button>
     </div>
 
     <!-- Module list -->
@@ -75,10 +75,18 @@ function formatDate(iso?: string) {
             <span class="ls__item-title">{{ item.title }}</span>
           </div>
           <div class="ls__row-right">
-            <span v-if="!isEditMode && item.progress !== undefined" class="ls__item-pct" :class="{ 'ls__item-pct--pink': expandedId === item.id }">{{ item.progress }} %</span>
+            <span
+              v-if="!isEditMode && item.progress !== undefined"
+              class="ls__item-pct"
+              :class="{ 'ls__item-pct--pink': expandedId === item.id }"
+              >{{ item.progress }} %</span
+            >
             <svg
               class="ls__chevron"
-              :class="{ 'ls__chevron--up': expandedId === item.id, 'ls__chevron--pink': expandedId === item.id }"
+              :class="{
+                'ls__chevron--up': expandedId === item.id,
+                'ls__chevron--pink': expandedId === item.id,
+              }"
               width="16"
               height="16"
               viewBox="0 0 24 24"
@@ -101,7 +109,9 @@ function formatDate(iso?: string) {
                 <span class="ls__expanded-date">
                   Terakhir Dikerjakan: {{ formatDate(item.tanggalDikerjakan) }}
                 </span>
-                <span v-if="item.progress !== undefined" class="ls__expanded-pct-bold">{{ item.progress }}%</span>
+                <span v-if="item.progress !== undefined" class="ls__expanded-pct-bold"
+                  >{{ item.progress }}%</span
+                >
               </div>
 
               <div v-if="!isEditMode && item.progress !== undefined" class="ls__expanded-track">
@@ -111,14 +121,28 @@ function formatDate(iso?: string) {
               <div class="ls__expanded-actions">
                 <template v-if="isEditMode">
                   <button class="ls__btn ls__btn--primary" style="flex: 1" @click.stop>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
                       <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
                       <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
                     </svg>
                     Edit Modul
                   </button>
                   <button class="ls__btn ls__btn--danger" style="flex: 1" @click.stop>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
                       <path d="M18.36 6.64a9 9 0 1 1-12.73 0" />
                       <line x1="12" y1="2" x2="12" y2="12" />
                     </svg>
@@ -222,7 +246,9 @@ function formatDate(iso?: string) {
   color: var(--color-primary);
 }
 .ls__chevron {
-  transition: transform 0.2s, color 0.2s;
+  transition:
+    transform 0.2s,
+    color 0.2s;
   color: var(--color-text-light);
 }
 .ls__chevron--pink {
@@ -306,31 +332,6 @@ function formatDate(iso?: string) {
 }
 .ls__btn--danger:hover {
   background: #b71c1c;
-}
-
-.ls__toggle-wrapper {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: -10px;
-}
-.ls__toggle-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: white;
-  border: 1px solid var(--color-primary);
-  color: var(--color-primary);
-  padding: 8px 16px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 4px 6px rgba(255, 60, 138, 0.1);
-  z-index: 10;
-}
-.ls__toggle-btn:hover {
-  background: rgba(255, 60, 138, 0.05);
 }
 
 /* Transition */

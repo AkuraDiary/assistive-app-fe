@@ -226,7 +226,7 @@ const MOCK_COURSE_DETAIL: CourseDetail[] = [
             focusInstruction: 'Tekan huruf M untuk mendengarkan Bunyinya',
             tips: 'Klik pada setiap kata yang berwarna biru dan hijau. Warna ini membantu kamu melihat pemisahan suku kata agar lebih mudah dibaca.',
           },
-        ]
+        ],
       },
       {
         id: 'as1',
@@ -238,8 +238,68 @@ const MOCK_COURSE_DETAIL: CourseDetail[] = [
         skills: ['Mendengar', 'Menulis', 'Membaca'],
         tanggalDikerjakan: '2026-04-12',
         isLocked: false,
-      }
-    ]
+        questions: [
+          {
+            id: 'q1',
+            questionType: 'voice',
+            category: 'Huruf',
+            text: 'Menyebutkan Huruf',
+            mediaLabel: 'A B D F E',
+            audioUrl: 'aa',
+            correctAnswer: 'A B D F E',
+          },
+
+          {
+            id: 'q2',
+            questionType: 'upload',
+            category: 'Kata',
+            text: 'Menuliskan Kata',
+            mediaLabel: 'Ikan',
+            correctAnswer: 'Ikan',
+          },
+          {
+            id: 'q3',
+            questionType: 'upload',
+            category: 'Menulis Kalimat',
+            text: 'Menulis Ulang Kalimat',
+            mediaLabel: 'Ayam Duduk Di Kandang',
+            audioUrl: '',
+            correctAnswer: 'Ayam',
+          },
+          {
+            id: 'q1a',
+            questionType: 'upload',
+            category: 'Menyusun Kata',
+            text: 'Susun Kata-kata',
+            mediaLabel: 'makan kucing ikan',
+            audioUrl: 'aa',
+            correctAnswer: 'kucing makan ikan',
+          },
+          {
+            id: 'q4',
+            questionType: 'rapid-naming',
+            category: 'Hewan',
+            text: 'Sebutkan hewan-hewan berikut',
+            rapidNamingType: 'picture',
+            rapidNamingItems: [
+              'https://placehold.co/120x120?text=Singa',
+              'https://placehold.co/120x120?text=Anjing',
+              'https://placehold.co/120x120?text=Kucing',
+            ],
+            correctAnswer: 'Singa, Anjing, Kucing',
+          },
+          {
+            id: 'q5',
+            questionType: 'rapid-naming',
+            category: 'Warna',
+            text: 'Sebutkan warna-warna berikut',
+            rapidNamingType: 'color',
+            rapidNamingItems: ['#FF0000', '#FFA500', '#00C853'],
+            correctAnswer: 'Merah, Kuning, Hijau',
+          },
+        ],
+      },
+    ],
   },
   {
     id: 'cr2',
@@ -270,9 +330,59 @@ const MOCK_COURSE_DETAIL: CourseDetail[] = [
         skills: ['Mendengar', 'Menulis', 'Membaca'],
         tanggalDikerjakan: '2026-04-12',
         isLocked: false,
-      }
-    ]
-  }
+        questions: [
+          {
+            id: 'q1',
+            questionType: 'voice',
+            category: 'Kata',
+            text: 'A B D F E',
+            mediaLabel: 'A B D F E',
+            audioUrl: '',
+            correctAnswer: 'A B D F E',
+          },
+          {
+            id: 'q2',
+            questionType: 'upload',
+            category: 'Kata',
+            text: 'Tulislah kata "Ikan"',
+            mediaLabel: 'Ikan',
+            correctAnswer: 'Ikan',
+          },
+          {
+            id: 'q3',
+            questionType: 'voice',
+            category: 'Kata',
+            text: 'Ayam',
+            mediaLabel: 'Ayam',
+            audioUrl: '',
+            correctAnswer: 'Ayam',
+          },
+          {
+            id: 'q4',
+            questionType: 'rapid-naming',
+            category: 'Hewan',
+            text: 'Sebutkan hewan-hewan berikut',
+            rapidNamingType: 'picture',
+            rapidNamingItems: [
+              'https://placehold.co/120x120?text=Singa',
+              'https://placehold.co/120x120?text=Anjing',
+              'https://placehold.co/120x120?text=Kucing',
+            ],
+            correctAnswer: 'Singa, Anjing, Kucing',
+          },
+          {
+            id: 'q5',
+            questionType: 'rapid-naming',
+            category: 'Warna',
+            text: 'Sebutkan warna-warna berikut',
+            rapidNamingType: 'color',
+            rapidNamingItems: ['#FF0000', '#FFA500', '#00C853'],
+            correctAnswer: 'Merah, Kuning, Hijau',
+          },
+        ],
+      },
+    ],
+  },
 ]
 
 export const latestAssessmentAnswers = ref<Record<string, any>>({})
@@ -304,7 +414,10 @@ export const courseService = {
     return res.data!
   },
 
-  async addModulToCourse(courseId: string, payload: { label: string; description: string; hasLatihan: boolean }): Promise<string> {
+  async addModulToCourse(
+    courseId: string,
+    payload: { label: string; description: string; hasLatihan: boolean },
+  ): Promise<string> {
     if (USE_MOCK) {
       const course = MOCK_COURSE_DETAIL.find((c) => c.id === courseId) || MOCK_COURSE_DETAIL[0]
       const newId = `l${Date.now()}`
@@ -316,7 +429,7 @@ export const courseService = {
           type: 'materi',
           progress: 0,
           isLocked: false,
-          materi: []
+          materi: [],
         })
       }
       return newId
@@ -325,7 +438,10 @@ export const courseService = {
     return res.data?.id || 'm1'
   },
 
-  async addAssessmentToCourse(courseId: string, payload: { title: string; description: string; poinMinimal: number; categories: string[] }): Promise<string> {
+  async addAssessmentToCourse(
+    courseId: string,
+    payload: { title: string; description: string; poinMinimal: number; categories: string[] },
+  ): Promise<string> {
     if (USE_MOCK) {
       const course = MOCK_COURSE_DETAIL.find((c) => c.id === courseId) || MOCK_COURSE_DETAIL[0]
       const newId = `a${Date.now()}`
@@ -345,5 +461,5 @@ export const courseService = {
     }
     const res = await apiService.post(`/teacher/courses/${courseId}/assessments`, payload)
     return res.data?.id || 'a1'
-  }
+  },
 }

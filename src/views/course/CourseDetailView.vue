@@ -2,18 +2,21 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useCourseDetail } from '@/composable/useCourseDetail'
+import { useAuth } from '@/composable/useAuth'
 import CourseDetailHeader from '@/components/course/CourseDetailHeader.vue'
 import CourseOverallProgress from '@/components/course/CourseOverallProgress.vue'
 import LatihanSection from '@/components/course/LatihanSection.vue'
 import AssessmentSection from '@/components/course/AssessmentSection.vue'
+import type { CourseModule } from '@/types/course.types'
 
 const router = useRouter()
 const route = useRoute()
 const { courseDetail, loading, error, fetchCourseDetail } = useCourseDetail()
 
-// UI state
 const isEditMode = ref(false)
-const userRole = ref('teacher')
+const { user } = useAuth()
+const userRole = computed(() => user.value?.role || 'student')
+
 // Toggle for progress testing
 const debugProgress100 = ref(false)
 
@@ -23,6 +26,8 @@ const childId = computed(() => (route.params.childId as string) || 'ch1')
 
 onMounted(() => {
   if (courseId.value) {
+    //  isEditMode = ref(false)
+    //  userRole = ref('teacher')
     fetchCourseDetail(childId.value, courseId.value)
   }
 })
@@ -67,16 +72,21 @@ function onLanjut() {
 
 <template>
   <div class="cdv-page">
-    <div class="debug-controls" style="padding: 10px; background: #eee; border-radius: 8px; margin-bottom: 16px; font-size: 12px; display: flex; gap: 12px; align-items: center;">
+    <div
+      class="debug-controls"
+      v-if="userRole === 'teacher'"
+      style="
+        padding: 10px;
+        background: #eee;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        font-size: 12px;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      "
+    >
       <strong>Debug:</strong>
-      <label><input type="checkbox" v-model="isEditMode" /> isEditMode</label>
-      <label>
-        Role:
-        <select v-model="userRole">
-          <option value="teacher">Teacher</option>
-          <option value="student">Student</option>
-        </select>
-      </label>
       <label><input type="checkbox" v-model="debugProgress100" /> Force 100% Progress</label>
     </div>
 
@@ -84,6 +94,39 @@ function onLanjut() {
     <div v-else-if="error" class="cdv-page__error">{{ error }}</div>
 
     <template v-else-if="courseDetail">
+      <!-- Toggle Mode Button -->
+      <div class="ls__toggle-wrapper" v-if="userRole === 'teacher'">
+        <button class="ls__toggle-btn" @click="isEditMode = !isEditMode">
+          <template v-if="isEditMode">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+            Kembali ke Mode Belajar
+          </template>
+          <template v-else>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+            </svg>
+            Masuk ke Mode Edit
+          </template>
+        </button>
+      </div>
+
       <div class="cdv-page__header-actions">
         <CourseDetailHeader :course="courseDetail" />
 
@@ -107,7 +150,10 @@ function onLanjut() {
       </div>
 
       <div class="cdv-page__body">
-        <CourseOverallProgress v-if="!isEditMode" :progress="debugProgress100 ? 100 : courseDetail.progress" />
+        <CourseOverallProgress
+          v-if="!isEditMode"
+          :progress="debugProgress100 ? 100 : courseDetail.progress"
+        />
 
         <div class="cdv-page__sections-title">Pilih Modul</div>
 
@@ -252,5 +298,37 @@ function onLanjut() {
 .cdv-btn--primary:hover {
   background: #e62c76;
   transform: translateY(-1px);
+}
+
+.ls__toggle-wrapper {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+  z-index: 100;
+  justify-content: flex-end;
+  margin-top: -10px;
+}
+.ls__toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: white;
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 6px rgba(255, 60, 138, 0.1);
+  z-index: 10;
+}
+.ls__toggle-btn:hover {
+  background: rgba(255, 60, 138, 0.05);
 }
 </style>

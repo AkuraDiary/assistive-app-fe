@@ -8,6 +8,8 @@ import QuestionUpload from '@/components/quiz/question-types/QuestionUpload.vue'
 import QuestionTap from '@/components/quiz/question-types/QuestionTap.vue'
 import QuestionRapidNaming from '@/components/quiz/question-types/QuestionRapidNaming.vue'
 
+import { courseService } from '@/services/course.service'
+
 const router = useRouter()
 const route = useRoute()
 const { fontSizeClass, dyslexiaClass } = useAccessibility()
@@ -22,53 +24,16 @@ const loading = ref(true)
 const submitting = ref(false)
 const isSidebarOpen = ref(true)
 
-onMounted(() => {
-  // Mock questions for the assessment based on mockup
-  questions.value = [
-    {
-      id: 'q1',
-      questionType: 'rapid-naming',
-      category: 'Warna',
-      text: 'Sebutkan warna-warna berikut',
-      rapidNamingType: 'color',
-      rapidNamingItems: ['#FF0000', '#FFA500', '#00C853'] // Red, Orange, Green
-    },
-    {
-      id: 'q2',
-      questionType: 'rapid-naming',
-      category: 'Hewan',
-      text: 'Sebutkan hewan-hewan berikut',
-      rapidNamingType: 'picture',
-      rapidNamingItems: [
-        'https://placehold.co/120x120?text=Singa',
-        'https://placehold.co/120x120?text=Anjing',
-        'https://placehold.co/120x120?text=Kucing'
-      ]
-    },
-    {
-      id: 'q3',
-      questionType: 'voice',
-      category: 'Kata',
-      text: 'Ayam',
-      mediaLabel: 'Ayam',
-      audioUrl: '', // optional audio hint
-    },
-    {
-      id: 'q4',
-      questionType: 'upload',
-      category: 'Kata',
-      text: 'Tulislah kata "Ikan"',
-      mediaLabel: 'Ikan',
-    },
-    {
-      id: 'q5',
-      questionType: 'tap',
-      category: 'Kata',
-      text: 'Pilih huruf awal dari kata "Bebek"',
-      mediaLabel: 'Bebek',
-      options: ['A', 'B', 'C', 'D']
+onMounted(async () => {
+  try {
+    const course = await courseService.getCourseDetail('c1', courseId)
+    const module = course.modules.find(m => m.id === moduleId)
+    if (module && module.questions) {
+      questions.value = module.questions
     }
-  ]
+  } catch(e) {
+    console.error(e)
+  }
   loading.value = false
 })
 
@@ -99,7 +64,7 @@ async function next() {
     import('@/services/course.service').then(m => {
       m.latestAssessmentAnswers.value = { ...answers.value }
     })
-    
+
     submitting.value = false
     router.push({ name: 'assessment-result', params: { courseId, moduleId } })
     return
@@ -134,10 +99,10 @@ async function next() {
           </svg>
           <h2 class="assessment-page__sidebar-title">Navigasi Soal</h2>
         </div>
-        
+
         <ul v-show="isSidebarOpen" class="assessment-page__nav-list">
-          <li 
-            v-for="(q, index) in questions" 
+          <li
+            v-for="(q, index) in questions"
             :key="q.id"
             class="assessment-page__nav-item"
             :class="{ 'assessment-page__nav-item--active': currentIndex === index }"

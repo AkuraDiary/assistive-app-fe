@@ -31,14 +31,15 @@ export interface CourseModule {
   progress?: number
   tanggalDikerjakan?: string
   isLocked: boolean
-  
+
   // If materi
   materi?: MateriContent[]
-  
+
   // If assessment
   level?: string
   categories?: string[] // Kata, Kalimat, Objek
   skills?: string[] // Mendengar, Menulis, Membaca
+  questions?: AssessmentQuestion[]
 }
 
 export interface CourseDetail extends Course {
@@ -68,4 +69,17 @@ export interface MateriContent {
   focusHuruf?: string
   focusInstruction?: string
   tips?: string
+}
+
+export interface AssessmentQuestion {
+  id: string
+  questionType: 'voice' | 'upload' | 'tap' | 'rapid-naming' |  string
+  category: string
+  text: string
+  mediaLabel?: string
+  audioUrl?: string
+  rapidNamingType?: 'color' | 'picture' | string
+  rapidNamingItems?: string[]
+  options?: string[]
+  correctAnswer?: string
 }

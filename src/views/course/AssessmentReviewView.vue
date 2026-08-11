@@ -1,36 +1,49 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import QuestionVoice from '@/components/quiz/question-types/QuestionVoice.vue'
 import QuestionUpload from '@/components/quiz/question-types/QuestionUpload.vue'
 import QuestionTap from '@/components/quiz/question-types/QuestionTap.vue'
 import QuestionRapidNaming from '@/components/quiz/question-types/QuestionRapidNaming.vue'
-import { latestAssessmentAnswers } from '@/services/course.service'
+import { latestAssessmentAnswers, courseService } from '@/services/course.service'
 
 const router = useRouter()
+const route = useRoute()
 
-// Mock data based on mockups
-const questions = ref([
-  { id: 'q1', number: 1, title: 'Warna', category: 'Rapid Naming', questionType: 'rapid-naming', questionText: 'Sebutkan warna-warna berikut', userAnswer: 'Merah, Oranye, Hijau', correctAnswer: 'Merah, Oranye, Hijau', isCorrect: true },
-  { id: 'q2', number: 2, title: 'Hewan', category: 'Rapid Naming', questionType: 'rapid-naming', questionText: 'Sebutkan hewan-hewan berikut', userAnswer: 'Singa, Anjing, Kucing', correctAnswer: 'Singa, Anjing, Kucing', isCorrect: true },
-  { id: 'q3', number: 3, title: 'Bebek', category: 'Kata', questionType: 'voice', questionText: 'Bebek', userAnswer: 'Bebek', correctAnswer: 'Bebek', isCorrect: true },
-  { id: 'q4', number: 4, title: 'Capung', category: 'Kata', questionType: 'voice', questionText: 'Capung', userAnswer: 'Capung', correctAnswer: 'Capung', isCorrect: true },
-  { id: 'q5', number: 5, title: 'Angsa', category: 'Kata', questionType: 'voice', questionText: 'Angsa', userAnswer: 'Angsa', correctAnswer: 'Angsa', isCorrect: true },
-])
+const courseId = route.params.courseId as string
+const moduleId = route.params.moduleId as string
 
-onMounted(() => {
-  // Override mock answers with actual recorded answers if available
-  questions.value.forEach(q => {
-    const recorded = latestAssessmentAnswers.value[q.id]
-    if (recorded) {
-      q.userAnswer = recorded.value
-      // We assume correct just for show, but in a real app this is graded by the backend
-      q.isCorrect = true 
+const questions = ref<any[]>([])
+
+
+
+onMounted(async () => {
+  try {
+    const course = await courseService.getCourseDetail('c1', courseId)
+    const module = course.modules.find(m => m.id === moduleId)
+    
+    if (module && module.questions) {
+      questions.value = module.questions.map((q, index) => {
+        const recorded = latestAssessmentAnswers.value[q.id]
+        return {
+          ...q,
+          number: index + 1,
+          title: q.text,
+          questionText: q.text,
+          userAnswer: recorded ? recorded.value : '-',
+          isCorrect: !!recorded, // mock correctness
+        }
+      })
+      if (questions.value.length > 0) {
+        activeQuestionId.value = questions.value[0].id
+      }
     }
-  })
+  } catch (e) {
+    console.error(e)
+  }
 })
 
-const activeQuestionId = ref('q1')
+const activeQuestionId = ref('')
 const activeQuestion = computed(() => questions.value.find(q => q.id === activeQuestionId.value))
 
 const showMediaModal = ref(false)
@@ -73,8 +86,8 @@ function prevQuestion() {
       <aside class="review-page__sidebar">
         <h2 class="review-page__sidebar-title">Navigasi Soal</h2>
         <ul class="review-page__nav-list">
-          <li 
-            v-for="q in questions" 
+          <li
+            v-for="q in questions"
             :key="q.id"
             class="review-page__nav-item"
             :class="{ 'review-page__nav-item--active': activeQuestionId === q.id }"
@@ -106,9 +119,9 @@ function prevQuestion() {
           <div class="review-page__answer-grid">
             <div class="review-page__form-group">
               <label class="review-page__label">Transkrip Jawaban</label>
-              <div 
+              <div
                 class="review-page__input-wrapper"
-                :class="{ 
+                :class="{
                   'review-page__input-wrapper--correct': activeQuestion.isCorrect,
                   'review-page__input-wrapper--incorrect': !activeQuestion.isCorrect
                 }"
@@ -121,10 +134,10 @@ function prevQuestion() {
                   <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </div>
-              
+
               <!-- Media Links -->
-              <button 
-                v-if="activeQuestion.questionType === 'upload'" 
+              <button
+                v-if="activeQuestion.questionType === 'upload'"
                 class="review-page__media-link"
                 @click="showMediaModal = true"
               >
@@ -133,9 +146,9 @@ function prevQuestion() {
                   <path d="M15.232 5.232L18.768 8.768M16.732 3.732C17.708 2.756 19.292 2.756 20.268 3.732C21.244 4.708 21.244 6.292 20.268 7.268L7.268 20.268L3 21L3.732 16.732L16.732 3.732Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </button>
-              
-              <button 
-                v-else-if="['voice', 'rapid-naming'].includes(activeQuestion.questionType)" 
+
+              <button
+                v-else-if="['voice', 'rapid-naming'].includes(activeQuestion.questionType)"
                 class="review-page__media-link"
                 @click="showMediaModal = true"
               >
@@ -184,13 +197,13 @@ function prevQuestion() {
                   ? QuestionUpload
                   : QuestionTap
           "
-          :question="{ 
-            id: activeQuestion?.id, 
-            text: activeQuestion?.questionText, 
-            questionType: activeQuestion?.questionType, 
+          :question="{
+            id: activeQuestion?.id,
+            text: activeQuestion?.questionText,
+            questionType: activeQuestion?.questionType,
             mediaLabel: activeQuestion?.questionText,
             rapidNamingType: activeQuestion?.rapidNamingType,
-            rapidNamingItems: activeQuestion?.rapidNamingItems 
+            rapidNamingItems: activeQuestion?.rapidNamingItems
           }"
           :recordedAudioUrl="activeQuestion?.userAnswer"
           :readonly="true"
