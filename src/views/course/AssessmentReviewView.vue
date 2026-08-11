@@ -6,6 +6,7 @@ import QuestionUpload from '@/components/quiz/question-types/QuestionUpload.vue'
 import QuestionTap from '@/components/quiz/question-types/QuestionTap.vue'
 import QuestionRapidNaming from '@/components/quiz/question-types/QuestionRapidNaming.vue'
 import { latestAssessmentAnswers, courseService } from '@/services/course.service'
+import type { AssessmentQuestion, CourseDetail } from '@/types/course.types'
 
 const router = useRouter()
 const route = useRoute()
@@ -13,26 +14,33 @@ const route = useRoute()
 const courseId = route.params.courseId as string
 const moduleId = route.params.moduleId as string
 
-const questions = ref<any[]>([])
+export interface ReviewQuestion extends AssessmentQuestion {
+  number: number
+  title: string
+  questionText: string
+  userAnswer: string
+  isCorrect: boolean
+  durationFormatted: string
+}
 
-
+const questions = ref<ReviewQuestion[]>([])
 
 onMounted(async () => {
   try {
     const res = await courseService.getCourseDetail('c1', courseId)
     const course = res.data
     courseDetail.value = course
-    const module = course ? course.modules.find(m => m.id === moduleId) : null
-    
+    const module = course ? course.modules.find((m) => m.id === moduleId) : null
+
     if (module && module.questions) {
       questions.value = module.questions.map((q, index) => {
         const recorded = latestAssessmentAnswers.value[q.id]
-        
+
         let formattedDuration = '-'
         if (recorded?.durationSpent) {
           const m = Math.floor(recorded.durationSpent / 60)
           const s = recorded.durationSpent % 60
-          formattedDuration = m > 0 ? `${m}m ${s}s` : `${s}s`
+          formattedDuration = m > 0 ? `${m} menit ${s} detik` : `${s} detik`
         }
 
         return {
@@ -42,7 +50,7 @@ onMounted(async () => {
           questionText: q.text,
           userAnswer: recorded ? recorded.value : '-',
           isCorrect: !!recorded, // mock correctness
-          durationFormatted: formattedDuration
+          durationFormatted: formattedDuration,
         }
       })
       if (questions.value.length > 0) {
@@ -55,8 +63,8 @@ onMounted(async () => {
 })
 
 const activeQuestionId = ref('')
-const activeQuestion = computed(() => questions.value.find(q => q.id === activeQuestionId.value))
-const courseDetail = ref<any>(null)
+const activeQuestion = computed(() => questions.value.find((q) => q.id === activeQuestionId.value))
+const courseDetail = ref<CourseDetail | null>(null)
 
 const showMediaModal = ref(false)
 
@@ -66,7 +74,7 @@ function goBack() {
 
 function nextQuestion() {
   if (!activeQuestion.value) return
-  const index = questions.value.findIndex(q => q.id === activeQuestion.value!.id)
+  const index = questions.value.findIndex((q) => q.id === activeQuestion.value!.id)
   if (index < questions.value.length - 1) {
     activeQuestionId.value = questions.value[index + 1].id
   }
@@ -74,7 +82,7 @@ function nextQuestion() {
 
 function prevQuestion() {
   if (!activeQuestion.value) return
-  const index = questions.value.findIndex(q => q.id === activeQuestion.value!.id)
+  const index = questions.value.findIndex((q) => q.id === activeQuestion.value!.id)
   if (index > 0) {
     activeQuestionId.value = questions.value[index - 1].id
   }
@@ -85,8 +93,20 @@ function prevQuestion() {
   <div class="review-page">
     <div class="review-page__header">
       <button class="review-page__back-btn" @click="goBack">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M15 18L9 12L15 6"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
         </svg>
         Kembali
       </button>
@@ -114,7 +134,11 @@ function prevQuestion() {
       <!-- Main Review Area -->
       <main class="review-page__main" v-if="activeQuestion">
         <header class="review-page__main-header">
-          <span class="review-page__pagination">Soal <span class="review-page__pagination-active">{{ activeQuestion.number }}</span> dari {{ questions.length }}</span>
+          <span class="review-page__pagination"
+            >Soal
+            <span class="review-page__pagination-active">{{ activeQuestion.number }}</span> dari
+            {{ questions.length }}</span
+          >
         </header>
 
         <div class="review-page__editor">
@@ -123,19 +147,14 @@ function prevQuestion() {
             <span class="review-page__badge">{{ activeQuestion.category }}</span>
           </div>
 
-          <div class="review-page__form-group review-page__form-group--row">
-            <label class="review-page__label">Waktu Pengerjaan</label>
-            <span class="review-page__badge" style="background: #E0E7FF; color: #4338CA;">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px; vertical-align: text-bottom;">
-                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-              </svg>
-              {{ activeQuestion.durationFormatted }}
-            </span>
-          </div>
-
           <div class="review-page__form-group">
             <label class="review-page__label">Soal</label>
-            <input type="text" class="review-page__input" :value="activeQuestion.questionText" disabled />
+            <input
+              type="text"
+              class="review-page__input"
+              :value="activeQuestion.questionText"
+              disabled
+            />
           </div>
 
           <div class="review-page__answer-grid">
@@ -145,15 +164,48 @@ function prevQuestion() {
                 class="review-page__input-wrapper"
                 :class="{
                   'review-page__input-wrapper--correct': activeQuestion.isCorrect,
-                  'review-page__input-wrapper--incorrect': !activeQuestion.isCorrect
+                  'review-page__input-wrapper--incorrect': !activeQuestion.isCorrect,
                 }"
               >
-                <input type="text" class="review-page__input review-page__input--status" :value="activeQuestion.userAnswer" disabled />
-                <svg v-if="activeQuestion.isCorrect" class="review-page__status-icon review-page__status-icon--correct" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M5 13L9 17L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <input
+                  type="text"
+                  class="review-page__input review-page__input--status"
+                  :value="activeQuestion.userAnswer"
+                  disabled
+                />
+                <svg
+                  v-if="activeQuestion.isCorrect"
+                  class="review-page__status-icon review-page__status-icon--correct"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M5 13L9 17L19 7"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
                 </svg>
-                <svg v-else class="review-page__status-icon review-page__status-icon--incorrect" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <svg
+                  v-else
+                  class="review-page__status-icon review-page__status-icon--incorrect"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M18 6L6 18M6 6L18 18"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
                 </svg>
               </div>
 
@@ -164,8 +216,20 @@ function prevQuestion() {
                 @click="showMediaModal = true"
               >
                 Lihat Gambar Tulisan
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M15.232 5.232L18.768 8.768M16.732 3.732C17.708 2.756 19.292 2.756 20.268 3.732C21.244 4.708 21.244 6.292 20.268 7.268L7.268 20.268L3 21L3.732 16.732L16.732 3.732Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M15.232 5.232L18.768 8.768M16.732 3.732C17.708 2.756 19.292 2.756 20.268 3.732C21.244 4.708 21.244 6.292 20.268 7.268L7.268 20.268L3 21L3.732 16.732L16.732 3.732Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
                 </svg>
               </button>
 
@@ -175,30 +239,68 @@ function prevQuestion() {
                 @click="showMediaModal = true"
               >
                 Dengarkan Rekaman Suara
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M11 5L6 9H2V15H6L11 19V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M15.54 8.46C16.4774 9.3976 17.0039 10.6692 17.0039 11.995C17.0039 13.3208 16.4774 14.5924 15.54 15.53" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M11 5L6 9H2V15H6L11 19V5Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M15.54 8.46C16.4774 9.3976 17.0039 10.6692 17.0039 11.995C17.0039 13.3208 16.4774 14.5924 15.54 15.53"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
                 </svg>
               </button>
             </div>
 
             <div class="review-page__form-group">
               <label class="review-page__label">Kunci Jawaban</label>
-              <input type="text" class="review-page__input" :value="activeQuestion.correctAnswer" disabled />
+              <input
+                type="text"
+                class="review-page__input"
+                :value="activeQuestion.correctAnswer"
+                disabled
+              />
             </div>
           </div>
 
           <div class="review-page__metrics">
-            <span class="review-page__metric-pill">Skor : <span class="review-page__metric-bold">10/100</span></span>
-            <span class="review-page__metric-pill">Durasi Menjawab : <span class="review-page__metric-bold">10 Detik</span></span>
+            <span class="review-page__metric-pill"
+              >Skor : <span class="review-page__metric-bold">10/100</span></span
+            >
+            <span class="review-page__metric-pill"
+              >Durasi Menjawab :
+              <span class="review-page__metric-bold">{{
+                activeQuestion.durationFormatted
+              }}</span></span
+            >
           </div>
         </div>
 
         <div class="review-page__actions">
-          <button class="review-page__btn review-page__btn--outline" @click="prevQuestion" :disabled="activeQuestion.number === 1">
+          <button
+            class="review-page__btn review-page__btn--outline"
+            @click="prevQuestion"
+            :disabled="activeQuestion.number === 1"
+          >
             &lt; Sebelumnya
           </button>
-          <button class="review-page__btn review-page__btn--primary" @click="nextQuestion" :disabled="activeQuestion.number === questions.length">
+          <button
+            class="review-page__btn review-page__btn--primary"
+            @click="nextQuestion"
+            :disabled="activeQuestion.number === questions.length"
+          >
             Selanjutnya &gt;
           </button>
         </div>
@@ -206,7 +308,11 @@ function prevQuestion() {
     </div>
 
     <!-- Media Modal -->
-    <div v-if="showMediaModal" class="review-page__modal-overlay" @click.self="showMediaModal = false">
+    <div
+      v-if="showMediaModal"
+      class="review-page__modal-overlay"
+      @click.self="showMediaModal = false"
+    >
       <div class="review-page__modal-content">
         <h3 class="review-page__modal-title">Review Media Jawaban</h3>
         <component
@@ -227,13 +333,19 @@ function prevQuestion() {
             rapidNamingType: activeQuestion?.rapidNamingType,
             rapidNamingItems: activeQuestion?.rapidNamingItems,
             order: activeQuestion?.number || 0,
-            required: true
+            required: true,
           }"
           :recordedAudioUrl="activeQuestion?.userAnswer"
           :readonly="true"
           class="review-page__modal-component"
         />
-        <button class="review-page__btn review-page__btn--primary" style="margin-top: 1rem; width: 100%" @click="showMediaModal = false">Tutup</button>
+        <button
+          class="review-page__btn review-page__btn--primary"
+          style="margin-top: 1rem; width: 100%"
+          @click="showMediaModal = false"
+        >
+          Tutup
+        </button>
       </div>
     </div>
   </div>
@@ -532,8 +644,11 @@ function prevQuestion() {
 /* Modal */
 .review-page__modal-overlay {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.5);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;

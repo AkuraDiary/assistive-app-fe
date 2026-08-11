@@ -1,28 +1,30 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { courseService } from '@/services/course.service'
+import type { AssessmentQuestion } from '@/types/course.types'
 
 const router = useRouter()
 const route = useRoute()
 const courseId = route.params.courseId as string
+const moduleId = route.params.moduleId as string
 
-// Mock Data for questions
-interface Question {
-  id: number
-  text: string
-  category: string
-  answer: string
-  options?: any[] // for colors or images
-}
+const courseTitle = ref('Loading...')
+const questions = ref<AssessmentQuestion[]>([])
 
-const questions = ref<Question[]>([
-  { id: 1, text: 'Ayam', category: 'Kata', answer: 'Ayam', questionType: 'upload' },
-  { id: 2, text: 'Lorem ipsum door sit amet...', category: 'Kalimat', answer: 'Lorem ipsum', questionType: 'voice' },
-  { id: 3, text: 'Lorem ipsum door sit amet...', category: 'Kalimat', answer: 'Lorem ipsum', questionType: 'voice' },
-  { id: 4, text: 'Lorem ipsum door sit amet...', category: 'Kalimat', answer: 'Lorem ipsum', questionType: 'voice' },
-  { id: 5, text: 'Warna', category: 'Rapid Naming (Warna)', answer: 'Merah, Kuning', options: ['#ef4444', '#f59e0b', '#22c55e', '#3b82f6', '#374151', '#ffffff'] },
-  { id: 6, text: 'Objek', category: 'Rapid Naming (Gambar)', answer: 'Singa, Anjing, Kucing', options: [] },
-])
+onMounted(async () => {
+  const res = await courseService.getCourseDetail('c1', courseId)
+  if (res.success && res.data) {
+    courseTitle.value = res.data.name
+    const module = res.data.modules.find(m => m.id === moduleId)
+    if (module && module.questions) {
+      questions.value = module.questions
+    }
+  }
+  if (questions.value.length === 0) {
+    addQuestion() // Add default question if empty
+  }
+})
 
 const activeIndex = ref(0)
 const activeQuestion = computed(() => questions.value[activeIndex.value])
@@ -103,10 +105,10 @@ function prevQuestion() {
 
 function addQuestion() {
   questions.value.push({
-    id: Date.now(),
+    id: Date.now().toString(),
     text: '',
     category: 'Kata',
-    answer: '',
+    correctAnswer: '',
     questionType: 'upload'
   })
   activeIndex.value = questions.value.length - 1
@@ -121,12 +123,12 @@ function deleteQuestion() {
   }
 }
 
-function onSave() {
-  console.log('Saved assessment questions:', questions.value)
+async function onSave() {
+  await courseService.updateAssessmentQuestions(courseId, moduleId, questions.value)
 }
 
-function onFinish() {
-  onSave()
+async function onFinish() {
+  await onSave()
   onBack()
 }
 </script>
@@ -140,7 +142,7 @@ function onFinish() {
         </svg>
         Kembali
       </button>
-      <h1 class="page-title">Assessmen Mengenal Huruf Vokal (A, I, U, E, O)</h1>
+      <h1 class="page-title">Assessmen {{ courseTitle }}</h1>
       <button class="btn-solid-pink" @click="onFinish">
         Selesaikan
       </button>
@@ -310,7 +312,7 @@ function onFinish() {
           <input 
             type="text" 
             class="input-field" 
-            v-model="activeQuestion.answer"
+            v-model="activeQuestion.correctAnswer"
           />
           <span class="help-text" v-if="activeQuestion.category === 'Rapid Naming (Gambar)' || activeQuestion.category === 'Rapid Naming (Warna)' || activeQuestion.category === 'Menyusun Kata'">Pisahkan kunci jawaban dengan tanda koma (,)</span>
         </div>

@@ -9,7 +9,7 @@ import QuestionTap from '@/components/quiz/question-types/QuestionTap.vue'
 import QuestionRapidNaming from '@/components/quiz/question-types/QuestionRapidNaming.vue'
 import { useCourseDetail } from '@/composable/useCourseDetail'
 import { courseService, latestAssessmentAnswers } from '@/services/course.service'
-import type { AssessmentQuestion } from '@/types/course.types'
+import type { CourseDetail, CourseModule, AssessmentQuestion, AssessmentAnswer } from '@/types/course.types'
 import { ttsService } from '@/services/tts.service'
 
 const router = useRouter()
@@ -19,10 +19,10 @@ const { fontSizeClass, dyslexiaClass } = useAccessibility()
 const moduleId = route.params.moduleId as string
 const courseId = route.params.courseId as string
 
-const courseData = ref<any>(null)
-const moduleData = ref<any>(null)
-const questions = ref<any[]>([])
-const answers = ref<Record<string, any>>({})
+const courseData = ref<CourseDetail | null>(null)
+const moduleData = ref<CourseModule | null>(null)
+const questions = ref<AssessmentQuestion[]>([])
+const answers = ref<Record<string, AssessmentAnswer>>({})
 const questionDurations = ref<Record<string, number>>({})
 const currentIndex = ref(0)
 const loading = ref(true)
@@ -60,7 +60,7 @@ const isLast = computed(() => currentIndex.value === questions.value.length - 1)
 const ACCUMULATE_TIME = false // toggle: true = accumulate, false = reset
 let activeQuestionStartTime = 0
 const globalTimeLeft = ref<number | null>(null)
-let globalTimerInterval: any = null
+let globalTimerInterval: ReturnType<typeof setInterval> | null = null
 
 const formattedGlobalTime = computed(() => {
   if (globalTimeLeft.value === null) return ''

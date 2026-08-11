@@ -1,9 +1,9 @@
-import type { Course, CourseDetail } from '@/types/course.types'
+import type { Course, CourseDetail, AssessmentAnswer, AssessmentQuestion } from '@/types/course.types'
 import { apiService, USE_MOCK, type ApiResponse } from './api'
 import { ref } from 'vue'
 import { mockCourses, mockTeacherCourses, mockCourseDetail } from '@/mocks/course.mock'
 
-export const latestAssessmentAnswers = ref<Record<string, any>>({})
+export const latestAssessmentAnswers = ref<Record<string, AssessmentAnswer>>({})
 
 export const courseService = {
   async getCourses(childId: string): Promise<ApiResponse<Course[]>> {
@@ -59,7 +59,7 @@ export const courseService = {
       }
       return { success: false, message: 'Course not found' }
     }
-    const res = await apiService.post<any>(`/teacher/courses/${courseId}/moduls`, payload)
+    const res = await apiService.post<{ id: string }>(`/teacher/courses/${courseId}/moduls`, payload)
     if (!res.success) return { success: false, message: res.message }
     return { success: true, data: res.data?.id || 'm1' }
   },
@@ -88,8 +88,30 @@ export const courseService = {
       }
       return { success: false, message: 'Course not found' }
     }
-    const res = await apiService.post<any>(`/teacher/courses/${courseId}/assessments`, payload)
+    const res = await apiService.post<{ id: string }>(`/teacher/courses/${courseId}/assessments`, payload)
     if (!res.success) return { success: false, message: res.message }
     return { success: true, data: res.data?.id || 'a1' }
   },
+
+  async updateAssessmentQuestions(
+    courseId: string,
+    moduleId: string,
+    questions: AssessmentQuestion[]
+  ): Promise<ApiResponse<void>> {
+    if (USE_MOCK) {
+      await new Promise(resolve => setTimeout(resolve, 300))
+      const course = mockCourseDetail.find((c) => c.id === courseId)
+      if (course) {
+        const module = course.modules.find((m) => m.id === moduleId)
+        if (module) {
+          module.questions = questions
+          return { success: true, data: undefined }
+        }
+      }
+      return { success: false, message: 'Module not found' }
+    }
+    const res = await apiService.put<{ id: string }>(`/teacher/courses/${courseId}/assessments/${moduleId}/questions`, { questions })
+    if (!res.success) return { success: false, message: res.message }
+    return { success: true, data: undefined }
+  }
 }
