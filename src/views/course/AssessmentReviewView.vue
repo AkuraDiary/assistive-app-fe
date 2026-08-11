@@ -19,6 +19,7 @@ export interface ReviewQuestion extends AssessmentQuestion {
   title: string
   questionText: string
   userAnswer: string
+  userAnswerRaw: string
   isCorrect: boolean
   durationFormatted: string
 }
@@ -45,8 +46,8 @@ onMounted(async () => {
 
         let userAnswerText = '-'
         if (recorded) {
-          if (recorded.transcription) {
-            userAnswerText = recorded.transcription
+          if (recorded.transcription !== undefined) {
+            userAnswerText = recorded.transcription || '(Transkrip kosong)'
           } else if (recorded.value.startsWith('data:')) {
             userAnswerText = '(Media tersimpan)'
           } else {
@@ -60,6 +61,7 @@ onMounted(async () => {
           title: q.text,
           questionText: q.text,
           userAnswer: userAnswerText,
+          userAnswerRaw: recorded ? recorded.value : '',
           isCorrect: !!recorded, // mock correctness
           durationFormatted: formattedDuration,
         }
@@ -345,8 +347,10 @@ function prevQuestion() {
             rapidNamingItems: activeQuestion?.rapidNamingItems,
             order: activeQuestion?.number || 0,
             required: true,
+            category: activeQuestion?.category,
           }"
-          :recordedAudioUrl="activeQuestion?.userAnswer"
+          :recordedAudioUrl="activeQuestion?.userAnswerRaw"
+          :initialUploadedImage="activeQuestion?.userAnswerRaw"
           :readonly="true"
           class="review-page__modal-component"
         />
@@ -684,6 +688,6 @@ function prevQuestion() {
 }
 
 .review-page__modal-component {
-  pointer-events: none; /* Make it read-only purely for review visualization */
+  /* Let the component handle its own readonly state so audio players are clickable */
 }
 </style>

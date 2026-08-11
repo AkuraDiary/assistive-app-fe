@@ -11,15 +11,42 @@ const props = defineProps<{
 const emit = defineEmits<{ (e: 'answer', value: string): void }>()
 
 const recording = ref(false)
-const audioUrl = ref<string | null>(props.recordedAudioUrl || null)
+const audioUrl = ref<string | null>(null)
 const mediaRecorder = ref<MediaRecorder | null>(null)
 const audioChunks = ref<Blob[]>([])
 const mediaStream = ref<MediaStream | null>(null)
 
-watch(() => props.recordedAudioUrl, (newVal) => {
-  if (newVal !== undefined) {
-    audioUrl.value = newVal || null
+function processAudioUrl(val: string | undefined) {
+  if (!val) {
+    audioUrl.value = null
+    return
   }
+  if (val.startsWith('data:audio/')) {
+    try {
+      const arr = val.split(',')
+      const mime = arr[0].match(/:(.*?);/)?.[1] || 'audio/webm'
+      const bstr = atob(arr[1])
+      let n = bstr.length
+      const u8arr = new Uint8Array(n)
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n)
+      }
+      const blob = new Blob([u8arr], { type: mime })
+      audioUrl.value = URL.createObjectURL(blob)
+    } catch (e) {
+      console.error('Failed to parse base64 audio', e)
+      audioUrl.value = val // fallback
+    }
+  } else {
+    audioUrl.value = val
+  }
+}
+
+// Initialize
+processAudioUrl(props.recordedAudioUrl)
+
+watch(() => props.recordedAudioUrl, (newVal) => {
+  processAudioUrl(newVal)
 })
 
 async function toggleRecord() {
@@ -114,7 +141,7 @@ onUnmounted(() => {
 
     <!-- Record Button -->
     <button
-      v-else
+      v-else-if="!readonly"
       class="qv__mic-btn"
       :class="{ 'qv__mic-btn--active': recording }"
       @click="toggleRecord"
@@ -128,6 +155,10 @@ onUnmounted(() => {
       </svg>
       {{ recording ? 'Berhenti Merekam' : 'Rekam Suara' }}
     </button>
+    
+    <div v-else class="qv__empty-state">
+      Tidak ada rekaman
+    </div>
   </div>
 </template>
 
@@ -212,5 +243,13 @@ onUnmounted(() => {
   font-weight: 600;
   cursor: pointer;
   text-decoration: underline;
+}
+
+.qv__empty-state {
+  color: #64748B;
+  font-size: 1rem;
+  font-style: italic;
+  padding: 1rem;
+  text-align: center;
 }
 </style>
