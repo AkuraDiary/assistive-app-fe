@@ -7,7 +7,6 @@ import CourseDetailHeader from '@/components/course/CourseDetailHeader.vue'
 import CourseOverallProgress from '@/components/course/CourseOverallProgress.vue'
 import LatihanSection from '@/components/course/LatihanSection.vue'
 import AssessmentSection from '@/components/course/AssessmentSection.vue'
-import type { CourseModule } from '@/types/course.types'
 
 const router = useRouter()
 const route = useRoute()
@@ -26,8 +25,6 @@ const childId = computed(() => (route.params.childId as string) || 'ch1')
 
 onMounted(() => {
   if (courseId.value) {
-    //  isEditMode = ref(false)
-    //  userRole = ref('teacher')
     fetchCourseDetail(childId.value, courseId.value)
   }
 })

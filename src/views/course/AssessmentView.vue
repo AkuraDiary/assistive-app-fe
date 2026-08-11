@@ -7,7 +7,6 @@ import QuestionVoice from '@/components/quiz/question-types/QuestionVoice.vue'
 import QuestionUpload from '@/components/quiz/question-types/QuestionUpload.vue'
 import QuestionTap from '@/components/quiz/question-types/QuestionTap.vue'
 import QuestionRapidNaming from '@/components/quiz/question-types/QuestionRapidNaming.vue'
-
 import { courseService } from '@/services/course.service'
 
 const router = useRouter()
@@ -17,19 +16,26 @@ const { fontSizeClass, dyslexiaClass } = useAccessibility()
 const moduleId = route.params.moduleId as string
 const courseId = route.params.courseId as string
 
+const courseData = ref<any>(null)
+const moduleData = ref<any>(null)
 const questions = ref<any[]>([])
 const answers = ref<Record<string, any>>({})
 const currentIndex = ref(0)
 const loading = ref(true)
 const submitting = ref(false)
 const isSidebarOpen = ref(true)
+const hasStarted = ref(false)
 
 onMounted(async () => {
   try {
     const course = await courseService.getCourseDetail('c1', courseId)
+    courseData.value = course
     const module = course.modules.find(m => m.id === moduleId)
-    if (module && module.questions) {
-      questions.value = module.questions
+    if (module) {
+      moduleData.value = module
+      if (module.questions) {
+        questions.value = module.questions
+      }
     }
   } catch(e) {
     console.error(e)
@@ -75,19 +81,88 @@ async function next() {
 
 <template>
   <div class="assessment-page" :class="[fontSizeClass, dyslexiaClass]">
-    <div class="assessment-page__header">
+    <div class="assessment-page__header" v-if="hasStarted">
       <button class="assessment-page__back-btn" @click="router.back()">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
-      <h1 class="assessment-page__title">Mengenal Huruf Vokal</h1>
+      <h1 class="assessment-page__title">{{ courseData?.title || 'Mengenal Huruf Vokal' }}</h1>
     </div>
 
     <div v-if="loading" class="assessment-page__loading">
       <div class="assessment-page__spinner" />
     </div>
 
+    <!-- Intro State -->
+    <div v-else-if="!hasStarted && moduleData" class="assessment-intro">
+      <div class="assessment-intro__header">
+        <h1 class="assessment-intro__title">{{ courseData?.title || 'Mengenal Huruf Vokal' }}</h1>
+        <p class="assessment-intro__subtitle">{{ moduleData.title || 'Modul 1' }}</p>
+      </div>
+
+      <div class="assessment-intro__stats">
+        <div class="assessment-intro__stat-card">
+          <div class="assessment-intro__stat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF3366" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="assessment-intro__stat-label">Durasi</div>
+          <div class="assessment-intro__stat-value">{{ moduleData.duration || 20 }} Menit</div>
+        </div>
+        <div class="assessment-intro__stat-card">
+          <div class="assessment-intro__stat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF3366" stroke-width="2">
+              <path d="M19 4h-3V2h-2v2h-4V2H8v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/>
+              <path d="M9 14l2 2 4-4"/>
+            </svg>
+          </div>
+          <div class="assessment-intro__stat-label">Pertanyaan</div>
+          <div class="assessment-intro__stat-value">{{ questions.length }}</div>
+        </div>
+        <div class="assessment-intro__stat-card">
+          <div class="assessment-intro__stat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF3366" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <div class="assessment-intro__stat-label">Minimal Nilai</div>
+          <div class="assessment-intro__stat-value">{{ moduleData.passingScore || 75 }}</div>
+        </div>
+      </div>
+
+      <div class="assessment-intro__details">
+        <div class="assessment-intro__card">
+          <h3 class="assessment-intro__card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#3B82F6" stroke="none"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="8" r="1.5" fill="#fff"/></svg>
+            Instruksi
+          </h3>
+          <ul class="assessment-intro__instruction-list">
+            <li>
+              <span class="assessment-intro__instruction-num">1</span>
+              <span>Selesaikan semua soal dengan teliti.</span>
+            </li>
+            <li>
+              <span class="assessment-intro__instruction-num">2</span>
+              <span>Pastikan suara menyala jika ada soal audio.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="assessment-intro__card">
+          <h3 class="assessment-intro__card-title assessment-intro__card-title--blue">Kategori</h3>
+          <div class="assessment-intro__tags">
+            <span v-for="skill in (moduleData.skills || ['Mendengar', 'Menulis', 'Membaca'])" :key="skill" class="assessment-intro__tag">
+              {{ skill }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="assessment-intro__actions">
+        <button class="assessment-intro__btn assessment-intro__btn--outline" @click="router.back()">Batal</button>
+        <button class="assessment-intro__btn assessment-intro__btn--primary" @click="hasStarted = true">Kerjakan</button>
+      </div>
+    </div>
+
+    <!-- Quiz State -->
     <div v-else-if="current" class="assessment-page__content">
       <!-- Sidebar Navigation -->
       <aside class="assessment-page__sidebar" :class="{ 'assessment-page__sidebar--collapsed': !isSidebarOpen }">
@@ -161,6 +236,7 @@ async function next() {
   gap: 1.5rem;
   height: 100vh;
   background: var(--color-white);
+  overflow-y: auto;
 }
 
 .assessment-page__header {
@@ -204,6 +280,178 @@ async function next() {
   to { transform: rotate(360deg); }
 }
 
+/* Assessment Intro Styles */
+.assessment-intro {
+  max-width: 800px;
+  margin: 2rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+}
+
+.assessment-intro__header {
+  text-align: center;
+}
+
+.assessment-intro__title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #2D3748;
+  margin: 0 0 0.5rem;
+}
+
+.assessment-intro__subtitle {
+  font-size: 1.1rem;
+  color: #718096;
+  margin: 0;
+  font-weight: 500;
+}
+
+.assessment-intro__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.assessment-intro__stat-card {
+  background: white;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.assessment-intro__stat-icon {
+  margin-bottom: 0.25rem;
+}
+
+.assessment-intro__stat-label {
+  font-size: 0.875rem;
+  color: #718096;
+  font-weight: 500;
+}
+
+.assessment-intro__stat-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2D3748;
+}
+
+.assessment-intro__details {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+}
+
+.assessment-intro__card {
+  background: white;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.assessment-intro__card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #3B82F6;
+  margin: 0 0 1.5rem;
+}
+
+.assessment-intro__instruction-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.assessment-intro__instruction-list li {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #4A5568;
+  font-size: 0.95rem;
+}
+
+.assessment-intro__instruction-num {
+  background: #E0E7FF;
+  color: #4338CA;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+.assessment-intro__tags {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.assessment-intro__tag {
+  border: 1px solid #E2E8F0;
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: #4A5568;
+  background: white;
+  text-align: center;
+  font-weight: 500;
+}
+
+.assessment-intro__actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.assessment-intro__btn {
+  padding: 0.75rem 2.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.assessment-intro__btn--outline {
+  background: white;
+  border: 1px solid #FF3366;
+  color: #FF3366;
+}
+.assessment-intro__btn--outline:hover {
+  background: #FFF0F3;
+}
+
+.assessment-intro__btn--primary {
+  background: #FF3366;
+  border: 1px solid #FF3366;
+  color: white;
+}
+.assessment-intro__btn--primary:hover {
+  background: #E62C5C;
+}
+
+
+/* Existing Quiz Styles */
 .assessment-page__content {
   display: flex;
   gap: 2rem;
@@ -349,5 +597,14 @@ async function next() {
 .assessment-page__nav-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .assessment-intro__stats {
+    grid-template-columns: 1fr;
+  }
+  .assessment-intro__details {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
