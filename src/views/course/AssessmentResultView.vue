@@ -12,6 +12,7 @@ const moduleId = route.params.moduleId as string
 
 import { useCourseDetail } from '@/composable/useCourseDetail'
 import { onMounted, computed } from 'vue'
+import { latestAssessmentAnswers } from '@/services/course.service'
 
 const { courseDetail, fetchCourseDetail, loading } = useCourseDetail()
 
@@ -21,6 +22,21 @@ onMounted(() => {
 
 const moduleDetail = computed(() => {
   return courseDetail.value?.modules.find(m => m.id === moduleId) || null
+})
+
+const totalDurationFormatted = computed(() => {
+  const answers = Object.values(latestAssessmentAnswers.value)
+  const totalSeconds = answers.reduce((sum, ans) => sum + (ans.durationSpent || 0), 0)
+  
+  if (totalSeconds === 0) return '0 Detik'
+  
+  const m = Math.floor(totalSeconds / 60)
+  const s = totalSeconds % 60
+  
+  if (m > 0) {
+    return `${m} Menit ${s} Detik`
+  }
+  return `${s} Detik`
 })
 
 function goToReview() {
@@ -49,7 +65,7 @@ function finish() {
               <path d="M12 6V12L16 14" stroke="#F43F5E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
-          <div class="result-page__stat-value">20 Menit</div>
+          <div class="result-page__stat-value">{{ totalDurationFormatted }}</div>
           <div class="result-page__stat-label">Waktu pengerjaan</div>
         </div>
 

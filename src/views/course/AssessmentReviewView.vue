@@ -27,6 +27,14 @@ onMounted(async () => {
     if (module && module.questions) {
       questions.value = module.questions.map((q, index) => {
         const recorded = latestAssessmentAnswers.value[q.id]
+        
+        let formattedDuration = '-'
+        if (recorded?.durationSpent) {
+          const m = Math.floor(recorded.durationSpent / 60)
+          const s = recorded.durationSpent % 60
+          formattedDuration = m > 0 ? `${m}m ${s}s` : `${s}s`
+        }
+
         return {
           ...q,
           number: index + 1,
@@ -34,6 +42,7 @@ onMounted(async () => {
           questionText: q.text,
           userAnswer: recorded ? recorded.value : '-',
           isCorrect: !!recorded, // mock correctness
+          durationFormatted: formattedDuration
         }
       })
       if (questions.value.length > 0) {
@@ -112,6 +121,16 @@ function prevQuestion() {
           <div class="review-page__form-group review-page__form-group--row">
             <label class="review-page__label">Kategori Soal</label>
             <span class="review-page__badge">{{ activeQuestion.category }}</span>
+          </div>
+
+          <div class="review-page__form-group review-page__form-group--row">
+            <label class="review-page__label">Waktu Pengerjaan</label>
+            <span class="review-page__badge" style="background: #E0E7FF; color: #4338CA;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px; vertical-align: text-bottom;">
+                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+              </svg>
+              {{ activeQuestion.durationFormatted }}
+            </span>
           </div>
 
           <div class="review-page__form-group">

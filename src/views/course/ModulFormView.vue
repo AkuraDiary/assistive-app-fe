@@ -12,15 +12,17 @@ const form = ref({
   deskripsi: '',
   tambahLatihan: false,
   poinMinimal: '',
+  durasiPengerjaan: '',
   kategoriSoal: [] as string[]
 })
 
 const kategoriOptions = [
-  { label: 'Huruf', value: 'huruf' },
-  { label: 'Kata', value: 'kata' },
-  { label: 'Kalimat', value: 'kalimat' },
-  { label: 'Warna', value: 'warna' },
-  { label: 'Objek', value: 'objek' },
+  { label: 'Deret Huruf', value: 'Deret Huruf' },
+  { label: 'Kata', value: 'Kata' },
+  { label: 'Kalimat', value: 'Kalimat' },
+  { label: 'Menyusun Kata', value: 'Menyusun Kata' },
+  { label: 'Rapid Naming (Warna)', value: 'Rapid Naming (Warna)' },
+  { label: 'Rapid Naming (Gambar)', value: 'Rapid Naming (Gambar)' },
 ]
 
 async function handleSubmit() {
@@ -40,6 +42,7 @@ async function handleSubmit() {
       title: form.value.nama,
       description: form.value.deskripsi,
       poinMinimal: Number(form.value.poinMinimal),
+      durationMinutes: form.value.durasiPengerjaan ? Number(form.value.durasiPengerjaan) : undefined,
       categories: form.value.kategoriSoal
     })
     if (res.success && res.data) {
@@ -111,6 +114,15 @@ async function handleSubmit() {
             type="number" 
             required 
             placeholder="Contoh: 90"
+          />
+        </div>
+
+        <div class="form-group mb-6">
+          <label>Batas Waktu Pengerjaan (Menit)</label>
+          <input 
+            v-model="form.durasiPengerjaan"
+            type="number" 
+            placeholder="Kosongkan jika tidak ada batas waktu"
           />
         </div>
 

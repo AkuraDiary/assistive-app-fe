@@ -16,22 +16,24 @@ interface Question {
 }
 
 const questions = ref<Question[]>([
-  { id: 1, text: 'Ayam', category: 'kata', answer: 'Ayam' },
-  { id: 2, text: 'Lorem ipsum door sit amet...', category: 'kalimat', answer: 'Lorem ipsum' },
-  { id: 3, text: 'Lorem ipsum door sit amet...', category: 'kalimat', answer: 'Lorem ipsum' },
-  { id: 4, text: 'Lorem ipsum door sit amet...', category: 'kalimat', answer: 'Lorem ipsum' },
-  { id: 5, text: 'Warna', category: 'warna', answer: 'Merah, Kuning', options: ['#ef4444', '#f59e0b', '#22c55e', '#3b82f6', '#374151', '#ffffff'] },
-  { id: 6, text: 'Objek', category: 'objek', answer: 'Singa, Anjing, Kucing', options: [] },
+  { id: 1, text: 'Ayam', category: 'Kata', answer: 'Ayam', questionType: 'upload' },
+  { id: 2, text: 'Lorem ipsum door sit amet...', category: 'Kalimat', answer: 'Lorem ipsum', questionType: 'voice' },
+  { id: 3, text: 'Lorem ipsum door sit amet...', category: 'Kalimat', answer: 'Lorem ipsum', questionType: 'voice' },
+  { id: 4, text: 'Lorem ipsum door sit amet...', category: 'Kalimat', answer: 'Lorem ipsum', questionType: 'voice' },
+  { id: 5, text: 'Warna', category: 'Rapid Naming (Warna)', answer: 'Merah, Kuning', options: ['#ef4444', '#f59e0b', '#22c55e', '#3b82f6', '#374151', '#ffffff'] },
+  { id: 6, text: 'Objek', category: 'Rapid Naming (Gambar)', answer: 'Singa, Anjing, Kucing', options: [] },
 ])
 
 const activeIndex = ref(0)
 const activeQuestion = computed(() => questions.value[activeIndex.value])
 
 const categories = [
-  { label: 'Kata', value: 'kata' },
-  { label: 'Kalimat', value: 'kalimat' },
-  { label: 'Objek', value: 'objek' },
-  { label: 'Warna', value: 'warna' },
+  { label: 'Deret Huruf', value: 'Deret Huruf' },
+  { label: 'Kata', value: 'Kata' },
+  { label: 'Kalimat', value: 'Kalimat' },
+  { label: 'Menyusun Kata', value: 'Menyusun Kata' },
+  { label: 'Rapid Naming (Warna)', value: 'Rapid Naming (Warna)' },
+  { label: 'Rapid Naming (Gambar)', value: 'Rapid Naming (Gambar)' },
 ]
 
 const presetColors = ['#ef4444', '#f59e0b', '#22c55e', '#3b82f6', '#374151', '#ffffff']
@@ -103,8 +105,9 @@ function addQuestion() {
   questions.value.push({
     id: Date.now(),
     text: '',
-    category: 'kata',
-    answer: ''
+    category: 'Kata',
+    answer: '',
+    questionType: 'upload'
   })
   activeIndex.value = questions.value.length - 1
 }
@@ -162,20 +165,20 @@ function onFinish() {
             <span class="q-number">{{ idx + 1 }}</span>
             <span class="q-text">{{ q.text || 'Soal baru...' }}</span>
             <div class="q-icon">
-              <template v-if="q.category === 'kata'">
+              <template v-if="['Deret Huruf', 'Kata', 'Kalimat', 'Menyusun Kata'].includes(q.category)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
                   <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
                 </svg>
               </template>
-              <template v-else-if="q.category === 'objek'">
+              <template v-else-if="q.category === 'Rapid Naming (Gambar)'">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
                   <circle cx="8.5" cy="8.5" r="1.5"/>
                   <polyline points="21 15 16 10 5 21"/>
                 </svg>
               </template>
-              <template v-else-if="q.category === 'warna'">
+              <template v-else-if="q.category === 'Rapid Naming (Warna)'">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
                   <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
@@ -237,7 +240,20 @@ function onFinish() {
           </div>
         </div>
 
-        <div class="form-group" v-if="activeQuestion && activeQuestion.category === 'warna'">
+        <div class="form-group" v-if="activeQuestion && ['Deret Huruf', 'Kata', 'Kalimat', 'Menyusun Kata'].includes(activeQuestion.category)">
+          <label>Cara Menjawab (Metode)</label>
+          <div class="select-wrapper">
+            <select class="input-field" v-model="activeQuestion.questionType">
+              <option value="upload">Menulis / Upload Gambar</option>
+              <option value="voice">Berbicara (Rekam Suara)</option>
+            </select>
+            <svg class="select-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="form-group" v-if="activeQuestion && activeQuestion.category === 'Rapid Naming (Warna)'">
           <label>Pilih Warna</label>
           <div class="colors-grid">
             <div 
@@ -251,7 +267,7 @@ function onFinish() {
           </div>
         </div>
 
-        <div class="form-group" v-if="activeQuestion && activeQuestion.category === 'objek'">
+        <div class="form-group" v-if="activeQuestion && activeQuestion.category === 'Rapid Naming (Gambar)'">
           <label>Pilih Objek</label>
           <div class="images-grid">
             <div 
@@ -296,7 +312,7 @@ function onFinish() {
             class="input-field" 
             v-model="activeQuestion.answer"
           />
-          <span class="help-text" v-if="activeQuestion.category === 'objek' || activeQuestion.category === 'warna'">Pisahkan kunci jawaban dengan tanda koma (,)</span>
+          <span class="help-text" v-if="activeQuestion.category === 'Rapid Naming (Gambar)' || activeQuestion.category === 'Rapid Naming (Warna)' || activeQuestion.category === 'Menyusun Kata'">Pisahkan kunci jawaban dengan tanda koma (,)</span>
         </div>
 
         <div class="editor__footer">

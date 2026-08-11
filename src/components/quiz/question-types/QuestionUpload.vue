@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { ScreeningQuestion } from '@/types/screening.types';
+import type { ScreeningQuestion } from '@/types/screening.types'
 import { ref, onUnmounted, watch, onMounted } from 'vue'
 
-const props = defineProps<{ 
-  question: ScreeningQuestion,
-  recordedAudioUrl?: string,
-  readonly?: boolean 
+const props = defineProps<{
+  question: ScreeningQuestion
+  recordedAudioUrl?: string
+  readonly?: boolean
 }>()
 const emit = defineEmits<{ (e: 'answer', value: string): void }>()
 
@@ -16,12 +16,15 @@ const inputRef = ref<HTMLInputElement>()
 // Default to 'canvas' if no preview, else 'preview'
 const currentMode = ref<'canvas' | 'camera' | 'preview'>(preview.value ? 'preview' : 'canvas')
 
-watch(() => props.recordedAudioUrl, (newVal) => {
-  if (newVal !== undefined) {
-    preview.value = newVal || null
-    if (preview.value) currentMode.value = 'preview'
-  }
-})
+watch(
+  () => props.recordedAudioUrl,
+  (newVal) => {
+    if (newVal !== undefined) {
+      preview.value = newVal || null
+      if (preview.value) currentMode.value = 'preview'
+    }
+  },
+)
 
 // File Upload
 function onFileChange(e: Event) {
@@ -84,18 +87,19 @@ function draw(e: MouseEvent | TouchEvent) {
   const canvas = canvasRef.value
   const ctx = canvas.getContext('2d')
   if (!ctx) return
-  
+
   ctx.lineWidth = 5
   ctx.lineCap = 'round'
   ctx.strokeStyle = '#333'
-  
+
   const rect = canvas.getBoundingClientRect()
-  
+
   // Handle scaling if CSS size differs from canvas internal size
   const scaleX = canvas.width / rect.width
   const scaleY = canvas.height / rect.height
 
-  let clientX = 0, clientY = 0
+  let clientX = 0,
+    clientY = 0
   if (e instanceof MouseEvent) {
     clientX = e.clientX
     clientY = e.clientY
@@ -111,7 +115,7 @@ function draw(e: MouseEvent | TouchEvent) {
   } else {
     return
   }
-  
+
   ctx.lineTo((clientX - rect.left) * scaleX, (clientY - rect.top) * scaleY)
   ctx.stroke()
   ctx.beginPath()
@@ -166,7 +170,7 @@ function capturePhoto() {
 }
 function closeCamera() {
   if (videoStream) {
-    videoStream.getTracks().forEach(track => track.stop())
+    videoStream.getTracks().forEach((track) => track.stop())
     videoStream = null
   }
 }
@@ -202,55 +206,79 @@ onUnmounted(() => {
     <div class="qu__layout">
       <!-- Left Toolbar -->
       <div class="qu__toolbar" v-if="!readonly">
-        <button 
-          class="qu__tool-btn" 
+        <button
+          class="qu__tool-btn"
           :class="{ 'qu__tool-btn--active': currentMode === 'canvas' }"
           @click="setMode('canvas')"
           title="Gambar di Canvas"
         >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 19l7-7 3 3-7 7-3-3z"/>
-            <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
-            <path d="M2 2l7.586 7.586"/>
-            <circle cx="11" cy="11" r="2"/>
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M12 19l7-7 3 3-7 7-3-3z" />
+            <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" />
+            <path d="M2 2l7.586 7.586" />
+            <circle cx="11" cy="11" r="2" />
           </svg>
         </button>
 
-        <button 
-          class="qu__tool-btn" 
+        <button
+          class="qu__tool-btn"
           :class="{ 'qu__tool-btn--active': currentMode === 'camera' }"
           @click="setMode('camera')"
           title="Ambil Foto"
         >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-            <circle cx="12" cy="13" r="4"/>
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"
+            />
+            <circle cx="12" cy="13" r="4" />
           </svg>
         </button>
 
-        <button 
-          class="qu__tool-btn" 
-          @click="triggerUpload"
-          title="Upload Gambar"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="17 8 12 3 7 8"/>
-            <line x1="12" y1="3" x2="12" y2="15"/>
+        <button class="qu__tool-btn" @click="triggerUpload" title="Upload Gambar">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="17 8 12 3 7 8" />
+            <line x1="12" y1="3" x2="12" y2="15" />
           </svg>
         </button>
-        <input ref="inputRef" type="file" accept="image/*" class="qu__hidden-input" @change="onFileChange" />
+        <input
+          ref="inputRef"
+          type="file"
+          accept="image/*"
+          class="qu__hidden-input"
+          @change="onFileChange"
+        />
       </div>
 
       <!-- Main Workspace -->
       <div class="qu__workspace">
-        
         <!-- Canvas Mode -->
         <div v-show="currentMode === 'canvas'" class="qu__workspace-view">
-          <canvas 
-            ref="canvasRef" 
-            width="800" 
-            height="500" 
+          <canvas
+            ref="canvasRef"
+            width="800"
+            height="250"
             class="qu__canvas"
             @mousedown="startDrawing"
             @mousemove="draw"
@@ -277,18 +305,32 @@ onUnmounted(() => {
           <template v-if="currentMode === 'canvas'">
             <button class="qu__action-btn" @click="saveCanvas">
               Simpan Gambar
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-                <polyline points="17 21 17 13 7 13 7 21"/>
-                <polyline points="7 3 7 8 15 8"/>
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                <polyline points="17 21 17 13 7 13 7 21" />
+                <polyline points="7 3 7 8 15 8" />
               </svg>
             </button>
             <button class="qu__action-btn" @click="clearCanvas">
               Ulangi Menggambar
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 19l7-7 3 3-7 7-3-3z"/>
-                <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
-                <path d="M2 2l7.586 7.586"/>
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M12 19l7-7 3 3-7 7-3-3z" />
+                <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" />
+                <path d="M2 2l7.586 7.586" />
               </svg>
             </button>
           </template>
@@ -296,8 +338,15 @@ onUnmounted(() => {
           <template v-else-if="currentMode === 'camera'">
             <button class="qu__action-btn" @click="capturePhoto">
               Ambil Foto
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="13" r="4"/>
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="13" r="4" />
               </svg>
             </button>
           </template>
@@ -305,39 +354,50 @@ onUnmounted(() => {
           <template v-else-if="currentMode === 'preview'">
             <button class="qu__action-btn" @click="resetAnswer">
               Hapus Gambar
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="3 6 5 6 21 6"/>
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="3 6 5 6 21 6" />
+                <path
+                  d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                />
               </svg>
             </button>
           </template>
         </div>
-
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.qu { 
-  display: flex; 
-  flex-direction: column; 
-  gap: 1.5rem; 
-  width: 100%; 
+.qu {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
 }
 
 .qu__media-card {
-  width: 100%; height: 240px;
-  background: #FCE7F3;
+  width: 100%;
+  height: 240px;
+  background: #fce7f3;
   border-radius: 1rem;
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 2rem;
 }
 
-.qu__media-label { 
-  font-size: 4rem; 
-  font-weight: 800; 
-  color: #334155; 
+.qu__media-label {
+  font-size: 4rem;
+  font-weight: 800;
+  color: #334155;
   text-align: center;
 }
 
@@ -357,9 +417,9 @@ onUnmounted(() => {
   width: 48px;
   height: 48px;
   border-radius: 8px;
-  border: 1px solid #FF3366;
+  border: 1px solid #ff3366;
   background: white;
-  color: #FF3366;
+  color: #ff3366;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -368,8 +428,8 @@ onUnmounted(() => {
 }
 
 .qu__tool-btn--active {
-  background: #FCE7F3;
-  border-color: #FF3366;
+  background: #fce7f3;
+  border-color: #ff3366;
 }
 
 .qu__hidden-input {
@@ -387,7 +447,7 @@ onUnmounted(() => {
 
 .qu__workspace-view {
   width: 100%;
-  border: 1px solid #E2E8F0;
+  border: 1px solid #e2e8f0;
   border-radius: 12px;
   background: white;
   overflow: hidden;
@@ -406,7 +466,8 @@ onUnmounted(() => {
   cursor: crosshair;
 }
 
-.qu__video, .qu__preview-img {
+.qu__video,
+.qu__preview-img {
   width: 100%;
   height: auto;
   max-height: 500px;
@@ -427,15 +488,15 @@ onUnmounted(() => {
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
   border-radius: 9999px;
-  border: 1px solid #FF3366;
+  border: 1px solid #ff3366;
   background: white;
-  color: #FF3366;
+  color: #ff3366;
   font-weight: 600;
   font-size: 0.875rem;
   cursor: pointer;
   transition: all 0.2s;
 }
 .qu__action-btn:hover {
-  background: #FCE7F3;
+  background: #fce7f3;
 }
 </style>

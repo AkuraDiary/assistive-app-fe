@@ -66,7 +66,7 @@ export const courseService = {
 
   async addAssessmentToCourse(
     courseId: string,
-    payload: { title: string; description: string; poinMinimal: number; categories: string[] },
+    payload: { title: string; description: string; poinMinimal: number; categories: string[]; durationMinutes?: number },
   ): Promise<ApiResponse<string>> {
     if (USE_MOCK) {
       await new Promise(resolve => setTimeout(resolve, 300))
@@ -82,6 +82,7 @@ export const courseService = {
           categories: payload.categories,
           skills: ['Mendengar', 'Menulis', 'Membaca'],
           isLocked: false,
+          durationMinutes: payload.durationMinutes,
         })
         return { success: true, data: newId }
       }

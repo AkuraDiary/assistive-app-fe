@@ -40,6 +40,7 @@ export interface CourseModule {
   categories?: string[] // Kata, Kalimat, Objek
   skills?: string[] // Mendengar, Menulis, Membaca
   questions?: AssessmentQuestion[]
+  durationMinutes?: number // Batas Waktu
 }
 
 export interface CourseDetail extends Course {

@@ -232,15 +232,16 @@ export const mockCourseDetail: CourseDetail[] = [
         description: 'Ujian mengenai huruf vokal yang telah dipelajari.',
         type: 'assessment',
         level: 'Level 1',
-        categories: ['Kata', 'Kalimat', 'Objek'],
+        categories: ['Deret Huruf', 'Kata', 'Kalimat', 'Menyusun Kata', 'Rapid Naming (Warna)', 'Rapid Naming (Gambar)'],
         skills: ['Mendengar', 'Menulis', 'Membaca'],
-        tanggalDikerjakan: '2026-04-12',
+        tanggalDikerjakan: '2026-05-12',
         isLocked: false,
+        durationMinutes: 10,
         questions: [
           {
             id: 'q1',
             questionType: 'voice',
-            category: 'Huruf',
+            category: 'Deret Huruf',
             text: 'Menyebutkan Huruf',
             mediaLabel: 'A B D F E',
             audioUrl: 'aa',
@@ -257,7 +258,7 @@ export const mockCourseDetail: CourseDetail[] = [
           {
             id: 'q3',
             questionType: 'upload',
-            category: 'Menulis Kalimat',
+            category: 'Kalimat',
             text: 'Menulis Ulang Kalimat',
             mediaLabel: 'Ayam Duduk Di Kandang',
             audioUrl: '',
@@ -275,7 +276,7 @@ export const mockCourseDetail: CourseDetail[] = [
           {
             id: 'q4',
             questionType: 'rapid-naming',
-            category: 'Hewan',
+            category: 'Rapid Naming (Gambar)',
             text: 'Sebutkan hewan-hewan berikut',
             rapidNamingType: 'picture',
             rapidNamingItems: [
@@ -288,7 +289,7 @@ export const mockCourseDetail: CourseDetail[] = [
           {
             id: 'q5',
             questionType: 'rapid-naming',
-            category: 'Warna',
+            category: 'Rapid Naming (Warna)',
             text: 'Sebutkan warna-warna berikut',
             rapidNamingType: 'color',
             rapidNamingItems: ['#FF0000', '#FFA500', '#00C853'],
@@ -323,15 +324,16 @@ export const mockCourseDetail: CourseDetail[] = [
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
         type: 'assessment',
         level: 'Level 1',
-        categories: ['Kata', 'Kalimat', 'Objek'],
+        categories: ['Deret Huruf', 'Kata', 'Kalimat', 'Menyusun Kata', 'Rapid Naming (Warna)', 'Rapid Naming (Gambar)'],
         skills: ['Mendengar', 'Menulis', 'Membaca'],
         tanggalDikerjakan: '2026-04-12',
         isLocked: false,
+        durationMinutes: 15,
         questions: [
           {
             id: 'q1',
             questionType: 'voice',
-            category: 'Kata',
+            category: 'Deret Huruf',
             text: 'A B D F E',
             mediaLabel: 'A B D F E',
             audioUrl: '',

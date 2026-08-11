@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAccessibility } from '@/composable/useAccessibility'
 import AccessibilityMenu from '@/components/shared/AccessibilityMenu.vue'
@@ -10,6 +10,7 @@ import QuestionRapidNaming from '@/components/quiz/question-types/QuestionRapidN
 import { useCourseDetail } from '@/composable/useCourseDetail'
 import { courseService, latestAssessmentAnswers } from '@/services/course.service'
 import type { AssessmentQuestion } from '@/types/course.types'
+import { ttsService } from '@/services/tts.service'
 
 const router = useRouter()
 const route = useRoute()
@@ -22,6 +23,7 @@ const courseData = ref<any>(null)
 const moduleData = ref<any>(null)
 const questions = ref<any[]>([])
 const answers = ref<Record<string, any>>({})
+const questionDurations = ref<Record<string, number>>({})
 const currentIndex = ref(0)
 const loading = ref(true)
 const submitting = ref(false)
@@ -33,21 +35,79 @@ onMounted(async () => {
     const res = await courseService.getCourseDetail('c1', courseId)
     const course = res.data
     courseData.value = course || null
-    const module = course ? course.modules.find(m => m.id === moduleId) : null
+    const module = course ? course.modules.find((m) => m.id === moduleId) : null
     if (module) {
       moduleData.value = module
       if (module.questions) {
         questions.value = module.questions
       }
     }
-  } catch(e) {
+  } catch (e) {
     console.error(e)
   }
   loading.value = false
 })
 
+onUnmounted(() => {
+  if (globalTimerInterval) clearInterval(globalTimerInterval)
+  ttsService.cancel()
+})
+
 const current = computed(() => questions.value[currentIndex.value])
 const isLast = computed(() => currentIndex.value === questions.value.length - 1)
+
+// --- Timer Logic ---
+const ACCUMULATE_TIME = false // toggle: true = accumulate, false = reset
+let activeQuestionStartTime = 0
+const globalTimeLeft = ref<number | null>(null)
+let globalTimerInterval: any = null
+
+const formattedGlobalTime = computed(() => {
+  if (globalTimeLeft.value === null) return ''
+  const m = Math.floor(globalTimeLeft.value / 60)
+  const s = globalTimeLeft.value % 60
+  return `${m}:${s.toString().padStart(2, '0')}`
+})
+
+function startQuestionTimer() {
+  activeQuestionStartTime = Date.now()
+}
+
+function stopQuestionTimer(questionId: string) {
+  if (activeQuestionStartTime > 0) {
+    const elapsed = Math.floor((Date.now() - activeQuestionStartTime) / 1000)
+    if (ACCUMULATE_TIME) {
+      questionDurations.value[questionId] = (questionDurations.value[questionId] || 0) + elapsed
+    } else {
+      questionDurations.value[questionId] = elapsed
+    }
+  }
+}
+
+function playTTSForCurrentQuestion(delayMs = 1000) {
+  if (!current.value) return
+  const stringCategories = ['Deret Huruf', 'Kata', 'Kalimat', 'Menyusun Kata']
+  if (stringCategories.includes(current.value.category)) {
+    ttsService.speak({ text: current.value.mediaLabel, delayMs })
+  }
+}
+
+function startAssessment() {
+  hasStarted.value = true
+  if (moduleData.value?.durationMinutes) {
+    globalTimeLeft.value = moduleData.value.durationMinutes * 60
+    globalTimerInterval = setInterval(() => {
+      if (globalTimeLeft.value !== null && globalTimeLeft.value > 0) {
+        globalTimeLeft.value--
+      } else {
+        clearInterval(globalTimerInterval)
+        submitAssessment()
+      }
+    }, 1000)
+  }
+  startQuestionTimer()
+  playTTSForCurrentQuestion()
+}
 
 function handleAnswer(value: string) {
   if (!current.value) return
@@ -60,23 +120,58 @@ function retry() {
 }
 
 function prev() {
-  if (currentIndex.value > 0) currentIndex.value--
-  else router.back()
+  if (!current.value) return
+  stopQuestionTimer(current.value.id)
+  ttsService.cancel()
+  if (currentIndex.value > 0) {
+    currentIndex.value--
+    startQuestionTimer()
+    playTTSForCurrentQuestion()
+  } else {
+    router.back()
+  }
+}
+
+function jumpTo(index: number) {
+  if (!current.value || index === currentIndex.value) return
+  stopQuestionTimer(current.value.id)
+  ttsService.cancel()
+  currentIndex.value = index
+  startQuestionTimer()
+  playTTSForCurrentQuestion()
+}
+
+async function submitAssessment() {
+  if (current.value) stopQuestionTimer(current.value.id)
+  ttsService.cancel()
+  if (globalTimerInterval) clearInterval(globalTimerInterval)
+
+  submitting.value = true
+  await new Promise((resolve) => setTimeout(resolve, 500))
+
+  // Attach durations to answers
+  for (const q of questions.value) {
+    if (answers.value[q.id]) {
+      answers.value[q.id].durationSpent = questionDurations.value[q.id] || 0
+    }
+  }
+
+  latestAssessmentAnswers.value = { ...answers.value }
+  submitting.value = false
+  router.push({ name: 'assessment-result', params: { courseId, moduleId } })
 }
 
 async function next() {
-  if (isLast.value) {
-    submitting.value = true
-    // Simulate submission delay
-    await new Promise((resolve) => setTimeout(resolve, 500))
-    // Save answers temporarily to simulate backend
-    latestAssessmentAnswers.value = { ...answers.value }
+  if (!current.value) return
+  stopQuestionTimer(current.value.id)
+  ttsService.cancel()
 
-    submitting.value = false
-    router.push({ name: 'assessment-result', params: { courseId, moduleId } })
-    return
+  if (isLast.value) {
+    return submitAssessment()
   }
   currentIndex.value++
+  startQuestionTimer()
+  playTTSForCurrentQuestion()
 }
 </script>
 
@@ -84,8 +179,20 @@ async function next() {
   <div class="assessment-page" :class="[fontSizeClass, dyslexiaClass]">
     <div class="assessment-page__header" v-if="hasStarted">
       <button class="assessment-page__back-btn" @click="router.back()">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M15 18L9 12L15 6"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
         </svg>
       </button>
       <h1 class="assessment-page__title">{{ courseData?.title || 'Mengenal Huruf Vokal' }}</h1>
@@ -105,16 +212,37 @@ async function next() {
       <div class="assessment-intro__stats">
         <div class="assessment-intro__stat-card">
           <div class="assessment-intro__stat-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF3366" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#FF3366"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
           </div>
-          <div class="assessment-intro__stat-label">Durasi</div>
-          <div class="assessment-intro__stat-value">{{ moduleData.duration || 20 }} Menit</div>
+          <div class="assessment-intro__stat-label">Batas Waktu</div>
+          <div class="assessment-intro__stat-value">
+            {{ moduleData.durationMinutes ? moduleData.durationMinutes + ' Menit' : 'Tidak ada' }}
+          </div>
         </div>
         <div class="assessment-intro__stat-card">
           <div class="assessment-intro__stat-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF3366" stroke-width="2">
-              <path d="M19 4h-3V2h-2v2h-4V2H8v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/>
-              <path d="M9 14l2 2 4-4"/>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#FF3366"
+              stroke-width="2"
+            >
+              <path
+                d="M19 4h-3V2h-2v2h-4V2H8v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"
+              />
+              <path d="M9 14l2 2 4-4" />
             </svg>
           </div>
           <div class="assessment-intro__stat-label">Pertanyaan</div>
@@ -122,7 +250,18 @@ async function next() {
         </div>
         <div class="assessment-intro__stat-card">
           <div class="assessment-intro__stat-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF3366" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#FF3366"
+              stroke-width="2"
+            >
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+              />
+            </svg>
           </div>
           <div class="assessment-intro__stat-label">Minimal Nilai</div>
           <div class="assessment-intro__stat-value">{{ moduleData.passingScore || 75 }}</div>
@@ -132,7 +271,11 @@ async function next() {
       <div class="assessment-intro__details">
         <div class="assessment-intro__card">
           <h3 class="assessment-intro__card-title">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="#3B82F6" stroke="none"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="8" r="1.5" fill="#fff"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#3B82F6" stroke="none">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 16v-4" stroke="#fff" stroke-width="2" stroke-linecap="round" />
+              <circle cx="12" cy="8" r="1.5" fill="#fff" />
+            </svg>
             Instruksi
           </h3>
           <ul class="assessment-intro__instruction-list">
@@ -150,7 +293,11 @@ async function next() {
         <div class="assessment-intro__card">
           <h3 class="assessment-intro__card-title assessment-intro__card-title--blue">Kategori</h3>
           <div class="assessment-intro__tags">
-            <span v-for="skill in (moduleData.skills || ['Mendengar', 'Menulis', 'Membaca'])" :key="skill" class="assessment-intro__tag">
+            <span
+              v-for="skill in moduleData.skills || ['Mendengar', 'Menulis', 'Membaca']"
+              :key="skill"
+              class="assessment-intro__tag"
+            >
               {{ skill }}
             </span>
           </div>
@@ -158,17 +305,35 @@ async function next() {
       </div>
 
       <div class="assessment-intro__actions">
-        <button class="assessment-intro__btn assessment-intro__btn--outline" @click="router.back()">Batal</button>
-        <button class="assessment-intro__btn assessment-intro__btn--primary" @click="hasStarted = true">Kerjakan</button>
+        <button class="assessment-intro__btn assessment-intro__btn--outline" @click="router.back()">
+          Batal
+        </button>
+        <button
+          class="assessment-intro__btn assessment-intro__btn--primary"
+          @click="startAssessment"
+        >
+          Kerjakan
+        </button>
       </div>
     </div>
 
     <!-- Quiz State -->
     <div v-else-if="current" class="assessment-page__content">
       <!-- Sidebar Navigation -->
-      <aside class="assessment-page__sidebar" :class="{ 'assessment-page__sidebar--collapsed': !isSidebarOpen }">
+      <aside
+        class="assessment-page__sidebar"
+        :class="{ 'assessment-page__sidebar--collapsed': !isSidebarOpen }"
+      >
         <div class="assessment-page__sidebar-header" @click="isSidebarOpen = !isSidebarOpen">
-          <svg class="assessment-page__sidebar-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg
+            class="assessment-page__sidebar-icon"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <line x1="3" y1="12" x2="21" y2="12"></line>
             <line x1="3" y1="6" x2="21" y2="6"></line>
             <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -182,7 +347,7 @@ async function next() {
             :key="q.id"
             class="assessment-page__nav-item"
             :class="{ 'assessment-page__nav-item--active': currentIndex === index }"
-            @click="currentIndex = index"
+            @click="jumpTo(index)"
           >
             <span class="assessment-page__nav-num">{{ index + 1 }}</span>
             <span class="assessment-page__nav-text">{{ q.text }}</span>
@@ -192,8 +357,53 @@ async function next() {
 
       <!-- Main Area -->
       <main class="assessment-page__main">
+        <div class="assessment-page__top-bar">
+          <div v-if="globalTimeLeft !== null" class="assessment-page__timer">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            Sisa Waktu:
+            <strong :class="{ 'text-danger': globalTimeLeft < 60 }">{{
+              formattedGlobalTime
+            }}</strong>
+          </div>
+          <button
+            v-if="['Deret Huruf', 'Kata', 'Kalimat', 'Menyusun Kata'].includes(current.category)"
+            class="assessment-page__tts-btn"
+            @click="playTTSForCurrentQuestion(0)"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+            Dengarkan
+          </button>
+        </div>
+
         <h3 class="assessment-page__subtitle">
-          Jawab dengan {{ current.questionType === 'upload' ? 'menulis di kertas lalu di-upload, atau menggambar di canvas' : 'merekam suaramu' }}.
+          Jawab dengan
+          {{
+            current.questionType === 'upload'
+              ? 'menulis di kertas lalu di-upload, atau menggambar di canvas'
+              : current.questionType === 'rapid-naming'
+                ? 'menyebutkannya dengan cepat'
+                : 'merekam suaramu'
+          }}.
         </h3>
 
         <div class="assessment-page__question-area">
@@ -246,6 +456,48 @@ async function next() {
   gap: 1rem;
 }
 
+.assessment-page__top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  background: #f8fafc;
+  padding: 12px 16px;
+  border-radius: 12px;
+}
+
+.assessment-page__timer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #475569;
+}
+
+.text-danger {
+  color: #ef4444;
+}
+
+.assessment-page__tts-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--color-white);
+  border: 1.5px solid #ff3366;
+  color: #ff3366;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.assessment-page__tts-btn:hover {
+  background: #ffe4e6;
+}
+
 .assessment-page__back-btn {
   display: flex;
   align-items: center;
@@ -253,14 +505,14 @@ async function next() {
   padding: 0.5rem;
   background: transparent;
   border: none;
-  color: #FF3366;
+  color: #ff3366;
   cursor: pointer;
 }
 
 .assessment-page__title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #FF3366;
+  color: #ff3366;
   margin: 0;
 }
 
@@ -273,12 +525,14 @@ async function next() {
   width: 28px;
   height: 28px;
   border: 2px solid #ede8fa;
-  border-top-color: #FF3366;
+  border-top-color: #ff3366;
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Assessment Intro Styles */
@@ -298,7 +552,7 @@ async function next() {
 .assessment-intro__title {
   font-size: 1.75rem;
   font-weight: 700;
-  color: #2D3748;
+  color: #2d3748;
   margin: 0 0 0.5rem;
 }
 
@@ -317,7 +571,7 @@ async function next() {
 
 .assessment-intro__stat-card {
   background: white;
-  border: 1px solid #E2E8F0;
+  border: 1px solid #e2e8f0;
   border-radius: 12px;
   padding: 1.5rem;
   display: flex;
@@ -326,7 +580,7 @@ async function next() {
   justify-content: center;
   text-align: center;
   gap: 0.5rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
 .assessment-intro__stat-icon {
@@ -342,7 +596,7 @@ async function next() {
 .assessment-intro__stat-value {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #2D3748;
+  color: #2d3748;
 }
 
 .assessment-intro__details {
@@ -353,10 +607,10 @@ async function next() {
 
 .assessment-intro__card {
   background: white;
-  border: 1px solid #E2E8F0;
+  border: 1px solid #e2e8f0;
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
 .assessment-intro__card-title {
@@ -365,7 +619,7 @@ async function next() {
   gap: 0.75rem;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #3B82F6;
+  color: #3b82f6;
   margin: 0 0 1.5rem;
 }
 
@@ -382,13 +636,13 @@ async function next() {
   display: flex;
   align-items: center;
   gap: 1rem;
-  color: #4A5568;
+  color: #4a5568;
   font-size: 0.95rem;
 }
 
 .assessment-intro__instruction-num {
-  background: #E0E7FF;
-  color: #4338CA;
+  background: #e0e7ff;
+  color: #4338ca;
   width: 24px;
   height: 24px;
   border-radius: 50%;
@@ -407,11 +661,11 @@ async function next() {
 }
 
 .assessment-intro__tag {
-  border: 1px solid #E2E8F0;
+  border: 1px solid #e2e8f0;
   border-radius: 20px;
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
-  color: #4A5568;
+  color: #4a5568;
   background: white;
   text-align: center;
   font-weight: 500;
@@ -435,22 +689,21 @@ async function next() {
 
 .assessment-intro__btn--outline {
   background: white;
-  border: 1px solid #FF3366;
-  color: #FF3366;
+  border: 1px solid #ff3366;
+  color: #ff3366;
 }
 .assessment-intro__btn--outline:hover {
-  background: #FFF0F3;
+  background: #fff0f3;
 }
 
 .assessment-intro__btn--primary {
-  background: #FF3366;
-  border: 1px solid #FF3366;
+  background: #ff3366;
+  border: 1px solid #ff3366;
   color: white;
 }
 .assessment-intro__btn--primary:hover {
-  background: #E62C5C;
+  background: #e62c5c;
 }
-
 
 /* Existing Quiz Styles */
 .assessment-page__content {
@@ -489,7 +742,7 @@ async function next() {
 }
 
 .assessment-page__sidebar-icon {
-  color: #64748B;
+  color: #64748b;
 }
 
 .assessment-page__sidebar-title {
@@ -523,12 +776,12 @@ async function next() {
 }
 
 .assessment-page__nav-item--active {
-  background: #FCE7F3; /* tailwind pink-100 */
+  background: #fce7f3; /* tailwind pink-100 */
 }
 
 .assessment-page__nav-item--active .assessment-page__nav-num,
 .assessment-page__nav-item--active .assessment-page__nav-text {
-  color: #FF3366;
+  color: #ff3366;
   font-weight: 700;
 }
 
@@ -581,9 +834,9 @@ async function next() {
 .assessment-page__nav-btn {
   padding: 0.75rem 2rem;
   border-radius: 9999px;
-  border: 1px solid #FF3366;
+  border: 1px solid #ff3366;
   background: transparent;
-  color: #FF3366;
+  color: #ff3366;
   font-weight: 600;
   font-size: 0.875rem;
   cursor: pointer;
@@ -591,7 +844,7 @@ async function next() {
 }
 
 .assessment-page__nav-btn:hover:not(:disabled) {
-  background: #FF3366;
+  background: #ff3366;
   color: white;
 }
 
