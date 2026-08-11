@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ScreeningQuestion } from '@/types/screening.types'
+import { ttsService } from '@/services/tts.service'
 import { ref, onUnmounted, watch, onMounted } from 'vue'
 
 const props = defineProps<{
@@ -200,7 +201,20 @@ onUnmounted(() => {
 <template>
   <div class="qu">
     <div class="qu__media-card">
-      <span class="qu__media-label">{{ question.mediaLabel || question.text }}</span>
+      <div class="qu__media-content">
+        <span class="qu__media-label">{{ question.mediaLabel || question.text }}</span>
+        <button 
+          v-if="['Deret Huruf', 'Kata', 'Kalimat', 'Menyusun Kata'].includes(question.category)"
+          class="qu__tts-btn" 
+          @click.prevent="ttsService.speak({ text: question.mediaLabel || question.text })"
+          title="Dengarkan"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+        </button>
+      </div>
     </div>
 
     <div class="qu__layout">
@@ -394,6 +408,27 @@ onUnmounted(() => {
   padding: 2rem;
 }
 
+.qu__media-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+.qu__tts-btn {
+  background: var(--color-white);
+  border: 1px solid #FF3366;
+  color: #FF3366;
+  border-radius: 9999px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.qu__tts-btn:hover {
+  background: #FFE4E6;
+}
 .qu__media-label {
   font-size: 4rem;
   font-weight: 800;

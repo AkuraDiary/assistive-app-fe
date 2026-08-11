@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import type { ScreeningQuestion } from '@/types/screening.types';
-
-
-
+import { ttsService } from '@/services/tts.service';
 defineProps<{ question: ScreeningQuestion }>()
 const emit = defineEmits<{ (e: 'answer', value: string): void }>()
 </script>
@@ -10,7 +8,20 @@ const emit = defineEmits<{ (e: 'answer', value: string): void }>()
 <template>
   <div class="qt">
     <div class="qt__media-card" @click="emit('answer', question.mediaLabel ?? '')">
-      <span class="qt__media-label">{{ question.mediaLabel || question.text }}</span>
+      <div class="qt__media-content">
+        <span class="qt__media-label">{{ question.mediaLabel || question.text }}</span>
+        <button 
+          v-if="['Deret Huruf', 'Kata', 'Kalimat', 'Menyusun Kata'].includes(question.category)"
+          class="qt__tts-btn" 
+          @click.stop.prevent="ttsService.speak({ text: question.mediaLabel || question.text })"
+          title="Dengarkan"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+        </button>
+      </div>
       <span class="qt__tap-hint">
         <!-- hand tap icon -->
         <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
@@ -19,13 +30,6 @@ const emit = defineEmits<{ (e: 'answer', value: string): void }>()
         </svg>
       </span>
     </div>
-
-    <button class="qt__audio-btn" @click="() => {}">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <path d="M11 5L6 9H2v6h4l5 4V5z" fill="currentColor"/>
-        <path d="M15.5 8.5a5 5 0 010 7M19 6a9 9 0 010 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>
-    </button>
 
     <!-- optional letter choices (q2 in design) -->
     <div v-if="question.options?.length" class="qt__options">
@@ -57,11 +61,28 @@ const emit = defineEmits<{ (e: 'answer', value: string): void }>()
   color: #334155; 
   text-align: center;
 }
-.qt__tap-hint { position: absolute; bottom: 24px; right: 24px; opacity: 0.5; }
-.qt__audio-btn {
-  background: none; border: none; cursor: pointer;
-  color: #FF3366; padding: 0.5rem;
+.qt__media-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 }
+.qt__tts-btn {
+  background: var(--color-white);
+  border: 1px solid #FF3366;
+  color: #FF3366;
+  border-radius: 9999px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.qt__tts-btn:hover {
+  background: #FFE4E6;
+}
+.qt__tap-hint { position: absolute; bottom: 24px; right: 24px; opacity: 0.5; }
 .qt__options { display: flex; gap: 0.75rem; }
 .qt__option-btn {
   width: 56px; height: 56px;

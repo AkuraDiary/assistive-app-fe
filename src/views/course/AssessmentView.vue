@@ -9,7 +9,12 @@ import QuestionTap from '@/components/quiz/question-types/QuestionTap.vue'
 import QuestionRapidNaming from '@/components/quiz/question-types/QuestionRapidNaming.vue'
 import { useCourseDetail } from '@/composable/useCourseDetail'
 import { courseService, latestAssessmentAnswers } from '@/services/course.service'
-import type { CourseDetail, CourseModule, AssessmentQuestion, AssessmentAnswer } from '@/types/course.types'
+import type {
+  CourseDetail,
+  CourseModule,
+  AssessmentQuestion,
+  AssessmentAnswer,
+} from '@/types/course.types'
 import { ttsService } from '@/services/tts.service'
 
 const router = useRouter()
@@ -375,24 +380,6 @@ async function next() {
               formattedGlobalTime
             }}</strong>
           </div>
-          <button
-            v-if="['Deret Huruf', 'Kata', 'Kalimat', 'Menyusun Kata'].includes(current.category)"
-            class="assessment-page__tts-btn"
-            @click="playTTSForCurrentQuestion(0)"
-          >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-            </svg>
-            Dengarkan
-          </button>
         </div>
 
         <h3 class="assessment-page__subtitle">
