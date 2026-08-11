@@ -14,5 +14,6 @@ export interface AssessmentQuestion {
 export interface AssessmentAnswer {
   questionId: string
   value: string
+  transcription?: string
   durationSpent?: number
 }

@@ -9,13 +9,14 @@ import QuestionTap from '@/components/quiz/question-types/QuestionTap.vue'
 import QuestionRapidNaming from '@/components/quiz/question-types/QuestionRapidNaming.vue'
 import { useCourseDetail } from '@/composable/useCourseDetail'
 import { courseService, latestAssessmentAnswers } from '@/services/course.service'
+import { ttsService } from '@/services/tts.service'
+import { aiService } from '@/services/ai.service'
 import type {
   CourseDetail,
   CourseModule,
   AssessmentQuestion,
   AssessmentAnswer,
 } from '@/types/course.types'
-import { ttsService } from '@/services/tts.service'
 
 const router = useRouter()
 const route = useRoute()
@@ -152,7 +153,20 @@ async function submitAssessment() {
   if (globalTimerInterval) clearInterval(globalTimerInterval)
 
   submitting.value = true
-  await new Promise((resolve) => setTimeout(resolve, 500))
+
+  // Process AI transcription batch
+  const processPromises = questions.value.map(async (q) => {
+    const ans = answers.value[q.id]
+    if (ans && ans.value && !ans.transcription) {
+      if (q.questionType === 'upload') {
+        ans.transcription = await aiService.processImageToText(ans.value, q.correctAnswer)
+      } else if (q.questionType === 'voice') {
+        ans.transcription = await aiService.processAudioToText(ans.value, q.correctAnswer)
+      }
+    }
+  })
+  
+  await Promise.allSettled(processPromises)
 
   // Attach durations to answers
   for (const q of questions.value) {

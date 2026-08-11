@@ -43,12 +43,23 @@ onMounted(async () => {
           formattedDuration = m > 0 ? `${m} menit ${s} detik` : `${s} detik`
         }
 
+        let userAnswerText = '-'
+        if (recorded) {
+          if (recorded.transcription) {
+            userAnswerText = recorded.transcription
+          } else if (recorded.value.startsWith('data:')) {
+            userAnswerText = '(Media tersimpan)'
+          } else {
+            userAnswerText = recorded.value
+          }
+        }
+
         return {
           ...q,
           number: index + 1,
           title: q.text,
           questionText: q.text,
-          userAnswer: recorded ? recorded.value : '-',
+          userAnswer: userAnswerText,
           isCorrect: !!recorded, // mock correctness
           durationFormatted: formattedDuration,
         }
@@ -329,7 +340,7 @@ function prevQuestion() {
             id: activeQuestion?.id,
             text: activeQuestion?.questionText,
             questionType: activeQuestion?.questionType,
-            mediaLabel: activeQuestion?.questionText,
+            mediaLabel: activeQuestion?.mediaLabel,
             rapidNamingType: activeQuestion?.rapidNamingType,
             rapidNamingItems: activeQuestion?.rapidNamingItems,
             order: activeQuestion?.number || 0,

@@ -128,9 +128,9 @@ class TTSService {
   private engine: TTSEngine
 
   constructor() {
-    const externalApiUrl = import.meta.env.VITE_TTS_API_URL
+    const externalApiUrl = import.meta.env.VITE_AI_API_URL
     if (externalApiUrl) {
-      this.engine = new ExternalTTSEngine(externalApiUrl)
+      this.engine = new ExternalTTSEngine(`${externalApiUrl}/text-to-speech`)
     } else {
       this.engine = new BrowserTTSEngine()
     }
