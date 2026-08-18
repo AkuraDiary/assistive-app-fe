@@ -376,25 +376,7 @@ async function next() {
 
       <!-- Main Area -->
       <main class="assessment-page__main">
-        <div class="assessment-page__top-bar">
-          <div v-if="globalTimeLeft !== null" class="assessment-page__timer">
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <polyline points="12 6 12 12 16 14" />
-            </svg>
-            Sisa Waktu:
-            <strong :class="{ 'text-danger': globalTimeLeft < 60 }">{{
-              formattedGlobalTime
-            }}</strong>
-          </div>
-        </div>
+
 
         <h3 class="assessment-page__subtitle">
           Jawab dengan

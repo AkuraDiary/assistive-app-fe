@@ -11,6 +11,7 @@ defineProps<{
 
 const emit = defineEmits<{
   (e: 'open-materi', moduleId: string): void
+  (e: 'toggle-lock', moduleId: string): void
 }>()
 
 const expandedId = ref<string | null>(null)
@@ -134,7 +135,7 @@ function formatDate(iso?: string) {
                     </svg>
                     Edit Modul
                   </button>
-                  <button class="ls__btn ls__btn--danger" style="flex: 1" @click.stop>
+                  <button class="ls__btn ls__btn--danger" style="flex: 1" @click.stop="emit('toggle-lock', item.id)">
                     <svg
                       width="14"
                       height="14"
@@ -146,7 +147,7 @@ function formatDate(iso?: string) {
                       <path d="M18.36 6.64a9 9 0 1 1-12.73 0" />
                       <line x1="12" y1="2" x2="12" y2="12" />
                     </svg>
-                    Nonaktifkan Modul
+                    {{ item.isLocked ? 'Aktifkan Modul' : 'Nonaktifkan Modul' }}
                   </button>
                 </template>
                 <template v-else>
@@ -312,9 +313,13 @@ function formatDate(iso?: string) {
   border-radius: 8px;
   font-size: 13px;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   cursor: pointer;
   transition: all 0.15s;
-  text-align: center;
+  border: none;
 }
 .ls__btn--primary {
   background: var(--color-primary);

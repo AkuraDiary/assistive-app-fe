@@ -26,6 +26,26 @@ export function useCourseDetail() {
     }
   }
 
+  async function toggleModuleLock(courseId: string, moduleId: string, isLocked: boolean) {
+    loading.value = true
+    error.value = null
+    try {
+      const res = await courseService.toggleModuleLock(courseId, moduleId, isLocked)
+      if (res.success && courseDetail.value) {
+        const mod = courseDetail.value.modules.find(m => m.id === moduleId)
+        if (mod) {
+          mod.isLocked = isLocked
+        }
+      } else {
+        error.value = res.message || 'Failed to toggle lock'
+      }
+    } catch (err) {
+      error.value = (err as Error).message
+    } finally {
+      loading.value = false
+    }
+  }
+
   const currentIndex = computed(() =>
     courses.value.findIndex((c) => c.id === courseDetail.value?.id),
   )
@@ -44,5 +64,6 @@ export function useCourseDetail() {
     loading,
     error,
     fetchCourseDetail,
+    toggleModuleLock,
   }
 }

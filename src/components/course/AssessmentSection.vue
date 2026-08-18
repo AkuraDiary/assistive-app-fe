@@ -10,6 +10,7 @@ defineProps<{
 const emit = defineEmits<{
   (e: 'open-assessment', moduleId: string): void
   (e: 'edit-assessment', moduleId: string): void
+  (e: 'toggle-lock', moduleId: string): void
 }>()
 </script>
 
@@ -62,27 +63,27 @@ const emit = defineEmits<{
               </svg>
               Edit Assessment
             </button>
-            <button class="as__btn as__btn--danger" style="flex: 1;" @click.stop>
+            <button class="as__btn as__btn--danger" style="flex: 1;" @click.stop="emit('toggle-lock', item.id)">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M18.36 6.64a9 9 0 1 1-12.73 0" />
                 <line x1="12" y1="2" x2="12" y2="12" />
               </svg>
-              Nonaktifkan Assessment
+              {{ item.isLocked ? 'Aktifkan Assessment' : 'Nonaktifkan Assessment' }}
             </button>
           </div>
         </template>
         <template v-else>
           <button 
             class="as__btn" 
-            :class="progress < 100 || item.isLocked ? 'as__btn--locked' : 'as__btn--primary'"
-            :disabled="progress < 100 || item.isLocked"
+            :class="item.isLocked ? 'as__btn--locked' : 'as__btn--primary'"
+            :disabled="item.isLocked"
             @click="emit('open-assessment', item.id)"
           >
-            <svg v-if="progress < 100 || item.isLocked" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg v-if="item.isLocked" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
               <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
             </svg>
-            {{ progress < 100 || item.isLocked ? 'Terkunci' : 'Mulai Ujian' }}
+            {{ item.isLocked ? 'Terkunci' : 'Mulai Ujian' }}
           </button>
         </template>
       </div>

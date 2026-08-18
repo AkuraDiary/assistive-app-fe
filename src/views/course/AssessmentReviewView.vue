@@ -168,6 +168,14 @@ function prevQuestion() {
               :value="activeQuestion.questionText"
               disabled
             />
+            <div v-if="activeQuestion.rapidNamingItems && activeQuestion.rapidNamingItems.length" style="display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
+              <template v-if="activeQuestion.rapidNamingType === 'color'">
+                <div v-for="c in activeQuestion.rapidNamingItems" :key="c" :style="{ backgroundColor: c, width: '40px', height: '40px', borderRadius: '4px', border: '1px solid #ccc' }"></div>
+              </template>
+              <template v-else-if="activeQuestion.rapidNamingType === 'picture'">
+                <img v-for="p in activeQuestion.rapidNamingItems" :key="p" :src="p" style="width: 60px; height: 60px; object-fit: contain; border: 1px solid #ccc; border-radius: 4px;" />
+              </template>
+            </div>
           </div>
 
           <div class="review-page__answer-grid">

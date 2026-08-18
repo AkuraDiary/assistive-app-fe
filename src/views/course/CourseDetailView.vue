@@ -10,7 +10,7 @@ import AssessmentSection from '@/components/course/AssessmentSection.vue'
 
 const router = useRouter()
 const route = useRoute()
-const { courseDetail, loading, error, fetchCourseDetail } = useCourseDetail()
+const { courseDetail, loading, error, fetchCourseDetail, toggleModuleLock } = useCourseDetail()
 
 const isEditMode = ref(false)
 const { user } = useAuth()
@@ -56,6 +56,15 @@ function onEditAssessment(moduleId: string) {
     name: 'assessment-edit',
     params: { courseId: courseId.value, moduleId: moduleId },
   })
+}
+
+async function onToggleLock(moduleId: string) {
+  if (courseDetail.value) {
+    const mod = courseDetail.value.modules.find((m) => m.id === moduleId)
+    if (mod) {
+      await toggleModuleLock(courseId.value, moduleId, !mod.isLocked)
+    }
+  }
 }
 
 function goBack() {
@@ -124,6 +133,23 @@ function onLanjut() {
         </button>
       </div>
 
+      <div class="cdv-page__top-nav" style="margin-bottom: 12px; display: flex; align-items: center;">
+        <button class="cdv-btn cdv-btn--outline" @click="goBack" style="border:none; padding:0; background:transparent; display: flex; align-items: center; gap: 4px;">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+          Kembali
+        </button>
+      </div>
       <div class="cdv-page__header-actions">
         <CourseDetailHeader :course="courseDetail" />
 
@@ -162,6 +188,7 @@ function onLanjut() {
           :user-role="userRole"
           @open-materi="onOpenMateri"
           @toggle-edit-mode="isEditMode = !isEditMode"
+          @toggle-lock="onToggleLock"
         />
 
         <!-- Assessment List -->
@@ -172,41 +199,11 @@ function onLanjut() {
           :progress="debugProgress100 ? 100 : courseDetail.progress"
           @open-assessment="onOpenAssessment"
           @edit-assessment="onEditAssessment"
+          @toggle-lock="onToggleLock"
         />
       </div>
 
-      <div class="cdv-page__actions">
-        <button class="cdv-btn cdv-btn--outline" @click="goBack">
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M15 18l-6-6 6-6" />
-          </svg>
-          Kembali
-        </button>
-        <button class="cdv-btn cdv-btn--outline" @click="onLanjut">
-          Lanjut
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M9 18l6-6-6-6" />
-          </svg>
-        </button>
-      </div>
+
     </template>
   </div>
 </template>

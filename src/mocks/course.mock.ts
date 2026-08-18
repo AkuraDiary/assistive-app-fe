@@ -1,4 +1,7 @@
 import type { Course, CourseDetail } from '@/types/course.types'
+import imgSinga from '@/assets/images/img_singa.png'
+import imgAnjing from '@/assets/images/img_anjing.jpeg'
+import imgKucing from '@/assets/images/img_kucing.png'
 
 export const mockCourses: Course[] = [
   {
@@ -141,7 +144,7 @@ export const mockTeacherCourses: Course[] = [
     completedSessions: 4,
     totalSessions: 5,
     tanggalMulai: '2026-05-20',
-    status: 'belum', 
+    status: 'belum',
     studentName: 'Budiman',
   },
   {
@@ -280,9 +283,9 @@ export const mockCourseDetail: CourseDetail[] = [
             text: 'Sebutkan hewan-hewan berikut',
             rapidNamingType: 'picture',
             rapidNamingItems: [
-              'https://placehold.co/120x120?text=Singa',
-              'https://placehold.co/120x120?text=Anjing',
-              'https://placehold.co/120x120?text=Kucing',
+              imgSinga,
+              imgAnjing,
+              imgKucing,
             ],
             correctAnswer: 'Singa, Anjing, Kucing',
           },
@@ -363,9 +366,9 @@ export const mockCourseDetail: CourseDetail[] = [
             text: 'Sebutkan hewan-hewan berikut',
             rapidNamingType: 'picture',
             rapidNamingItems: [
-              'https://placehold.co/120x120?text=Singa',
-              'https://placehold.co/120x120?text=Anjing',
-              'https://placehold.co/120x120?text=Kucing',
+              imgSinga,
+              imgAnjing,
+              imgKucing,
             ],
             correctAnswer: 'Singa, Anjing, Kucing',
           },

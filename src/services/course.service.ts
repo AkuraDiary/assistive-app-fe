@@ -113,5 +113,27 @@ export const courseService = {
     const res = await apiService.put<{ id: string }>(`/teacher/courses/${courseId}/assessments/${moduleId}/questions`, { questions })
     if (!res.success) return { success: false, message: res.message }
     return { success: true, data: undefined }
+  },
+
+  async toggleModuleLock(
+    courseId: string,
+    moduleId: string,
+    isLocked: boolean
+  ): Promise<ApiResponse<void>> {
+    if (USE_MOCK) {
+      await new Promise(resolve => setTimeout(resolve, 300))
+      const course = mockCourseDetail.find((c) => c.id === courseId)
+      if (course) {
+        const module = course.modules.find((m) => m.id === moduleId)
+        if (module) {
+          module.isLocked = isLocked
+          return { success: true, data: undefined }
+        }
+      }
+      return { success: false, message: 'Module not found' }
+    }
+    const res = await apiService.patch<{ id: string }>(`/teacher/courses/${courseId}/moduls/${moduleId}/lock`, { isLocked })
+    if (!res.success) return { success: false, message: res.message }
+    return { success: true, data: undefined }
   }
 }
