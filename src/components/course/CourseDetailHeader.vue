@@ -19,8 +19,12 @@ const totalAssessment = computed(() => props.course.modules.filter(m => m.type =
       <p class="cdh__desc">{{ course.description ?? '-' }}</p>
 
       <div class="cdh__badges">
-        <span class="cdh__badge cdh__badge--primary"> {{ totalModul }} Modul </span>
+        <span class="cdh__badge cdh__badge--outline"> {{ totalModul }} Materi </span>
         <span class="cdh__badge cdh__badge--outline"> {{ totalAssessment }} Assesment </span>
+      </div>
+
+      <div class="cdh__actions">
+        <slot name="actions"></slot>
       </div>
     </div>
   </div>
@@ -84,7 +88,14 @@ const totalAssessment = computed(() => props.course.modules.filter(m => m.type =
 
 .cdh__badge--outline {
   background: transparent;
-  border: 1.5px solid var(--color-border);
+  border: 1px solid var(--color-border);
   color: var(--color-text-dark);
+}
+
+.cdh__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
 }
 </style>

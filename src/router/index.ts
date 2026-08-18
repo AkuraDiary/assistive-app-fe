@@ -130,21 +130,25 @@ const router = createRouter({
           path: '/course/:courseId/assessment/:moduleId/take',
           name: 'assessment-take',
           component: AssessmentView,
+          meta: { hideNavbar: true },
         },
         {
           path: '/course/:courseId/assessment/:moduleId/result',
           name: 'assessment-result',
           component: AssessmentResultView,
+          meta: { hideNavbar: true },
         },
         {
           path: '/course/:courseId/assessment/:moduleId/review',
           name: 'assessment-review',
           component: AssessmentReviewView,
+          meta: { hideNavbar: true },
         },
         {
           path: '/course/:courseId',
           name: 'course-detail',
           component: CourseDetailView,
+          meta: { hideNavbar: true },
         },
       ]
     }

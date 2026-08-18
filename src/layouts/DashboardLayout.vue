@@ -4,7 +4,7 @@ import DashboardNavbar from '@/components/dashboard/DashboardNavbar.vue'
 
 <template>
   <div class="dashboard-layout">
-    <DashboardNavbar />
+    <DashboardNavbar v-if="!$route.meta.hideNavbar" />
     
     <div class="dashboard-layout__content">
       <RouterView v-slot="{ Component }">
