@@ -703,6 +703,7 @@ async function next() {
   flex-direction: column;
   overflow: hidden;
   align-self: flex-start;
+  max-height: 100%;
   transition: all 0.3s ease;
 }
 

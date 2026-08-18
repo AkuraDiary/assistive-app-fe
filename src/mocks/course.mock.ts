@@ -298,6 +298,106 @@ export const mockCourseDetail: CourseDetail[] = [
             rapidNamingItems: ['#FF0000', '#FFA500', '#00C853'],
             correctAnswer: 'Merah, Kuning, Hijau',
           },
+          // 1. soal dibaca jawaban ditulis - satu huruf
+          {
+            id: 'v1',
+            questionType: 'upload',
+            category: 'Satu Huruf',
+            text: 'Tuliskan huruf berikut',
+            mediaLabel: 'B',
+            correctAnswer: 'B',
+          },
+          // 2. soal dibaca jawaban ditulis - deret huruf
+          {
+            id: 'v2',
+            questionType: 'upload',
+            category: 'Deret Huruf',
+            text: 'Tuliskan deret huruf berikut',
+            mediaLabel: 'A B C',
+            correctAnswer: 'A B C',
+          },
+          // 3. soal dibaca jawaban ditulis - kalimat
+          {
+            id: 'v3',
+            questionType: 'upload',
+            category: 'Kalimat',
+            text: 'Tuliskan kalimat berikut',
+            mediaLabel: 'Saya Suka Apel',
+            correctAnswer: 'Saya Suka Apel',
+          },
+          // 4. soal didengar jawaban dibaca - satu huruf
+          {
+            id: 'v4',
+            questionType: 'tap',
+            category: 'Satu Huruf',
+            text: 'Dengarkan dan pilih huruf yang benar',
+            mediaLabel: 'B',
+            audioUrl: 'aa',
+            options: ['A', 'B', 'C'],
+            correctAnswer: 'B',
+          },
+          // 5. soal didengar jawaban dibaca - deret huruf
+          {
+            id: 'v5',
+            questionType: 'tap',
+            category: 'Deret Huruf',
+            text: 'Dengarkan dan pilih deret huruf yang benar',
+            mediaLabel: 'A B C',
+            audioUrl: 'aa',
+            options: ['A B C', 'D E F', 'G H I'],
+            correctAnswer: 'A B C',
+          },
+          // 6. soal didengar jawaban dibaca - kalimat
+          {
+            id: 'v6',
+            questionType: 'tap',
+            category: 'Kalimat',
+            text: 'Dengarkan dan pilih kalimat yang benar',
+            mediaLabel: 'Saya Suka Apel',
+            audioUrl: 'aa',
+            options: ['Budi main bola', 'Susi makan roti', 'Saya Suka Apel'],
+            correctAnswer: 'Saya Suka Apel',
+          },
+          // 7. soal didengar jawaban ditulis - kalimat
+          {
+            id: 'v7',
+            questionType: 'upload',
+            category: 'Kalimat',
+            text: 'Dengarkan dan tulis kalimat tersebut',
+            mediaLabel: 'Ibu Pergi Ke Pasar',
+            audioUrl: 'aa',
+            correctAnswer: 'Ibu Pergi Ke Pasar',
+          },
+          // 8. soal dibaca jawaban dibaca - kalimat
+          {
+            id: 'v8',
+            questionType: 'tap',
+            category: 'Kalimat',
+            text: 'Baca dan pilih kalimat yang sesuai',
+            mediaLabel: 'Sapi Makan Rumput',
+            options: ['Sapi Makan Daging', 'Sapi Makan Rumput', 'Sapi Makan Batu'],
+            correctAnswer: 'Sapi Makan Rumput',
+          },
+          // 9. soal dilihat jawaban disebutkan - gambar
+          {
+            id: 'v9',
+            questionType: 'rapid-naming',
+            category: 'Rapid Naming (Gambar)',
+            text: 'Sebutkan nama benda pada gambar berikut dengan cepat',
+            rapidNamingType: 'picture',
+            rapidNamingItems: [imgSinga, imgAnjing, imgKucing],
+            correctAnswer: 'Singa, Anjing, Kucing',
+          },
+          // 10. soal dilihat jawaban disebutkan - warna
+          {
+            id: 'v10',
+            questionType: 'rapid-naming',
+            category: 'Rapid Naming (Warna)',
+            text: 'Sebutkan warna-warna berikut dengan cepat',
+            rapidNamingType: 'color',
+            rapidNamingItems: ['#0000FF', '#FF00FF', '#FFFF00'],
+            correctAnswer: 'Biru, Ungu, Kuning',
+          },
         ],
       },
     ],
