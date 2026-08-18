@@ -40,11 +40,11 @@ function formatDate(iso?: string) {
       <thead>
         <tr>
           <th v-if="showStudentName" class="ct__th">Nama Anak</th>
-          <th class="ct__th">Courses</th>
+          <th class="ct__th">Course Terakhir</th>
           <th class="ct__th">Progres</th>
           <th class="ct__th">Tanggal Mulai</th>
           <th class="ct__th">Status</th>
-          <th class="ct__th ct__th--center">Action</th>
+          <th class="ct__th ct__th--center">Aksi</th>
         </tr>
       </thead>
       <tbody>
@@ -57,10 +57,9 @@ function formatDate(iso?: string) {
           <!-- Course name + level -->
           <td class="ct__td">
             <div class="ct__course-cell">
-              <div class="ct__thumb" />
               <div>
                 <p class="ct__name">{{ course.name }}</p>
-                <p class="ct__level">{{ course.level ?? '-' }}</p>
+                <p class="ct__level">Level : {{ course.level ?? '-' }}</p>
               </div>
             </div>
           </td>
@@ -87,10 +86,7 @@ function formatDate(iso?: string) {
           <!-- Actions -->
           <td class="ct__td ct__td--center">
             <div class="ct__actions">
-              <button class="ct__btn-detail" @click="$emit('detail', course.id)">Detail</button>
-              <button class="ct__btn-more" @click="$emit('action', course.id)">
-                <span>•••</span>
-              </button>
+              <button class="ct__btn-detail" @click="$emit('detail', course.id)">Lihat Course</button>
             </div>
           </td>
         </tr>
@@ -181,13 +177,6 @@ function formatDate(iso?: string) {
   align-items: center;
   gap: 12px;
 }
-.ct__thumb {
-  width: 48px;
-  height: 48px;
-  border-radius: 10px;
-  background: var(--color-surface);
-  flex-shrink: 0;
-}
 .ct__name {
   font-size: calc(14px * var(--text-scale, 1));
   font-weight: 600;
@@ -209,13 +198,13 @@ function formatDate(iso?: string) {
 .ct__progress-track {
   flex: 1;
   height: 8px;
-  background: var(--color-border);
+  background: #FCE7F3;
   border-radius: 999px;
   overflow: hidden;
 }
 .ct__progress-fill {
   height: 100%;
-  background: var(--color-primary);
+  background: #FF3366;
   border-radius: 999px;
   transition: width 0.4s ease;
 }
@@ -248,23 +237,5 @@ function formatDate(iso?: string) {
 .ct__btn-detail:hover {
   background: #EC4899;
   color: #fff;
-}
-.ct__btn-more {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  border: 1.5px solid var(--color-border);
-  background: transparent;
-  font-size: calc(13px * var(--text-scale, 1));
-  color: var(--color-text-light);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.15s;
-}
-.ct__btn-more:hover {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
 }
 </style>

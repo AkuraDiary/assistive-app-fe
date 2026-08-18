@@ -62,22 +62,6 @@ const filterOptions: { label: string; value: CourseStatus | 'semua' }[] = [
               <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 8px">
                 <h1 class="cl__title" style="margin: 0">Daftar Course</h1>
               </div>
-              <p class="cl__subtitle">Total Course : {{ totalCount }}</p>
-            </div>
-
-            <!-- Filter dropdown -->
-            <div class="cl__filter-wrap">
-              <select
-                class="cl__filter"
-                :value="filterStatus"
-                @change="
-                  setFilter(($event.target as HTMLSelectElement).value as CourseStatus | 'semua')
-                "
-              >
-                <option v-for="opt in filterOptions" :key="opt.value" :value="opt.value">
-                  {{ opt.label }}
-                </option>
-              </select>
             </div>
           </div>
           <div v-if="user?.role === 'parent' && !selectedChildId" class="cl__empty-state">
@@ -98,29 +82,7 @@ const filterOptions: { label: string; value: CourseStatus | 'semua' }[] = [
             @action="(id) => console.log('action', id)"
           />
 
-          <!-- Footer -->
-          <div class="cl__footer">
-            <div class="cl__per-page">
-              <span class="cl__footer-label">Tampil</span>
-              <select
-                class="cl__per-page-select"
-                :value="perPage"
-                @change="setPerPage(Number(($event.target as HTMLSelectElement).value))"
-              >
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="15">15</option>
-                <option value="20">20</option>
-              </select>
-              <span class="cl__footer-label">data per halaman</span>
-            </div>
 
-            <CoursePagination
-              :current-page="currentPage"
-              :total-pages="totalPages"
-              @page-change="setPage"
-            />
-          </div>
         </div>
       </template>
     </main>
@@ -143,7 +105,6 @@ const filterOptions: { label: string; value: CourseStatus | 'semua' }[] = [
 .cl__card {
   background: var(--color-background);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-md);
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
