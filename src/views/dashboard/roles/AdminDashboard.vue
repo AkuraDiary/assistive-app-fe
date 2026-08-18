@@ -103,14 +103,14 @@ function handleYearChange(e: Event) {
 }
 
 .admin-dashboard__title {
-  font-size: 24px;
+  font-size: calc(24px * var(--text-scale, 1));
   font-weight: 700;
   color: #2d2d2d;
   margin: 0 0 8px 0;
 }
 
 .admin-dashboard__subtitle {
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
   color: #666;
   margin: 0;
 }
@@ -137,7 +137,7 @@ function handleYearChange(e: Event) {
 }
 
 .admin-dashboard__chart-title {
-  font-size: 22px;
+  font-size: calc(22px * var(--text-scale, 1));
   font-weight: 700;
   color: #ff4d8d;
   margin: 0;
@@ -152,7 +152,7 @@ function handleYearChange(e: Event) {
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   padding: 8px 36px 8px 12px;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   color: #2d2d2d;
   background: #fff url('data:image/svg+xml;utf8,<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="%236b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>') no-repeat right 12px center;
   cursor: pointer;

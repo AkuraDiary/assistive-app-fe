@@ -91,7 +91,7 @@ const items = [
 }
 
 .stat-card__label {
-  font-size: 16px;
+  font-size: calc(16px * var(--text-scale, 1));
   font-weight: 700;
 }
 
@@ -102,7 +102,7 @@ const items = [
 }
 
 .stat-card__value {
-  font-size: 48px;
+  font-size: calc(48px * var(--text-scale, 1));
   font-weight: 700;
   line-height: 1;
   margin-bottom: 8px;

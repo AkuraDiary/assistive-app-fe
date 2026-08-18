@@ -29,7 +29,7 @@ defineProps<{
 }
 
 .cop__title {
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
   margin: 0;
@@ -57,7 +57,7 @@ defineProps<{
 }
 
 .cop__pct {
-  font-size: 16px;
+  font-size: calc(16px * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
 }

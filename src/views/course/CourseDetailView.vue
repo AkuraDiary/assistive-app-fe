@@ -86,7 +86,7 @@ function onLanjut() {
         background: #eee;
         border-radius: 8px;
         margin-bottom: 16px;
-        font-size: 12px;
+        font-size: calc(12px * var(--text-scale, 1));
         display: flex;
         gap: 12px;
         align-items: center;
@@ -245,7 +245,7 @@ function onLanjut() {
 }
 
 .cdv-page__sections-title {
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
   margin-top: 8px;
@@ -268,7 +268,7 @@ function onLanjut() {
   height: fit-content;
   padding: 10px;
   border-radius: 8px;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
@@ -325,7 +325,7 @@ function onLanjut() {
   color: var(--color-primary);
   padding: 8px 16px;
   border-radius: 999px;
-  font-size: 12px;
+  font-size: calc(12px * var(--text-scale, 1));
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;

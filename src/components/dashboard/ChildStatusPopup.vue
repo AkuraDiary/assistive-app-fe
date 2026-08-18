@@ -66,7 +66,7 @@ const emit = defineEmits<{
 }
 
 .popup__message {
-  font-size: 22px;
+  font-size: calc(22px * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
 
@@ -78,7 +78,7 @@ const emit = defineEmits<{
   width: 100%;
   padding: 10px 16px;
   border-radius: var(--radius-md);
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 500;
   text-align: center;
 }
@@ -97,7 +97,7 @@ const emit = defineEmits<{
   background: transparent;
   border: none;
   color: var(--color-primary);
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 500;
   cursor: pointer;
   display: flex;

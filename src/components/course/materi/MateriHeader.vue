@@ -32,7 +32,7 @@ const metodeLabel: Record<MetodeBelajar, string> = {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 600;
   color: var(--color-text-dark);
 }
@@ -40,19 +40,19 @@ const metodeLabel: Record<MetodeBelajar, string> = {
   padding: 3px 12px;
   border-radius: 999px;
   border: 1.5px solid var(--color-border);
-  font-size: 12px;
+  font-size: calc(12px * var(--text-scale, 1));
   font-weight: 500;
   color: var(--color-text-dark);
   background: var(--color-white);
 }
 .mh__title {
-  font-size: 26px;
+  font-size: calc(26px * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
   margin: 0;
 }
 .mh__subtitle {
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   color: var(--color-text-light);
   margin: 0;
 }

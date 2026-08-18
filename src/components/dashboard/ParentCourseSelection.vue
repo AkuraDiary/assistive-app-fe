@@ -133,7 +133,7 @@ const editingChildAvatarUrl = computed(() => {
 }
 
 .pcs__title {
-  font-size: 24px;
+  font-size: calc(24px * var(--text-scale, 1));
   font-weight: 700;
   color: #333;
   margin: 0;
@@ -145,7 +145,7 @@ const editingChildAvatarUrl = computed(() => {
   border: none;
   border-radius: 8px;
   padding: 10px 20px;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s;

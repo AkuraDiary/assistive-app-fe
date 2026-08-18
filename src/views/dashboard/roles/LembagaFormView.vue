@@ -136,7 +136,7 @@ function goBack() {
 }
 
 .lembaga-form-page__title {
-  font-size: 28px;
+  font-size: calc(28px * var(--text-scale, 1));
   font-weight: 700;
   color: #2d2d2d;
   margin: 0;
@@ -155,7 +155,7 @@ function goBack() {
 }
 
 .form-group label {
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 600;
   color: #374151;
 }
@@ -164,7 +164,7 @@ function goBack() {
   padding: 12px 16px;
   border: 1px solid #d1d5db;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   outline: none;
   transition: border-color 0.2s;
 }
@@ -188,7 +188,7 @@ function goBack() {
   background: white;
   border-radius: 9999px;
   font-weight: 600;
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -204,7 +204,7 @@ function goBack() {
   border: none;
   border-radius: 9999px;
   font-weight: 600;
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
   cursor: pointer;
   transition: background-color 0.2s;
 }

@@ -243,7 +243,7 @@ const formattedDate = computed(() => {
   color: var(--color-primary);
   border-radius: 10px;
   padding: 8px 16px;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 600;
 }
 
@@ -266,14 +266,14 @@ const formattedDate = computed(() => {
 }
 
 .dashboard__title {
-  font-size: 20px;
+  font-size: calc(20px * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
   margin: 0 0 4px;
 }
 
 .dashboard__subtitle {
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   color: var(--color-text-light);
   margin: 0;
 }
@@ -286,7 +286,7 @@ const formattedDate = computed(() => {
   color: #fff;
   border: none;
 
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 600;
   cursor: pointer;
 }

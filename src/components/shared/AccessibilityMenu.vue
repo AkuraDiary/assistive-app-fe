@@ -77,7 +77,7 @@ const open = ref(false)
 }
 
 .a11y-menu__label {
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   color: var(--color-text-dark);
   font-weight: 500;
 }
@@ -93,7 +93,7 @@ const open = ref(false)
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-border);
   background: var(--color-surface);
-  font-size: 12px;
+  font-size: calc(12px * var(--text-scale, 1));
   font-weight: 600;
   cursor: pointer;
   color: var(--color-text-dark);
@@ -143,14 +143,14 @@ const open = ref(false)
   border: none;
   border-radius: var(--radius-full);
   padding: 0.625rem;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 600;
   cursor: pointer;
   box-shadow: var(--shadow-md);
 }
 .a11y-menu__trigger-label {
   margin: 4px 4px;
-  font-size: 16px;
+  font-size: calc(16px * var(--text-scale, 1));
 }
 
 /* Transition */

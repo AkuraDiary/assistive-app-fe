@@ -430,7 +430,7 @@ onUnmounted(() => {
   background: #FFE4E6;
 }
 .qu__media-label {
-  font-size: 4rem;
+  font-size: calc(4rem * var(--text-scale, 1));
   font-weight: 800;
   color: #334155;
   text-align: center;
@@ -527,7 +527,7 @@ onUnmounted(() => {
   background: white;
   color: #ff3366;
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: calc(0.875rem * var(--text-scale, 1));
   cursor: pointer;
   transition: all 0.2s;
 }

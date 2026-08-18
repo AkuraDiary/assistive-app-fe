@@ -61,7 +61,7 @@ onUnmounted(() => document.removeEventListener('mousedown', handleClickOutside))
   padding: 10px 16px;
   background: transparent;
   border: none;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   color: var(--color-text-dark);
   cursor: pointer;
   text-align: left;

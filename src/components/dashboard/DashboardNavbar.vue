@@ -117,7 +117,7 @@ async function emmitLogout() {
 }
 
 .navbar__brand-name {
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 600;
   color: #9b6fe8;
   letter-spacing: 0.02em;
@@ -133,7 +133,7 @@ async function emmitLogout() {
   border-radius: 999px;
   border: 1px solid var(--color-primary);
   background: transparent;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 600;
   color: var(--color-primary);
   cursor: pointer;

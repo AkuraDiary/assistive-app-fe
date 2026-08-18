@@ -112,7 +112,7 @@ function formatDate(iso: string) {
 }
 
 .activity-panel__title {
-  font-size: 18px;
+  font-size: calc(18px * var(--text-scale, 1));
   font-weight: 600;
   color: #2d2d2d;
   margin: 0;
@@ -151,7 +151,7 @@ function formatDate(iso: string) {
   display: inline-block;
   padding: 3px 12px;
   border-radius: 999px;
-  font-size: 12px;
+  font-size: calc(12px * var(--text-scale, 1));
   font-weight: 500;
   align-self: flex-start;
 }
@@ -169,7 +169,7 @@ function formatDate(iso: string) {
 }
 
 .activity-panel__item-title {
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
   font-weight: 600;
   color: #1a1a1a;
 }
@@ -203,7 +203,7 @@ function formatDate(iso: string) {
 }
 
 .activity-panel__progress-pct {
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
   font-weight: 600;
   color: #1a1a1a;
   white-space: nowrap;
@@ -217,7 +217,7 @@ function formatDate(iso: string) {
   margin-top: 2px;
 }
 .activity-panel__item-date {
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   color: #888;
 }
 .activity-panel__action {
@@ -228,7 +228,7 @@ function formatDate(iso: string) {
   border: none;
   border-radius: 999px;
   padding: 6px 14px;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 500;
   color: #1a1a1a;
   cursor: pointer;
@@ -248,7 +248,7 @@ function formatDate(iso: string) {
   justify-content: center;
 }
 .activity-panel__empty-text {
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   color: #aaa;
   margin: 0;
 }

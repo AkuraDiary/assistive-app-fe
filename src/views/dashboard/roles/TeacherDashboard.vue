@@ -92,14 +92,14 @@ function handleStudentChange(id: string) {
 }
 
 .teacher-dashboard__title {
-  font-size: 24px;
+  font-size: calc(24px * var(--text-scale, 1));
   font-weight: 700;
   color: #2d2d2d;
   margin: 0 0 8px 0;
 }
 
 .teacher-dashboard__subtitle {
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
   color: #666;
   margin: 0;
 }

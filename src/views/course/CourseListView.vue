@@ -158,14 +158,14 @@ const filterOptions: { label: string; value: CourseStatus | 'semua' }[] = [
 }
 
 .cl__title {
-  font-size: 22px;
+  font-size: calc(22px * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
   margin: 0 0 4px;
 }
 
 .cl__subtitle {
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   color: var(--color-text-light);
   margin: 0;
 }
@@ -180,7 +180,7 @@ const filterOptions: { label: string; value: CourseStatus | 'semua' }[] = [
   border-radius: 10px;
   border: 1.5px solid var(--color-border);
   background: var(--color-white);
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   color: var(--color-text-dark);
   cursor: pointer;
   outline: none;
@@ -213,7 +213,7 @@ const filterOptions: { label: string; value: CourseStatus | 'semua' }[] = [
 }
 
 .cl__footer-label {
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   color: var(--color-text-light);
 }
 
@@ -222,7 +222,7 @@ const filterOptions: { label: string; value: CourseStatus | 'semua' }[] = [
   border-radius: 6px;
   border: 1.5px solid var(--color-border);
   background: var(--color-white);
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   color: var(--color-text-dark);
   cursor: pointer;
   outline: none;
@@ -238,7 +238,7 @@ const filterOptions: { label: string; value: CourseStatus | 'semua' }[] = [
 }
 
 .cl__empty-text {
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   color: var(--color-text-light);
   margin: 0;
   text-align: center;
@@ -249,7 +249,7 @@ const filterOptions: { label: string; value: CourseStatus | 'semua' }[] = [
   border-radius: 10px;
   border: 1.5px solid var(--color-primary);
   background: transparent;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 500;
   color: var(--color-primary);
   cursor: pointer;

@@ -108,7 +108,7 @@ function handleSubmit() {
 }
 
 .sf__page-title {
-  font-size: 24px;
+  font-size: calc(24px * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
   text-align: center;
@@ -126,20 +126,20 @@ function handleSubmit() {
 }
 
 .sf__title {
-  font-size: 22px;
+  font-size: calc(22px * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
   margin: 0;
 }
 
 .sf__subtitle {
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   color: var(--color-text-light);
   margin: 0;
 }
 
 .sf__required-note {
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   color: var(--color-primary);
   margin: 0;
 }
@@ -165,7 +165,7 @@ function handleSubmit() {
 }
 
 .sf__progress-label {
-  font-size: 11px;
+  font-size: calc(11px * var(--text-scale, 1));
   font-weight: 600;
   color: var(--color-text-dark);
 }
@@ -188,7 +188,7 @@ function handleSubmit() {
 }
 
 .sf__question-text {
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 500;
   color: var(--color-text-dark);
   margin: 0;
@@ -211,7 +211,7 @@ function handleSubmit() {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   color: var(--color-text-dark);
   cursor: pointer;
 }

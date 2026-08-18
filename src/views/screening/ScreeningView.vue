@@ -121,7 +121,7 @@ async function next() {
 }
 
 .sv__title {
-  font-size: 1.75em;
+  font-size: calc(1.75em * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
   margin: 0;
@@ -179,7 +179,7 @@ async function next() {
   height: 28px;
   background: var(--color-primary-lighter);
   border-radius: var(--radius-sm);
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 600;
   color: var(--color-text-dark);
 }
@@ -202,7 +202,7 @@ async function next() {
   border-radius: var(--radius-full);
   border: 1.5px solid var(--color-border);
   background: var(--color-surface);
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 600;
   color: var(--color-text-dark);
   cursor: pointer;

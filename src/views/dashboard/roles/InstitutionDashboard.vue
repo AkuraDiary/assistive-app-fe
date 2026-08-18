@@ -190,14 +190,14 @@ function handleStudentChange(id: string) {
 }
 
 .inst-dashboard__title {
-  font-size: 24px;
+  font-size: calc(24px * var(--text-scale, 1));
   font-weight: 700;
   color: #2d2d2d;
   margin: 0 0 8px 0;
 }
 
 .inst-dashboard__subtitle {
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
   color: #666;
   margin: 0;
 }
@@ -278,7 +278,7 @@ function handleStudentChange(id: string) {
 }
 
 .inst-dashboard__table-title {
-  font-size: 22px;
+  font-size: calc(22px * var(--text-scale, 1));
   font-weight: 700;
   color: #ff4d8d;
   margin: 0;
@@ -288,7 +288,7 @@ function handleStudentChange(id: string) {
   background: none;
   border: none;
   color: #ff4d8d;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 500;
   cursor: pointer;
   padding: 0;
@@ -301,7 +301,7 @@ function handleStudentChange(id: string) {
 .inst-dashboard__table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
 }
 
 .inst-dashboard__table th {
@@ -329,7 +329,7 @@ function handleStudentChange(id: string) {
   color: #ff4d8d;
   background: #fff;
   border-radius: 8px;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
@@ -345,7 +345,7 @@ function handleStudentChange(id: string) {
   color: #fff;
   border: none;
   border-radius: 8px;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;

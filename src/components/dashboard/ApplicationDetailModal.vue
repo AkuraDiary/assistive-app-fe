@@ -98,7 +98,7 @@ const emit = defineEmits<{
 }
 
 .popup__title {
-  font-size: 24px;
+  font-size: calc(24px * var(--text-scale, 1));
   font-weight: 700;
   color: #2d2d2d;
   margin: 0;
@@ -133,7 +133,7 @@ const emit = defineEmits<{
 }
 
 .popup__section-title {
-  font-size: 16px;
+  font-size: calc(16px * var(--text-scale, 1));
   font-weight: 700;
   color: #2d2d2d;
   margin: 0;
@@ -147,13 +147,13 @@ const emit = defineEmits<{
 }
 
 .popup__label {
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 600;
   color: #2d2d2d;
 }
 
 .popup__value {
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   color: #666;
   text-align: right;
 }
@@ -172,7 +172,7 @@ const emit = defineEmits<{
   color: white;
   border: none;
   border-radius: 12px;
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s;
@@ -189,7 +189,7 @@ const emit = defineEmits<{
   color: #ff4d8d;
   border: 1px solid #ff4d8d;
   border-radius: 12px;
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;

@@ -127,7 +127,7 @@ async function handleRejectApplication(id: string) {
 }
 
 .pendaftaran-page__title {
-  font-size: 28px;
+  font-size: calc(28px * var(--text-scale, 1));
   font-weight: 700;
   color: #2d2d2d;
   margin: 0;
@@ -138,7 +138,7 @@ async function handleRejectApplication(id: string) {
   border: 1px solid #e5e7eb;
   border-radius: 12px;
   width: 300px;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   outline: none;
   transition: border-color 0.2s;
   background-color: #f9fafb;
@@ -164,7 +164,7 @@ async function handleRejectApplication(id: string) {
 .pendaftaran-page__table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
 }
 
 .pendaftaran-page__table th {
@@ -192,7 +192,7 @@ async function handleRejectApplication(id: string) {
   color: #ff4d8d;
   background: #fff;
   border-radius: 10px;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
@@ -208,7 +208,7 @@ async function handleRejectApplication(id: string) {
   color: #fff;
   border: none;
   border-radius: 10px;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;

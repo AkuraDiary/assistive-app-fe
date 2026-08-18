@@ -27,19 +27,19 @@ defineProps<{
   width: 100%;
 }
 .mfc__label {
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 600;
   color: var(--color-text-dark);
   margin: 0;
 }
 .mfc__letter {
-  font-size: 96px;
+  font-size: calc(96px * var(--text-scale, 1));
   font-weight: 900;
   color: var(--color-text-dark);
   line-height: 1;
 }
 .mfc__instruction {
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   color: var(--color-text-light);
   margin: 0;
   text-align: center;

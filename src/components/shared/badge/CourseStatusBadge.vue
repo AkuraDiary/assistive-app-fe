@@ -20,7 +20,7 @@ const map: Record<CourseStatus, { label: string; cls: string }> = {
   align-items: center;
   padding: 4px 14px;
   border-radius: 999px;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 500;
   white-space: nowrap;
 }

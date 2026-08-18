@@ -127,13 +127,13 @@ html {
 }
 
 .a11y--font-sm {
-  font-size: 14px;
+  --text-scale: 0.9;
 }
 .a11y--font-md {
-  font-size: 16px;
+  --text-scale: 1;
 }
 .a11y--font-lg {
-  font-size: 20px;
+  --text-scale: 1.15;
 }
 .a11y--dyslexia {
   font-family: 'OpenDyslexic', sans-serif !important;

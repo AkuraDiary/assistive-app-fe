@@ -347,7 +347,7 @@ async function onFinish() {
   border: 1px solid var(--color-border);
 }
 .page-title {
-  font-size: 16px;
+  font-size: calc(16px * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
   margin: 0;
@@ -361,7 +361,7 @@ async function onFinish() {
   border: 1px solid var(--color-border);
   border-radius: 6px;
   color: var(--color-text-light);
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 500;
   cursor: pointer;
 }
@@ -371,7 +371,7 @@ async function onFinish() {
   color: white;
   border: none;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 600;
   cursor: pointer;
 }
@@ -408,7 +408,7 @@ async function onFinish() {
   background: white;
 }
 .sidebar__title {
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
   margin: 0;
@@ -419,7 +419,7 @@ async function onFinish() {
   color: var(--color-primary);
   background: white;
   border-radius: 6px;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 600;
   cursor: pointer;
 }
@@ -452,7 +452,7 @@ async function onFinish() {
 }
 .q-number {
   font-weight: 700;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   color: var(--color-text-dark);
   width: 20px;
 }
@@ -461,7 +461,7 @@ async function onFinish() {
 }
 .q-text {
   flex: 1;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   color: var(--color-text-dark);
   white-space: nowrap;
   overflow: hidden;
@@ -532,7 +532,7 @@ async function onFinish() {
   cursor: not-allowed;
 }
 .page-text {
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   color: var(--color-text-dark);
 }
 
@@ -543,12 +543,12 @@ async function onFinish() {
   gap: 8px;
 }
 .form-group label {
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
 }
 .help-text {
-  font-size: 12px;
+  font-size: calc(12px * var(--text-scale, 1));
   color: var(--color-text-light);
 }
 .input-field {
@@ -556,7 +556,7 @@ async function onFinish() {
   padding: 12px 16px;
   border: 1px solid var(--color-border);
   border-radius: 8px;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   color: var(--color-text-dark);
   outline: none;
   appearance: none;
@@ -586,7 +586,7 @@ async function onFinish() {
 }
 .ai-link {
   color: var(--color-primary);
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 600;
   text-decoration: none;
 }
@@ -672,7 +672,7 @@ async function onFinish() {
   background: #f0f0f0;
 }
 .upload-btn span {
-  font-size: 11px;
+  font-size: calc(11px * var(--text-scale, 1));
   font-weight: 500;
 }
 </style>

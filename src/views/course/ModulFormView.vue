@@ -165,7 +165,7 @@ async function handleSubmit() {
 }
 
 .page-title {
-  font-size: 28px;
+  font-size: calc(28px * var(--text-scale, 1));
   font-weight: 700;
   color: #2d2d2d;
   margin: 0;
@@ -188,7 +188,7 @@ async function handleSubmit() {
 }
 
 .form-group label {
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
   font-weight: 700;
   color: #374151;
 }
@@ -198,7 +198,7 @@ async function handleSubmit() {
   padding: 14px 16px;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   outline: none;
   transition: border-color 0.2s;
   font-family: inherit;
@@ -281,7 +281,7 @@ async function handleSubmit() {
   cursor: pointer;
   font-weight: 600;
   color: #2d2d2d;
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
 }
 
 .checkbox-label input[type="checkbox"] {
@@ -389,7 +389,7 @@ async function handleSubmit() {
   background: white;
   border-radius: 9999px;
   font-weight: 600;
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -405,7 +405,7 @@ async function handleSubmit() {
   border: none;
   border-radius: 9999px;
   font-weight: 600;
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
   cursor: pointer;
   transition: background-color 0.2s;
 }

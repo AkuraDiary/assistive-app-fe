@@ -135,7 +135,7 @@ function handleKembali() {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 16px;
+  font-size: calc(16px * var(--text-scale, 1));
   font-weight: 500;
   color: var(--color-primary);
   background: none;
@@ -163,7 +163,7 @@ function handleKembali() {
   border-radius: var(--radius-xl);
   border: 1.5px solid var(--color-border);
   background: transparent;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 500;
   color: var(--color-text-dark);
   cursor: pointer;

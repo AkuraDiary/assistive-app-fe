@@ -52,14 +52,14 @@ const totalAssessment = computed(() => props.course.modules.filter(m => m.type =
 }
 
 .cdh__title {
-  font-size: 20px;
+  font-size: calc(20px * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
   margin: 0;
 }
 
 .cdh__desc {
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   color: var(--color-text-light);
   margin: 0;
   line-height: 1.5;
@@ -77,7 +77,7 @@ const totalAssessment = computed(() => props.course.modules.filter(m => m.type =
   align-items: center;
   padding: 5px 16px;
   border-radius: 999px;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 500;
 }
 

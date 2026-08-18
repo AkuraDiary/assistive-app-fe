@@ -146,7 +146,7 @@ function goBack() {
 }
 
 .guru-detail-page__title {
-  font-size: 28px;
+  font-size: calc(28px * var(--text-scale, 1));
   font-weight: 700;
   color: #2d2d2d;
   margin: 0;
@@ -162,7 +162,7 @@ function goBack() {
   background: white;
   border-radius: 9999px;
   font-weight: 600;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -175,7 +175,7 @@ function goBack() {
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 18px;
+  font-size: calc(18px * var(--text-scale, 1));
   font-weight: 700;
   color: #2d2d2d;
   margin-bottom: 2rem;
@@ -209,13 +209,13 @@ function goBack() {
 
 .identitas-label {
   color: #6b7280;
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
 }
 
 .identitas-value {
   color: #2d2d2d;
   font-weight: 600;
-  font-size: 16px;
+  font-size: calc(16px * var(--text-scale, 1));
 }
 
 .table-container {
@@ -225,7 +225,7 @@ function goBack() {
 .student-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
 }
 
 .student-table th {
@@ -246,7 +246,7 @@ function goBack() {
 .badge {
   padding: 6px 16px;
   border-radius: 9999px;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 600;
 }
 
@@ -267,7 +267,7 @@ function goBack() {
   background: white;
   border-radius: 9999px;
   font-weight: 600;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   cursor: pointer;
   transition: all 0.2s;
 }

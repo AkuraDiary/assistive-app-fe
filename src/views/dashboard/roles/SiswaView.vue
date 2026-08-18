@@ -120,7 +120,7 @@ async function handleToggleStatus(student: any) {
 }
 
 .siswa-page__title {
-  font-size: 28px;
+  font-size: calc(28px * var(--text-scale, 1));
   font-weight: 700;
   color: #2d2d2d;
   margin: 0;
@@ -131,7 +131,7 @@ async function handleToggleStatus(student: any) {
   border: 1px solid #e5e7eb;
   border-radius: 12px;
   width: 300px;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   outline: none;
   transition: border-color 0.2s;
   background-color: #f9fafb;
@@ -157,7 +157,7 @@ async function handleToggleStatus(student: any) {
 .siswa-page__table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
 }
 
 .siswa-page__table th {

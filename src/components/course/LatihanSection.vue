@@ -188,12 +188,12 @@ function formatDate(iso?: string) {
   color: var(--color-text-dark);
 }
 .ls__title {
-  font-size: 16px;
+  font-size: calc(16px * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
 }
 .ls__desc {
-  font-size: 12px;
+  font-size: calc(12px * var(--text-scale, 1));
   color: var(--color-text-light);
   margin: 0;
 }
@@ -233,12 +233,12 @@ function formatDate(iso?: string) {
   flex-shrink: 0;
 }
 .ls__item-title {
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 500;
   color: var(--color-text-dark);
 }
 .ls__item-pct {
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 600;
   color: var(--color-text-dark);
   transition: color 0.2s;
@@ -267,7 +267,7 @@ function formatDate(iso?: string) {
   padding-bottom: 16px;
 }
 .ls__expanded-desc {
-  font-size: 12px;
+  font-size: calc(12px * var(--text-scale, 1));
   color: var(--color-text-light);
   margin: 0;
   line-height: 1.5;
@@ -279,12 +279,12 @@ function formatDate(iso?: string) {
   margin-top: 8px;
 }
 .ls__expanded-date {
-  font-size: 11px;
+  font-size: calc(11px * var(--text-scale, 1));
   font-weight: 500;
   color: var(--color-text-light);
 }
 .ls__expanded-pct-bold {
-  font-size: 12px;
+  font-size: calc(12px * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
 }
@@ -311,7 +311,7 @@ function formatDate(iso?: string) {
   flex: 1;
   padding: 12px 0;
   border-radius: 8px;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 600;
   display: flex;
   align-items: center;

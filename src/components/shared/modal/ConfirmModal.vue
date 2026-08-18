@@ -55,7 +55,7 @@ const emit = defineEmits<{
 }
 
 .popup__message {
-  font-size: 22px;
+  font-size: calc(22px * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
   line-height: 1.4;

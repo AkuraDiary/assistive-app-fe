@@ -99,7 +99,7 @@ function formatRelativeTime(iso: string) {
 }
 
 .shared-activity__title {
-  font-size: 22px;
+  font-size: calc(22px * var(--text-scale, 1));
   font-weight: 700;
   color: #ff4d8d;
   margin: 0;
@@ -145,7 +145,7 @@ function formatRelativeTime(iso: string) {
 }
 
 .shared-activity__status-text {
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 600;
   color: #3b82f6;
 }
@@ -157,12 +157,12 @@ function formatRelativeTime(iso: string) {
 }
 
 .shared-activity__time-text {
-  font-size: 12px;
+  font-size: calc(12px * var(--text-scale, 1));
   color: #888;
 }
 
 .shared-activity__item-title {
-  font-size: 16px;
+  font-size: calc(16px * var(--text-scale, 1));
   font-weight: 700;
   color: #2d2d2d;
 }
@@ -175,7 +175,7 @@ function formatRelativeTime(iso: string) {
 }
 
 .shared-activity__progress-pct {
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 600;
   color: #2d2d2d;
   min-width: 32px;
@@ -199,7 +199,7 @@ function formatRelativeTime(iso: string) {
 .shared-activity__action-btn {
   background: none;
   border: none;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 500;
   color: #888;
   cursor: pointer;
@@ -226,7 +226,7 @@ function formatRelativeTime(iso: string) {
 }
 
 .shared-activity__empty-text {
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   color: #aaa;
   margin: 0;
 }

@@ -174,7 +174,7 @@ function goToUsers() {
 }
 
 .page-title {
-  font-size: 28px;
+  font-size: calc(28px * var(--text-scale, 1));
   font-weight: 700;
   color: #2d2d2d;
   margin: 0;
@@ -186,7 +186,7 @@ function goToUsers() {
   color: #ffffff;
   border: none;
   border-radius: 12px;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s;
@@ -211,7 +211,7 @@ function goToUsers() {
 .data-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
 }
 
 .data-table th {
@@ -293,7 +293,7 @@ input:checked + .slider:before {
   background: white;
   border-radius: 9999px;
   font-weight: 600;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   cursor: pointer;
   transition: all 0.2s;
 }

@@ -16,7 +16,7 @@
   color: var(--color-text-light);
 }
 .placeholder h1 {
-  font-size: 24px;
+  font-size: calc(24px * var(--text-scale, 1));
   color: var(--color-text-dark);
 }
 </style>

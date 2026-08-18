@@ -215,7 +215,7 @@ async function logout() {
 
 .pv__title {
   align-self: flex-start;
-  font-size: 28px;
+  font-size: calc(28px * var(--text-scale, 1));
   font-weight: 800;
   color: var(--color-text-dark);
   margin: 0;
@@ -249,7 +249,7 @@ async function logout() {
   border-radius: 999px;
   border: 1.5px solid var(--color-border);
   background: var(--color-white);
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   color: var(--color-text-dark);
   cursor: pointer;
   transition: background 0.15s;
@@ -267,13 +267,13 @@ async function logout() {
   text-align: center;
 }
 .pv__name {
-  font-size: 16px;
+  font-size: calc(16px * var(--text-scale, 1));
   font-weight: 700;
   margin: 0 0 2px;
   color: var(--color-text-dark);
 }
 .pv__meta {
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   color: var(--color-text-light);
   margin: 0;
 }
@@ -291,7 +291,7 @@ async function logout() {
 }
 
 .pv__form-title {
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
   margin: 0;
@@ -315,12 +315,12 @@ async function logout() {
   justify-content: space-between;
 }
 .pv__label {
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 500;
   color: var(--color-text-dark);
 }
 .pv__verified {
-  font-size: 12px;
+  font-size: calc(12px * var(--text-scale, 1));
   color: var(--color-success);
   font-weight: 500;
 }
@@ -339,7 +339,7 @@ async function logout() {
   gap: 6px;
   background: none;
   border: none;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 600;
   color: var(--color-primary);
   cursor: pointer;

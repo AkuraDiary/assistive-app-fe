@@ -56,7 +56,7 @@ const emit = defineEmits<{ (e: 'answer', value: string): void }>()
 }
 .qt__media-card:active { transform: scale(0.97); }
 .qt__media-label { 
-  font-size: 4rem; 
+  font-size: calc(4rem * var(--text-scale, 1)); 
   font-weight: 800; 
   color: #334155; 
   text-align: center;
@@ -89,7 +89,7 @@ const emit = defineEmits<{ (e: 'answer', value: string): void }>()
   border-radius: 0.5rem;
   border: 1.5px solid var(--color-border);
   background: var(--color-surface);
-  font-size: 1.25rem; font-weight: 600;
+  font-size: calc(1.25rem * var(--text-scale, 1)); font-weight: 600;
   color: var(--color-text-dark); cursor: pointer;
   transition: all var(--transition-fast);
 }

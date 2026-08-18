@@ -453,7 +453,7 @@ async function next() {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
   font-weight: 500;
   color: #475569;
 }
@@ -472,7 +472,7 @@ async function next() {
   color: #ff3366;
   border-radius: 9999px;
   font-weight: 600;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -493,7 +493,7 @@ async function next() {
 }
 
 .assessment-page__title {
-  font-size: 1.25rem;
+  font-size: calc(1.25rem * var(--text-scale, 1));
   font-weight: 700;
   color: #ff3366;
   margin: 0;
@@ -533,14 +533,14 @@ async function next() {
 }
 
 .assessment-intro__title {
-  font-size: 1.75rem;
+  font-size: calc(1.75rem * var(--text-scale, 1));
   font-weight: 700;
   color: #2d3748;
   margin: 0 0 0.5rem;
 }
 
 .assessment-intro__subtitle {
-  font-size: 1.1rem;
+  font-size: calc(1.1rem * var(--text-scale, 1));
   color: #718096;
   margin: 0;
   font-weight: 500;
@@ -571,13 +571,13 @@ async function next() {
 }
 
 .assessment-intro__stat-label {
-  font-size: 0.875rem;
+  font-size: calc(0.875rem * var(--text-scale, 1));
   color: #718096;
   font-weight: 500;
 }
 
 .assessment-intro__stat-value {
-  font-size: 1.25rem;
+  font-size: calc(1.25rem * var(--text-scale, 1));
   font-weight: 700;
   color: #2d3748;
 }
@@ -600,7 +600,7 @@ async function next() {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  font-size: 1.1rem;
+  font-size: calc(1.1rem * var(--text-scale, 1));
   font-weight: 600;
   color: #3b82f6;
   margin: 0 0 1.5rem;
@@ -620,7 +620,7 @@ async function next() {
   align-items: center;
   gap: 1rem;
   color: #4a5568;
-  font-size: 0.95rem;
+  font-size: calc(0.95rem * var(--text-scale, 1));
 }
 
 .assessment-intro__instruction-num {
@@ -633,7 +633,7 @@ async function next() {
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: calc(0.875rem * var(--text-scale, 1));
   flex-shrink: 0;
 }
 
@@ -647,7 +647,7 @@ async function next() {
   border: 1px solid #e2e8f0;
   border-radius: 20px;
   padding: 0.5rem 1rem;
-  font-size: 0.875rem;
+  font-size: calc(0.875rem * var(--text-scale, 1));
   color: #4a5568;
   background: white;
   text-align: center;
@@ -665,7 +665,7 @@ async function next() {
   padding: 0.75rem 2.5rem;
   border-radius: 8px;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: calc(1rem * var(--text-scale, 1));
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -730,7 +730,7 @@ async function next() {
 
 .assessment-page__sidebar-title {
   margin: 0;
-  font-size: 1rem;
+  font-size: calc(1rem * var(--text-scale, 1));
   font-weight: 700;
   color: #334155;
 }
@@ -769,13 +769,13 @@ async function next() {
 }
 
 .assessment-page__nav-num {
-  font-size: 0.875rem;
+  font-size: calc(0.875rem * var(--text-scale, 1));
   color: var(--color-text-light);
   width: 1rem;
 }
 
 .assessment-page__nav-text {
-  font-size: 0.875rem;
+  font-size: calc(0.875rem * var(--text-scale, 1));
   color: var(--color-text-dark);
   font-weight: 500;
 }
@@ -792,7 +792,7 @@ async function next() {
 }
 
 .assessment-page__subtitle {
-  font-size: 1.1rem;
+  font-size: calc(1.1rem * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
   text-align: center;
@@ -821,7 +821,7 @@ async function next() {
   background: transparent;
   color: #ff3366;
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: calc(0.875rem * var(--text-scale, 1));
   cursor: pointer;
   transition: all 0.2s;
 }

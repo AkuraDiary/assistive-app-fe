@@ -84,7 +84,7 @@ function onSave() {
 }
 
 .page-title {
-  font-size: 24px;
+  font-size: calc(24px * var(--text-scale, 1));
   font-weight: 700;
   color: #111827;
   margin: 0;
@@ -104,7 +104,7 @@ function onSave() {
 }
 
 .form-group label {
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 700;
   color: #111827;
 }
@@ -117,7 +117,7 @@ function onSave() {
   padding: 12px 16px;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   color: #111827;
   outline: none;
   transition: border-color 0.2s;
@@ -141,7 +141,7 @@ function onSave() {
   color: var(--color-primary);
   background: white;
   border-radius: 24px;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
@@ -157,7 +157,7 @@ function onSave() {
   color: white;
   border: none;
   border-radius: 24px;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;

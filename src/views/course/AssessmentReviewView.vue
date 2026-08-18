@@ -408,7 +408,7 @@ function prevQuestion() {
 }
 
 .review-page__title {
-  font-size: 1.25rem;
+  font-size: calc(1.25rem * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
   margin: 0;
@@ -435,7 +435,7 @@ function prevQuestion() {
 .review-page__sidebar-title {
   padding: 1rem 1.5rem;
   margin: 0;
-  font-size: 1rem;
+  font-size: calc(1rem * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
   border-bottom: 1px solid var(--color-border);
@@ -474,13 +474,13 @@ function prevQuestion() {
 }
 
 .review-page__nav-num {
-  font-size: 0.875rem;
+  font-size: calc(0.875rem * var(--text-scale, 1));
   color: var(--color-text-light);
   width: 1rem;
 }
 
 .review-page__nav-text {
-  font-size: 0.875rem;
+  font-size: calc(0.875rem * var(--text-scale, 1));
   color: var(--color-text-dark);
   font-weight: 500;
 }
@@ -504,7 +504,7 @@ function prevQuestion() {
 }
 
 .review-page__pagination {
-  font-size: 0.875rem;
+  font-size: calc(0.875rem * var(--text-scale, 1));
   color: var(--color-text-light);
 }
 
@@ -533,7 +533,7 @@ function prevQuestion() {
 }
 
 .review-page__label {
-  font-size: 0.875rem;
+  font-size: calc(0.875rem * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
 }
@@ -543,7 +543,7 @@ function prevQuestion() {
   color: white;
   padding: 0.25rem 1rem;
   border-radius: 1rem;
-  font-size: 0.75rem;
+  font-size: calc(0.75rem * var(--text-scale, 1));
   font-weight: 700;
 }
 
@@ -558,7 +558,7 @@ function prevQuestion() {
   padding: 0.75rem 1rem;
   border: 1px solid var(--color-border);
   border-radius: 0.5rem;
-  font-size: 0.875rem;
+  font-size: calc(0.875rem * var(--text-scale, 1));
   color: var(--color-text-dark);
   background: var(--color-bg);
 }
@@ -597,7 +597,7 @@ function prevQuestion() {
   color: var(--color-primary);
   background: none;
   border: none;
-  font-size: 0.75rem;
+  font-size: calc(0.75rem * var(--text-scale, 1));
   font-weight: 700;
   cursor: pointer;
   padding: 0;
@@ -616,7 +616,7 @@ function prevQuestion() {
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 1.5rem;
-  font-size: 0.75rem;
+  font-size: calc(0.75rem * var(--text-scale, 1));
   font-weight: 500;
 }
 
@@ -636,7 +636,7 @@ function prevQuestion() {
   padding: 0.75rem 2rem;
   border-radius: 0.5rem;
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: calc(0.875rem * var(--text-scale, 1));
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -691,7 +691,7 @@ function prevQuestion() {
 
 .review-page__modal-title {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: calc(1.25rem * var(--text-scale, 1));
   color: var(--color-text-dark);
 }
 

@@ -36,13 +36,13 @@ defineProps<{ tips: string }>()
   margin-top: 2px;
 }
 .mtc__title {
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
   margin: 0 0 4px;
 }
 .mtc__text {
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   color: var(--color-text-light);
   margin: 0;
   line-height: 1.6;

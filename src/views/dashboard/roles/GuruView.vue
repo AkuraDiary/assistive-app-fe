@@ -133,7 +133,7 @@ function goToCreate() {
 }
 
 .guru-page__title {
-  font-size: 28px;
+  font-size: calc(28px * var(--text-scale, 1));
   font-weight: 700;
   min-width: 250px;
   color: #2d2d2d;
@@ -145,7 +145,7 @@ function goToCreate() {
   border: 1px solid #e5e7eb;
   border-radius: 12px;
   width: 300px;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   outline: none;
   transition: border-color 0.2s;
   background-color: #f9fafb;
@@ -171,7 +171,7 @@ function goToCreate() {
 .guru-page__table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
 }
 
 .guru-page__table th {
@@ -204,7 +204,7 @@ function goToCreate() {
   color: white;
   border: none;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
@@ -220,7 +220,7 @@ function goToCreate() {
   color: var(--color-primary);
   background: white;
   border-radius: 20px;
-  font-size: 12px;
+  font-size: calc(12px * var(--text-scale, 1));
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
@@ -246,7 +246,7 @@ function goToCreate() {
 }
 
 .status-text {
-  font-size: 12px;
+  font-size: calc(12px * var(--text-scale, 1));
   font-weight: 700;
   color: #111827;
 }

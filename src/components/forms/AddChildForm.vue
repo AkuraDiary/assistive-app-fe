@@ -371,7 +371,7 @@ function handleNextStep() {
 }
 
 .add-child-form__title {
-  font-size: 24px;
+  font-size: calc(24px * var(--text-scale, 1));
   font-weight: 700;
   color: #1a1a1a;
   margin: 0 0 1rem;
@@ -381,7 +381,7 @@ function handleNextStep() {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 16px;
+  font-size: calc(16px * var(--text-scale, 1));
   font-weight: 700;
   color: #333;
   margin-bottom: 0.5rem;
@@ -410,7 +410,7 @@ function handleNextStep() {
 }
 
 .add-child-form__label {
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 500;
   color: #2d2d2d;
 }
@@ -423,7 +423,7 @@ function handleNextStep() {
   padding: 10px 14px;
   border: 1.5px solid #eaeaea;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   color: #2d2d2d;
   background: #fff;
   outline: none;
@@ -444,7 +444,7 @@ function handleNextStep() {
 .add-child-form__date-input {
   border: none;
   outline: none;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   color: #2d2d2d;
   background: transparent;
   flex: 1;
@@ -454,7 +454,7 @@ function handleNextStep() {
   padding: 10px 14px;
   border: 1.5px solid #eaeaea;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   color: #2d2d2d;
   background: #fff;
   outline: none;
@@ -480,7 +480,7 @@ function handleNextStep() {
   border: 1.5px solid #eaeaea;
   border-radius: 6px;
   background: #fff;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   color: #2d2d2d;
   cursor: pointer;
   transition: all 0.2s;
@@ -522,7 +522,7 @@ function handleNextStep() {
   padding: 12px 14px;
   border: 1.5px solid #e0d9f5;
   border-radius: 10px;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   color: #888;
   background: #fff;
 }
@@ -538,7 +538,7 @@ function handleNextStep() {
 .add-child-form__btn {
   padding: 10px 36px;
   border-radius: 10px;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
@@ -589,7 +589,7 @@ function handleNextStep() {
 }
 
 .add-child-form__label {
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 500;
   color: #2d2d2d;
 }
@@ -640,13 +640,13 @@ function handleNextStep() {
 }
 
 .add-child-form__popup-title {
-  font-size: 11px;
+  font-size: calc(11px * var(--text-scale, 1));
 
   color: #0066ff;
 }
 
 .add-child-form__popup-content {
-  font-size: 11px;
+  font-size: calc(11px * var(--text-scale, 1));
   line-height: 1.4;
   color: #4a4a4a;
   display: flex;
@@ -667,7 +667,7 @@ function handleNextStep() {
 }
 
 .add-child-form__popup-title {
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 500;
   color: #4a90e2; /* Clean blue title link text color */
 }
@@ -680,7 +680,7 @@ function handleNextStep() {
 }
 
 .add-child-form__popup-content {
-  font-size: 12px;
+  font-size: calc(12px * var(--text-scale, 1));
   line-height: 1.5;
   color: #555555;
   display: flex;
@@ -749,7 +749,7 @@ function handleNextStep() {
   background-color: var(--color-white);
   text-decoration-color: var(--color-white);
 
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   color: #2d2d2d;
   cursor: pointer;
   transition: background 0.15s;
@@ -774,7 +774,7 @@ function handleNextStep() {
 .add-child-form__lembaga-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   text-align: left;
 }
 .add-child-form__lembaga-table th {
@@ -795,7 +795,7 @@ function handleNextStep() {
   color: #ff4d8d;
   background: #fff;
   border-radius: 20px;
-  font-size: 12px;
+  font-size: calc(12px * var(--text-scale, 1));
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;

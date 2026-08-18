@@ -72,7 +72,7 @@ function formatRelativeTime(iso: string) {
 }
 
 .recent-activity__title {
-  font-size: 22px;
+  font-size: calc(22px * var(--text-scale, 1));
   font-weight: 700;
   color: #ff4d8d;
   margin: 0;
@@ -105,7 +105,7 @@ function formatRelativeTime(iso: string) {
 }
 
 .recent-activity__time-text {
-  font-size: 12px;
+  font-size: calc(12px * var(--text-scale, 1));
   color: #888;
 }
 
@@ -117,7 +117,7 @@ function formatRelativeTime(iso: string) {
 }
 
 .recent-activity__bold {
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
   font-weight: 700;
   color: #2d2d2d;
 }
@@ -127,7 +127,7 @@ function formatRelativeTime(iso: string) {
 }
 
 .recent-activity__desc {
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   color: #4b5563;
 }
 
@@ -142,7 +142,7 @@ function formatRelativeTime(iso: string) {
 }
 
 .recent-activity__empty-text {
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   color: #aaa;
   margin: 0;
 }

@@ -67,7 +67,7 @@ function pages(): (number | '...')[] {
   border-radius: 8px;
   border: 1.5px solid var(--color-border);
   background: var(--color-white);
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 500;
   color: var(--color-text-dark);
   cursor: pointer;
@@ -95,7 +95,7 @@ function pages(): (number | '...')[] {
   border-radius: 8px;
   border: 1.5px solid transparent;
 
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 500;
   color: var(--color-text-dark);
   cursor: pointer;

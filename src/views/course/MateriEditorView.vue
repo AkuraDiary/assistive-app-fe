@@ -97,7 +97,7 @@ function onFinish() {
 }
 
 .page-title {
-  font-size: 16px;
+  font-size: calc(16px * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
   margin: 0;
@@ -112,7 +112,7 @@ function onFinish() {
   border: 1px solid var(--color-border);
   border-radius: 6px;
   color: var(--color-text-light);
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
@@ -128,7 +128,7 @@ function onFinish() {
   color: white;
   border: none;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
@@ -155,7 +155,7 @@ function onFinish() {
 }
 
 .section-label {
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
   margin: 0;
@@ -166,7 +166,7 @@ function onFinish() {
   padding: 12px 16px;
   border: 1px solid var(--color-border);
   border-radius: 8px;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   color: var(--color-text-dark);
   outline: none;
   transition: border-color 0.2s;
@@ -193,7 +193,7 @@ function onFinish() {
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   min-height: 300px;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-family: inherit;
 }
 :deep(.ql-editor) {

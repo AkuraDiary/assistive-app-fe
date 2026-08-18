@@ -127,7 +127,7 @@ const genderLabel = computed(() => {
 }
 
 .modal-title {
-  font-size: 24px;
+  font-size: calc(24px * var(--text-scale, 1));
   font-weight: 700;
   color: #333;
   text-align: center;
@@ -142,7 +142,7 @@ const genderLabel = computed(() => {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 700;
   color: #333;
   margin-bottom: 16px;
@@ -169,7 +169,7 @@ const genderLabel = computed(() => {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
 }
 
 .data-label {

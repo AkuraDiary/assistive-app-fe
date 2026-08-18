@@ -150,12 +150,12 @@ function onChildChange(e: Event) {
 }
 
 .course-panel__icon {
-  font-size: 18px;
+  font-size: calc(18px * var(--text-scale, 1));
   color: #2d2d2d;
 }
 
 .course-panel__title {
-  font-size: 18px;
+  font-size: calc(18px * var(--text-scale, 1));
   font-weight: 600;
   color: #2d2d2d;
   margin: 0;
@@ -165,7 +165,7 @@ function onChildChange(e: Event) {
   border: 1px solid #c8e8d8;
   border-radius: 8px;
   padding: 6px 12px;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   color: #2d2d2d;
   background: #fff;
   cursor: pointer;
@@ -198,7 +198,7 @@ function onChildChange(e: Event) {
   border-radius: 8px;
   border: 1.5px solid #c0d8cc;
   background: #fff;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 500;
   color: #3d6b58;
   cursor: pointer;
@@ -229,7 +229,7 @@ function onChildChange(e: Event) {
 }
 
 .course-panel__detail-name {
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
   font-weight: 600;
 
   color: #1a3d2e;
@@ -291,7 +291,7 @@ function onChildChange(e: Event) {
 
 /* UPDATE */
 .course-panel__progress-label {
-  font-size: 16px;
+  font-size: calc(16px * var(--text-scale, 1));
   color: #5a8a72;
   white-space: nowrap;
   align-self: flex-end;
@@ -309,7 +309,7 @@ function onChildChange(e: Event) {
 }
 
 .course-panel__empty-text {
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   color: #aaa;
   margin: 0;
 }

@@ -102,7 +102,7 @@ function getGenderLabel(gender: string | undefined) {
 .ct__table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
 }
 
 /* Head */
@@ -115,7 +115,7 @@ function getGenderLabel(gender: string | undefined) {
   padding: 16px 20px;
   text-align: left;
   font-weight: 700;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   color: #333;
   overflow: hidden;
 }
@@ -169,7 +169,7 @@ function getGenderLabel(gender: string | undefined) {
   border: 1px solid #ff4d8d;
   color: #ff4d8d;
   background: transparent;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
@@ -184,7 +184,7 @@ function getGenderLabel(gender: string | undefined) {
   display: inline-block;
   padding: 4px 12px;
   border-radius: 999px;
-  font-size: 12px;
+  font-size: calc(12px * var(--text-scale, 1));
   font-weight: 600;
 }
 

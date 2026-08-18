@@ -33,7 +33,7 @@ const visible = ref(true)
   background: #fef9ec;
   border-radius: 12px;
   padding: 12px 16px;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 600;
   color: var(--color-text-dark);
   box-shadow: var(--shadow-md);
@@ -43,7 +43,7 @@ const visible = ref(true)
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   color: var(--color-text-light);
   padding: 0;
   line-height: 1;
@@ -55,7 +55,7 @@ const visible = ref(true)
   color: var(--color-primary);
   border-radius: 10px;
   padding: 8px 16px;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 600;
 }
 

@@ -190,7 +190,7 @@ const segments = computed(
 }
 
 .sr__page-title {
-  font-size: 32px;
+  font-size: calc(32px * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
   margin: 0;
@@ -253,19 +253,19 @@ const segments = computed(
   gap: 2px;
 }
 .sr__child-name {
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
   font-weight: 600;
   color: var(--color-text-dark);
   margin: 0;
 }
 .sr__child-age {
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   color: var(--color-text-light);
   margin: 0;
 }
 .sr__level-badge {
   margin-top: 0.5rem;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 600;
   color: var(--color-text-dark);
 }
@@ -277,7 +277,7 @@ const segments = computed(
   padding: 1.25rem 1.5rem;
 }
 .sr__donut-title {
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
   margin: 0 0 1rem;
@@ -309,7 +309,7 @@ const segments = computed(
   flex-shrink: 0;
 }
 .sr__legend-label {
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   color: var(--color-text-dark);
 }
 
@@ -325,7 +325,7 @@ const segments = computed(
   height: 100%;
 }
 .sr__pretest-title {
-  font-size: 16px;
+  font-size: calc(16px * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
   margin: 0 0 1.25rem;
@@ -346,11 +346,11 @@ const segments = computed(
   align-items: center;
 }
 .sr__pretest-label {
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   color: var(--color-text-dark);
 }
 .sr__pretest-score {
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
 }
@@ -371,7 +371,7 @@ const segments = computed(
   background: var(--color-surface-green);
   border-radius: var(--radius-lg);
   padding: 1rem 1.5rem;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   color: var(--color-text-dark);
 }
 .sr__rec-label {
@@ -381,7 +381,7 @@ const segments = computed(
 
 /* Empty */
 .sr__empty {
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   color: var(--color-text-light);
   text-align: center;
   padding: 2rem;

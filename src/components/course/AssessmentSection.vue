@@ -115,12 +115,12 @@ const emit = defineEmits<{
   color: var(--color-text-dark);
 }
 .as__title {
-  font-size: 16px;
+  font-size: calc(16px * var(--text-scale, 1));
   font-weight: 700;
   color: var(--color-text-dark);
 }
 .as__desc {
-  font-size: 12px;
+  font-size: calc(12px * var(--text-scale, 1));
   color: var(--color-text-light);
   margin: 0;
 }
@@ -149,7 +149,7 @@ const emit = defineEmits<{
 }
 
 .as__card-title {
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
   font-weight: 600;
   color: var(--color-text-dark);
 }
@@ -162,7 +162,7 @@ const emit = defineEmits<{
 .as__tag {
   background: var(--color-primary);
   color: #fff;
-  font-size: 9px;
+  font-size: calc(9px * var(--text-scale, 1));
   font-weight: 700;
   padding: 3px 8px;
   border-radius: 999px;
@@ -170,7 +170,7 @@ const emit = defineEmits<{
 }
 
 .as__card-desc {
-  font-size: 12px;
+  font-size: calc(12px * var(--text-scale, 1));
   color: var(--color-text-light);
   line-height: 1.4;
   margin: 0;
@@ -185,7 +185,7 @@ const emit = defineEmits<{
 .as__skill {
   border: 1px solid var(--color-border);
   color: var(--color-text-light);
-  font-size: 10px;
+  font-size: calc(10px * var(--text-scale, 1));
   padding: 4px 10px;
   border-radius: 999px;
   background: #fff;
@@ -197,7 +197,7 @@ const emit = defineEmits<{
   width: 100%;
   padding: 12px;
   border-radius: 6px;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 600;
   display: flex;
   align-items: center;

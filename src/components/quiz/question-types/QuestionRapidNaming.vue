@@ -216,7 +216,7 @@ onUnmounted(() => {
   border-radius: 9999px;
   border: 1.5px solid #FF3366;
   background: var(--color-white);
-  font-size: 1rem; font-weight: 600;
+  font-size: calc(1rem * var(--text-scale, 1)); font-weight: 600;
   color: #FF3366; cursor: pointer;
   transition: all 0.2s;
   justify-content: center;
@@ -251,7 +251,7 @@ onUnmounted(() => {
   background: transparent;
   color: #FF3366;
   border: none;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 600;
   cursor: pointer;
   text-decoration: underline;
@@ -259,7 +259,7 @@ onUnmounted(() => {
 
 .qrn__empty-state {
   color: #64748B;
-  font-size: 1rem;
+  font-size: calc(1rem * var(--text-scale, 1));
   font-style: italic;
   padding: 1rem;
   text-align: center;

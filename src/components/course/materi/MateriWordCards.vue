@@ -35,7 +35,7 @@ const colorMap = {
   border-radius: var(--radius-md);
   border: 1.5px solid var(--color-border);
   background: var(--color-white);
-  font-size: 18px;
+  font-size: calc(18px * var(--text-scale, 1));
   font-weight: 700;
   letter-spacing: 1px;
   cursor: pointer;

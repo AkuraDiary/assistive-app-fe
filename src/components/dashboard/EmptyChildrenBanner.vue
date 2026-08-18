@@ -35,14 +35,14 @@ const emit = defineEmits<{
 }
 
 .empty-banner__title {
-  font-size: 18px;
+  font-size: calc(18px * var(--text-scale, 1));
   font-weight: 500;
   color: #2d2d2d;
   margin: 0;
 }
 
 .empty-banner__subtitle {
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   color: #7a7a8a;
   margin: 0;
   max-width: 480px;
@@ -57,7 +57,7 @@ const emit = defineEmits<{
   border: none;
   border-radius: 8px;
   padding: 12px 28px;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 700;
   letter-spacing: 0.08em;
   cursor: pointer;
@@ -75,7 +75,7 @@ const emit = defineEmits<{
 }
 
 .empty-banner__btn-icon {
-  font-size: 16px;
+  font-size: calc(16px * var(--text-scale, 1));
   line-height: 1;
 }
 
@@ -83,7 +83,7 @@ const emit = defineEmits<{
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   color: #6c6ce0;
   text-decoration: none;
   margin-top: 4px;
@@ -102,7 +102,7 @@ const emit = defineEmits<{
   border-radius: 50%;
   background: #6c6ce0;
   color: #fff;
-  font-size: 10px;
+  font-size: calc(10px * var(--text-scale, 1));
   font-weight: 700;
   flex-shrink: 0;
 }

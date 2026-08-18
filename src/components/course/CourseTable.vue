@@ -114,7 +114,7 @@ function formatDate(iso?: string) {
   min-height: 200px;
 }
 .ct__empty {
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   color: var(--color-text-light);
   margin: 0;
 }
@@ -141,7 +141,7 @@ function formatDate(iso?: string) {
 
 .ct__th {
   padding: 12px 16px;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 600;
   color: var(--color-text-dark);
   text-align: left;
@@ -164,7 +164,7 @@ function formatDate(iso?: string) {
 
 .ct__td {
   padding: 14px 16px;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   color: var(--color-text-dark);
   vertical-align: middle;
 }
@@ -189,13 +189,13 @@ function formatDate(iso?: string) {
   flex-shrink: 0;
 }
 .ct__name {
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 600;
   color: var(--color-text-dark);
   margin: 0 0 2px;
 }
 .ct__level {
-  font-size: 12px;
+  font-size: calc(12px * var(--text-scale, 1));
   color: var(--color-text-light);
   margin: 0;
 }
@@ -220,7 +220,7 @@ function formatDate(iso?: string) {
   transition: width 0.4s ease;
 }
 .ct__progress-pct {
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 600;
   color: var(--color-text-dark);
   white-space: nowrap;
@@ -239,7 +239,7 @@ function formatDate(iso?: string) {
   border-radius: 99px; /* Pill shape */
   border: 1.5px solid #EC4899; /* Pink border */
   background: transparent;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   font-weight: 500;
   color: #EC4899; /* Pink text */
   cursor: pointer;
@@ -255,7 +255,7 @@ function formatDate(iso?: string) {
   border-radius: 8px;
   border: 1.5px solid var(--color-border);
   background: transparent;
-  font-size: 13px;
+  font-size: calc(13px * var(--text-scale, 1));
   color: var(--color-text-light);
   cursor: pointer;
   display: flex;

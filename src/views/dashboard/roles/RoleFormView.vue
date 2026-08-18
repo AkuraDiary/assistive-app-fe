@@ -182,7 +182,7 @@ function goBack() {
 }
 
 .page-title {
-  font-size: 28px;
+  font-size: calc(28px * var(--text-scale, 1));
   font-weight: 700;
   color: #2d2d2d;
   margin: 0;
@@ -195,7 +195,7 @@ function goBack() {
 }
 
 .form-group label {
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 700;
   color: #374151;
 }
@@ -205,7 +205,7 @@ function goBack() {
   padding: 12px 16px;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   outline: none;
   transition: border-color 0.2s;
   font-family: inherit;
@@ -222,7 +222,7 @@ function goBack() {
 
 .access-label {
   display: block;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
   font-weight: 700;
   color: #374151;
   margin-bottom: 12px;
@@ -236,7 +236,7 @@ function goBack() {
 .access-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 14px;
+  font-size: calc(14px * var(--text-scale, 1));
 }
 
 .access-table th {
@@ -323,7 +323,7 @@ function goBack() {
   background: white;
   border-radius: 9999px;
   font-weight: 600;
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -339,7 +339,7 @@ function goBack() {
   border: none;
   border-radius: 9999px;
   font-weight: 600;
-  font-size: 15px;
+  font-size: calc(15px * var(--text-scale, 1));
   cursor: pointer;
   transition: background-color 0.2s;
 }
