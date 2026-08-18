@@ -3,17 +3,27 @@ import type { ScreeningQuestion } from '@/types/screening.types';
 import { ttsService } from '@/services/tts.service';
 defineProps<{ question: ScreeningQuestion }>()
 const emit = defineEmits<{ (e: 'answer', value: string): void }>()
+
+function playQuestionAudio() {
+  if (props.question.audioUrl) {
+    const audio = new Audio(props.question.audioUrl)
+    audio.play()
+  } else {
+    ttsService.speak({ text: props.question.mediaLabel || props.question.text })
+  }
+}
 </script>
 
 <template>
   <div class="qt">
     <div class="qt__media-card" @click="emit('answer', question.mediaLabel ?? '')">
       <div class="qt__media-content">
-        <span class="qt__media-label">{{ question.mediaLabel || question.text }}</span>
+        <span v-if="!question.audioUrl" class="qt__media-label">{{ question.mediaLabel || question.text }}</span>
         <button 
-          v-if="['Deret Huruf', 'Kata', 'Kalimat', 'Menyusun Kata'].includes(question.category)"
+          v-if="question.audioUrl || ['Deret Huruf', 'Kata', 'Kalimat', 'Menyusun Kata'].includes(question.category)"
           class="qt__tts-btn" 
-          @click.stop.prevent="ttsService.speak({ text: question.mediaLabel || question.text })"
+          :class="{ 'qt__tts-btn--large': !!question.audioUrl }"
+          @click.stop.prevent="playQuestionAudio"
           title="Dengarkan"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -81,6 +91,13 @@ const emit = defineEmits<{ (e: 'answer', value: string): void }>()
 }
 .qt__tts-btn:hover {
   background: #FFE4E6;
+}
+.qt__tts-btn--large {
+  padding: 1.5rem;
+}
+.qt__tts-btn--large svg {
+  width: 40px;
+  height: 40px;
 }
 .qt__tap-hint { position: absolute; bottom: 24px; right: 24px; opacity: 0.5; }
 .qt__options { display: flex; gap: 0.75rem; }

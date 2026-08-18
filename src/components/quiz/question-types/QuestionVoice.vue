@@ -103,6 +103,15 @@ function resetRecording() {
   emit('answer', '') // Clear answer in parent
 }
 
+function playQuestionAudio() {
+  if (props.question.audioUrl) {
+    const audio = new Audio(props.question.audioUrl)
+    audio.play()
+  } else {
+    ttsService.speak({ text: props.question.mediaLabel || props.question.text })
+  }
+}
+
 // Cleanup object URLs on unmount to prevent memory leaks
 onUnmounted(() => {
   if (mediaStream.value) {
@@ -115,11 +124,12 @@ onUnmounted(() => {
   <div class="qv">
     <div class="qv__media-card">
       <div class="qv__media-content">
-        <span class="qv__media-label">{{ question.mediaLabel || question.text }}</span>
+        <span v-if="!question.audioUrl" class="qv__media-label">{{ question.mediaLabel || question.text }}</span>
         <button 
-          v-if="['Deret Huruf', 'Kata', 'Kalimat', 'Menyusun Kata'].includes(question.category)"
+          v-if="question.audioUrl || ['Deret Huruf', 'Kata', 'Kalimat', 'Menyusun Kata'].includes(question.category)"
           class="qv__tts-btn" 
-          @click.prevent="ttsService.speak({ text: question.mediaLabel || question.text })"
+          :class="{ 'qv__tts-btn--large': !!question.audioUrl }"
+          @click.prevent="playQuestionAudio"
           title="Dengarkan"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -191,6 +201,13 @@ onUnmounted(() => {
 }
 .qv__tts-btn:hover {
   background: #FFE4E6;
+}
+.qv__tts-btn--large {
+  padding: 1.5rem;
+}
+.qv__tts-btn--large svg {
+  width: 40px;
+  height: 40px;
 }
 .qv__media-label { 
   font-size: calc(4rem * var(--text-scale, 1)); 

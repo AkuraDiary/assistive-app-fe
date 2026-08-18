@@ -91,11 +91,7 @@ function stopQuestionTimer(questionId: string) {
 }
 
 function playTTSForCurrentQuestion(delayMs = 1000) {
-  if (!current.value) return
-  const stringCategories = ['Deret Huruf', 'Kata', 'Kalimat', 'Menyusun Kata']
-  if (stringCategories.includes(current.value.category)) {
-    ttsService.speak({ text: current.value.mediaLabel, delayMs })
-  }
+  // Autoplay audio disabled per user request
 }
 
 function startAssessment() {
