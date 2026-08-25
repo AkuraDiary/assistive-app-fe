@@ -9,6 +9,7 @@ export interface AssessmentQuestion {
   rapidNamingItems?: string[]
   options?: string[]
   correctAnswer?: string
+  isAudioQuestion?: boolean
 }
 
 export interface AssessmentAnswer {

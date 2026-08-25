@@ -381,7 +381,9 @@ async function next() {
               ? 'menulis di kertas lalu di-upload, atau menggambar di canvas'
               : current.questionType === 'rapid-naming'
                 ? 'menyebutkannya dengan cepat'
-                : 'merekam suaramu'
+                : current.questionType === 'tap'
+                  ? 'memilih jawaban yang benar'
+                  : 'merekam suaramu'
           }}.
         </h3>
 

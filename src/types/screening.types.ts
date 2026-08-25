@@ -24,6 +24,7 @@ export interface ScreeningQuestion {
   options?: string[]
   rapidNamingType?: 'color' | 'picture'
   rapidNamingItems?: string[]
+  isAudioQuestion?: boolean
 }
 
 export interface CategoryScore {

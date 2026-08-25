@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ScreeningQuestion } from '@/types/screening.types';
 import { ttsService } from '@/services/tts.service';
-defineProps<{ question: ScreeningQuestion }>()
+const props = defineProps<{ question: ScreeningQuestion }>()
 const emit = defineEmits<{ (e: 'answer', value: string): void }>()
 
 function playQuestionAudio() {
@@ -18,11 +18,11 @@ function playQuestionAudio() {
   <div class="qt">
     <div class="qt__media-card" @click="emit('answer', question.mediaLabel ?? '')">
       <div class="qt__media-content">
-        <span v-if="!question.audioUrl" class="qt__media-label">{{ question.mediaLabel || question.text }}</span>
+        <span v-if="!question.audioUrl && !question.isAudioQuestion" class="qt__media-label" :class="{ 'qt__media-label--long': (question.mediaLabel || question.text).length > 8 }">{{ question.mediaLabel || question.text }}</span>
         <button 
-          v-if="question.audioUrl || ['Deret Huruf', 'Kata', 'Kalimat', 'Menyusun Kata'].includes(question.category)"
+          v-if="question.audioUrl || question.isAudioQuestion || ['Deret Huruf', 'Kata', 'Kalimat', 'Menyusun Kata'].includes(question.category)"
           class="qt__tts-btn" 
-          :class="{ 'qt__tts-btn--large': !!question.audioUrl }"
+          :class="{ 'qt__tts-btn--large': !!question.audioUrl || !!question.isAudioQuestion }"
           @click.stop.prevent="playQuestionAudio"
           title="Dengarkan"
         >
@@ -70,6 +70,11 @@ function playQuestionAudio() {
   font-weight: 800; 
   color: #334155; 
   text-align: center;
+  word-break: break-word;
+}
+.qt__media-label--long {
+  font-size: calc(2.5rem * var(--text-scale, 1));
+  line-height: 1.3;
 }
 .qt__media-content {
   display: flex;
@@ -100,9 +105,11 @@ function playQuestionAudio() {
   height: 40px;
 }
 .qt__tap-hint { position: absolute; bottom: 24px; right: 24px; opacity: 0.5; }
-.qt__options { display: flex; gap: 0.75rem; }
+.qt__options { display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; }
 .qt__option-btn {
-  width: 56px; height: 56px;
+  min-width: 56px; min-height: 56px;
+  padding: 0.5rem 1rem;
+  display: flex; align-items: center; justify-content: center;
   border-radius: 0.5rem;
   border: 1.5px solid var(--color-border);
   background: var(--color-surface);

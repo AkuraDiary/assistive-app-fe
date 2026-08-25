@@ -211,11 +211,11 @@ onUnmounted(() => {
   <div class="qu">
     <div class="qu__media-card">
       <div class="qu__media-content">
-        <span v-if="!question.audioUrl" class="qu__media-label">{{ question.mediaLabel || question.text }}</span>
-        <button 
-          v-if="question.audioUrl || ['Deret Huruf', 'Kata', 'Kalimat', 'Menyusun Kata'].includes(question.category)"
-          class="qu__tts-btn" 
-          :class="{ 'qu__tts-btn--large': !!question.audioUrl }"
+        <span v-if="!question.audioUrl && !question.isAudioQuestion" class="qu__media-label" :class="{ 'qu__media-label--long': (question.mediaLabel || question.text).length > 8 }">{{ question.mediaLabel || question.text }}</span>
+        <button
+          v-if="question.audioUrl || question.isAudioQuestion"
+          class="qu__tts-btn"
+          :class="{ 'qu__tts-btn--large': !!question.audioUrl || !!question.isAudioQuestion }"
           @click.prevent="playQuestionAudio"
           title="Dengarkan"
         >
@@ -451,6 +451,11 @@ onUnmounted(() => {
   font-weight: 800;
   color: #334155;
   text-align: center;
+  word-break: break-word;
+}
+.qu__media-label--long {
+  font-size: calc(2.5rem * var(--text-scale, 1));
+  line-height: 1.3;
 }
 
 .qu__layout {
